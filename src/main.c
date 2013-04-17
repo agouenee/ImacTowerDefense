@@ -1,9 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -83,7 +83,6 @@ int main(int argc, char** argv) {
                   /* Clic droit */
                   case SDL_BUTTON_RIGHT:
                      break;
-<<<<<<< HEAD
 
                   default:
                      break;
@@ -119,40 +118,3 @@ int main(int argc, char** argv) {
    SDL_Quit();
    return EXIT_SUCCESS;
 }
-=======
-
-                  default:
-                     break;
-               }
-               break;
-            /*case SDL_VIDEORESIZE:
-            WIDTH = e.resize.w;
-            HEIGHT = e.resize.h;
-            setVideoMode();
-            break;*/
-
-            case SDL_KEYDOWN:
-               switch(e.key.keysym.sym) {
-                  case 's' :
-                     break;
-                  case 'q' :
-
-                  case SDLK_ESCAPE: 
-                     loop = 0;
-                     break;
-                  
-                  default: 
-                     break;
-               }
-               break;
-
-            default:
-               break;
-         }
-      }
-   }
-
-   SDL_Quit();
-   return EXIT_SUCCESS;
-}
->>>>>>> 80c31c815daf2913f7adc5c04ba335234bc2e24b
