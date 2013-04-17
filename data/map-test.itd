@@ -1,0 +1,15 @@
+@ITD 1
+carte map-itd.ppm
+energie 100
+chemin 255 255 255
+noeud 53 173 104
+construct 140 53 173
+in 226 214 28
+out 200 50 20
+6
+599 88
+455 88
+359 317
+230 317
+148 467
+0 467
