@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ansi
+CFLAGS = -Wall
 LDFLAGS = -lSDL
 
 APP_BIN = itd

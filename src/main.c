@@ -34,21 +34,21 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
    }
 
-   switch(image->format->BytesPerPixel) {
-      case 1:
-         format = GL_RED;
-         break;
-      case 3:
-         format = GL_RGB;
-         break;
-      case 4:
-         format = GL_RGBA;
-         break;
-      default:
-         /* On ne traite pas les autres cas */
-         fprintf(stderr, "Format des pixels de l’image %s non pris en charge\n", filename);
-         return EXIT_FAILURE;
- }
+   // switch(image->format->BytesPerPixel) {
+   //    case 1:
+   //       format = GL_RED;
+   //       break;
+   //    case 3:
+   //       format = GL_RGB;
+   //       break;
+   //    case 4:
+   //       format = GL_RGBA;
+   //       break;
+   //    default:
+   //       /* On ne traite pas les autres cas */
+   //       fprintf(stderr, "Format des pixels de l’image %s non pris en charge\n", filename);
+   //       return EXIT_FAILURE;
+   // }
 
 
    reshape();
