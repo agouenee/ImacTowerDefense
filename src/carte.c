@@ -116,12 +116,20 @@ int verifMap(FILE* itd_file) {
         return 1;
     }
     // Nombre de noeuds
-    /* pour compter le nb de lignes :
-    while(fgets(ligne, 200, fichier) != NULL){
-        count++;
-    } */
-    //printf("%s\n", keyword);
-    //printf("%d %d %d\n", val1, val2, val3);
+    fscanf(itd_file, "%d\n", &val1);
+    // Nombre de lignes restantes
+    unsigned int nbLignes = 0;
+    int c;
+    while((c = fgetc(itd_file)) != EOF) {
+        if(c == '\n') {
+            nbLignes++;
+        }
+    }
+    if(val1 != nbLignes) {
+        fprintf(stderr, "Error itd file number of nodes\n");
+        return 1;
+    }
+    // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
     return 0;
 }
 
@@ -138,7 +146,7 @@ void loadMap(char* itd_fileName) {
         // Vérification de la validité du fichier
         int test = verifMap(itd_file);
         if(test == 0) {
-            /* Carte valide */
+            // Carte valide
         }
     }
 }

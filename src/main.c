@@ -50,6 +50,7 @@ int main(int argc, char** argv) {
    //       return EXIT_FAILURE;
    // }
 
+   // Chargement carte
    loadMap("../data/map-test.itd");
 
 
