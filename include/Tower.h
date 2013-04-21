@@ -5,7 +5,7 @@ typedef enum {
 	ROCKET, LASER, MITRAILLETTE, HYBRIDE
 }TowerType;
 
-typedef struct {
+typedef struct tower {
 	TowerType type;
 	unsigned int puissance;
 	unsigned int reach;

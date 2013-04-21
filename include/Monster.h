@@ -6,7 +6,7 @@ typedef enum {
 	SLOW_MONSTER, FAST_MONSTER
 }MonsterType;
 
-typedef struct {
+typedef struct monster {
 	MonsterType type;
 	unsigned int life;
 	unsigned int resistance;
