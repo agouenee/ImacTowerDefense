@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "map.h"
+
 #define WIDTH 800
 #define HEIGHT 600
 
@@ -17,7 +19,7 @@ void reshape() {
 
 int main(int argc, char** argv) {
    // Initialisation des variables
-   char* filename = "../images/map-test.ppm";
+   char* filename = "images/map-test.ppm";
    /* SDL_Rect positonMap;
    positionMap.x = 0;
    positionMap.y = 0; */
@@ -33,6 +35,8 @@ int main(int argc, char** argv) {
       fprintf(stderr, "impossible de charger l'image %s\n", filename);
       return EXIT_FAILURE;
    }
+   SDL_FreeSurface(image);
+   SDL_Quit();
 
    // switch(image->format->BytesPerPixel) {
    //    case 1:
@@ -51,7 +55,7 @@ int main(int argc, char** argv) {
    // }
 
    // Chargement carte
-   loadMap("../data/map-test.itd");
+   loadMap("data/map-test.itd");
 
 
    reshape();
