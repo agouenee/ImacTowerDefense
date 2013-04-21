@@ -7,4 +7,6 @@ typedef struct color {
 	unsigned int b;
 }Color;
 
+Color ColorRGB(unsigned int, unsigned int g, unsigned int b);
+
 #endif
