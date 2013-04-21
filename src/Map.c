@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "map.h"
+#include "Map.h"
 
 // Vérification de la validité de la carte itd
 int verifMap(FILE* itd_file) {
@@ -39,6 +39,7 @@ int verifMap(FILE* itd_file) {
         exit(1);
     }
 	fscanf(itd_file, "%s\n", filename);
+    printf("%s\n", filename);
 	char *extension = strchr(filename, '.');
 	if(strcmp(extension, ".ppm") != 0) {
 		fprintf(stderr, "Error itd file keyword value [carte]\n");
@@ -145,8 +146,7 @@ void loadMap(char* itd_fileName) {
     }
     else {
         // Vérification de la validité du fichier
-        int test = verifMap(itd_file);
-        if(test) {
+        if(verifMap(itd_file)) {
             // Carte valide
             printf("Map chargée\n");
         }

@@ -5,13 +5,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "map.h"
+#include "Map.h"
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
+static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 void reshape() {
-  glViewport(0, 0, WIDTH, HEIGHT);
+  glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(-100., 100., -100., 100.);
@@ -27,7 +29,7 @@ int main(int argc, char** argv) {
 
    // Initialisation SDL
    SDL_Init(SDL_INIT_VIDEO);
-   SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_OPENGL);
+   SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_OPENGL);
    SDL_WM_SetCaption("ImacTowerDefense", NULL);
 
    SDL_Surface* image = IMG_Load(filename);
@@ -64,12 +66,10 @@ int main(int argc, char** argv) {
    // Boucle événements
    int loop = 1;
    while(loop) {
-      //Uint32 startTime = SDL_GetTicks();
+      Uint32 startTime = SDL_GetTicks();
 
       // Dessin
-
-
-      SDL_GL_SwapBuffers();
+      //SDL_GL_SwapBuffers();
       /* ****** */
 
       SDL_Event e;
@@ -78,19 +78,13 @@ int main(int argc, char** argv) {
             loop = 0;
             break;
          }
-
          switch(e.type) {
-            /* Clic souris */
             case SDL_MOUSEBUTTONDOWN:
                switch(e.button.button) {
-                  /* Clic gauche */
                   case SDL_BUTTON_LEFT:
                      break;
-
-                  /* Clic droit */
                   case SDL_BUTTON_RIGHT:
                      break;
-
                   default:
                      break;
                }
@@ -100,25 +94,27 @@ int main(int argc, char** argv) {
             HEIGHT = e.resize.h;
             setVideoMode();
             break;*/
-
             case SDL_KEYDOWN:
                switch(e.key.keysym.sym) {
                   case 's' :
                      break;
                   case 'q' :
-
+                     loop = 0;
+                     break;
                   case SDLK_ESCAPE: 
                      loop = 0;
                      break;
-                  
                   default: 
                      break;
                }
                break;
-
             default:
                break;
          }
+      }
+      Uint32 elapsedTime = SDL_GetTicks() - startTime;
+      if(elapsedTime < FRAMERATE_MILLISECONDS) {
+         SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
       }
    }
 
