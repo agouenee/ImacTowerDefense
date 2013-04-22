@@ -16,7 +16,7 @@ typedef struct map {
 	Node* listNodes;
 }Map;
 
-int verifMap(FILE* itd_file);
+int createMap(FILE* itd_file, Map* map);
 void loadMap(char* itd_fileName);
 
 #endif
