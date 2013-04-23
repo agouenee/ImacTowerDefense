@@ -1,6 +1,8 @@
 #ifndef ITD_MAP___
 #define ITD_MAP___
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include "Color.h"
 #include "Node.h"
 

@@ -27,20 +27,17 @@ int createMap(FILE* itd_file, Map* map) {
     int val2 = 0;
     int val3 = 0;
     // Mot clé "carte"
-    fgets(keyword, 6, itd_file);
-    if(strcmp(keyword, "carte") != 0) {
+    fgets(keyword, 7, itd_file);
+    if(strcmp(keyword, "carte ") != 0) {
 		fprintf(stderr, "Error itd file keyword [carte]\n");
 		return 0;
 	}
-	// Valeur : nom du fichier PPM 		GERER LES ESPACES !
-	char* filename = (char*) malloc(sizeof(char)*20);
-    if(filename == NULL) {
-        fprintf(stderr, "Error allocation memory\n");
-        exit(1);
-    }
-	fscanf(itd_file, "%s\n", filename);
-	char *extension = strchr(filename, '.');
-	if(strcmp(extension, ".ppm") != 0) {
+	// Valeur : nom du fichier PPM
+    char filename[30];
+    fgets(filename, 30, itd_file);
+    //printf("%s", filename);               GERER L'ABSENCE DE POINT !
+	char* extension = strchr(filename, '.');
+	if(strcmp(extension, ".ppm\n") != 0) {
 		fprintf(stderr, "Error itd file keyword value [carte]\n");
        	return 0;
 	}
@@ -48,8 +45,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).image = filename;
     }
     // Mot clé "energie"
-    fgets(keyword, 8, itd_file);
-    if(strcmp(keyword, "energie") != 0) {
+    fgets(keyword, 9, itd_file);
+    if(strcmp(keyword, "energie ") != 0) {
         fprintf(stderr, "Error itd file keyword [energie]\n");
         return 0;
     }
@@ -63,8 +60,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).energie = val1;
     }
     // Mot clé "chemin"
-    fgets(keyword, 7, itd_file);
-    if(strcmp(keyword, "chemin") != 0) {
+    fgets(keyword, 8, itd_file);
+    if(strcmp(keyword, "chemin ") != 0) {
         fprintf(stderr, "Error itd file keyword [chemin]\n");
         return 0;
     }
@@ -78,8 +75,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).pathColor = ColorRGB(val1, val2, val3);
     }
     // Mot clé "noeud"
-    fgets(keyword, 6, itd_file);
-    if(strcmp(keyword, "noeud") != 0) {
+    fgets(keyword, 7, itd_file);
+    if(strcmp(keyword, "noeud ") != 0) {
         fprintf(stderr, "Error itd file keyword [noeud]\n");
         return 0;
     }
@@ -93,8 +90,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).nodeColor = ColorRGB(val1, val2, val3);
     }
     // Mot clé "construct"
-    fgets(keyword, 10, itd_file);
-    if(strcmp(keyword, "construct") != 0) {
+    fgets(keyword, 11, itd_file);
+    if(strcmp(keyword, "construct ") != 0) {
         fprintf(stderr, "Error itd file keyword [construct]\n");
         return 0;
     }
@@ -108,8 +105,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).buildingAreaColor = ColorRGB(val1, val2, val3);
     }
     // Mot clé "in"
-    fgets(keyword, 3, itd_file);
-    if(strcmp(keyword, "in") != 0) {
+    fgets(keyword, 4, itd_file);
+    if(strcmp(keyword, "in ") != 0) {
         fprintf(stderr, "Error itd file keyword [in]\n");
         return 0;
     }
@@ -123,8 +120,8 @@ int createMap(FILE* itd_file, Map* map) {
         (*map).inColor = ColorRGB(val1, val2, val3);
     }
      // Mot clé "out"
-    fgets(keyword, 4, itd_file);
-    if(strcmp(keyword, "out") != 0) {
+    fgets(keyword, 5, itd_file);
+    if(strcmp(keyword, "out ") != 0) {
         fprintf(stderr, "Error itd file keyword [out]\n");
         return 0;
     }
@@ -140,7 +137,7 @@ int createMap(FILE* itd_file, Map* map) {
     // Nombre de noeuds
     fscanf(itd_file, "%d\n", &val1);
     // Nombre de lignes restantes
-    unsigned int nbLignes = 0;
+    unsigned int nbLignes = 1;
     int c;
     while((c = fgetc(itd_file)) != EOF) {
         if(c == '\n') {
@@ -154,7 +151,20 @@ int createMap(FILE* itd_file, Map* map) {
     else {
         (*map).nbNodes = val1;
     }
+
     // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
+    // Chargement de l'image pour avoir accès à ses dimensions
+    char file[256] = "images/";
+    strcat(file, filename);
+    //printf("%s\n", file);
+    /*SDL_Surface* image = IMG_Load(file);
+    if(image == NULL) {
+        fprintf(stderr, "impossible de charger l'image %s\n", file);
+        return EXIT_FAILURE;
+    }
+
+    printf("height: %d\n width: %d\n", image->h, image->w);*/
+
     return 1;
 }
 
