@@ -153,17 +153,28 @@ int createMap(FILE* itd_file, Map* map) {
     }
 
     // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
+    // Suppression du caractère '\n' de trop à la fin du nom du fichier 
+    int i = 0;
+    while(i < strlen(filename)) {
+        if(filename[i] == '\n') {
+            filename[i] = '\0';
+        }
+        i++;
+    }
     // Chargement de l'image pour avoir accès à ses dimensions
     char file[256] = "images/";
     strcat(file, filename);
-    //printf("%s\n", file);
-    /*SDL_Surface* image = IMG_Load(file);
+
+    SDL_Surface* image = IMG_Load(file);
     if(image == NULL) {
         fprintf(stderr, "impossible de charger l'image %s\n", file);
-        return EXIT_FAILURE;
+        return 0;
     }
+    
+    //fscanf(itd_file, "%d %d\n", &val1, &val2);
+    //printf("%d %d\n", val1, val2);
 
-    printf("height: %d\n width: %d\n", image->h, image->w);*/
+    //printf("height: %d\n width: %d\n", image->h, image->w);
 
     return 1;
 }
