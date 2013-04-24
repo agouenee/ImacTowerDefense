@@ -5,6 +5,7 @@
 
 // Vérification de la validité de la carte itd et création de la map
 int createMap(FILE* itd_file, Map* map) {
+    int i;
 	// Première ligne : @ITD 1
 	char code[5];
 	int version;
@@ -136,6 +137,7 @@ int createMap(FILE* itd_file, Map* map) {
     }
     // Nombre de noeuds
     fscanf(itd_file, "%d\n", &val1);
+    long posFile = ftell(itd_file);
     // Nombre de lignes restantes
     unsigned int nbLignes = 1;
     int c;
@@ -151,10 +153,9 @@ int createMap(FILE* itd_file, Map* map) {
     else {
         (*map).nbNodes = val1;
     }
-
     // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
     // Suppression du caractère '\n' de trop à la fin du nom du fichier 
-    int i = 0;
+    i = 0;
     while(i < strlen(filename)) {
         if(filename[i] == '\n') {
             filename[i] = '\0';
@@ -171,10 +172,23 @@ int createMap(FILE* itd_file, Map* map) {
         return 0;
     }
     
-    //fscanf(itd_file, "%d %d\n", &val1, &val2);
-    //printf("%d %d\n", val1, val2);
-
     //printf("height: %d\n width: %d\n", image->h, image->w);
+
+    // Création de la liste des noeuds
+    fseek(itd_file, posFile, SEEK_SET);
+    int currX, currY;
+    fscanf(itd_file, "%d %d\n", &currX, &currY);
+    Node* currNode = createNode(currX, currY);
+    Node* root = currNode;
+    for(i = 1; i < nbLignes; i++) {
+        fscanf(itd_file, "%d %d\n", &val1, &val2);
+        Node* node = createNode(val1, val2);
+        (*currNode).next = node;
+        currNode = (*currNode).next;
+    }
+    (*currNode).next = NULL;
+
+    (*map).listNodes = root;
 
     return 1;
 }

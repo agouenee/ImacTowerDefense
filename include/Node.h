@@ -1,11 +1,16 @@
 #ifndef ITD_NODE___
 #define ITD_NODE___
 
+#include "stdlib.h"
+#include "stdio.h"
+
 typedef struct node {
-	float x;
-	float y;
+	int x;
+	int y;
 	struct node* next;
 }Node;
 typedef Node* Path;
+
+Node* createNode(int x, int y);
 
 #endif
