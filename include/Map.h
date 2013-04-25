@@ -19,6 +19,6 @@ typedef struct map {
 }Map;
 
 int createMap(FILE* itd_file, Map* map);
-void loadMap(char* itd_fileName);
+Map loadMap(char* itd_fileName);
 
 #endif

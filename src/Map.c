@@ -194,7 +194,7 @@ int createMap(FILE* itd_file, Map* map) {
 }
 
 // Chargement et ouverture de l'image (IM_1)
-void loadMap(char* itd_fileName) {
+Map loadMap(char* itd_fileName) {
     // Ouverture fichier (r: lecture seule)
     FILE* itd_file = fopen(itd_fileName, "r");
     if(itd_file == NULL) {
@@ -208,6 +208,7 @@ void loadMap(char* itd_fileName) {
         if(createMap(itd_file, &map)) {
             // Carte valide
             printf("Map créée\n");
+            return map;
         }
     }
 }
