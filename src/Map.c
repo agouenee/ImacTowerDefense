@@ -220,5 +220,9 @@ Map loadMap(char* itd_fileName) {
             printf("Map créée\n");
             return map;
         }
+        else {
+            fprintf(stderr, "Invalid itd file : %s\n", itd_fileName);
+            exit(1);
+        }
     }
 }

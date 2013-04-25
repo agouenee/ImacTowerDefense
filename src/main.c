@@ -62,8 +62,8 @@ int main(int argc, char** argv) {
       glColor3ub(255, 255, 255);
 
       while(root->next != NULL) {
-         glVertex2i(root->x, root->y);
-         glVertex2i(root->next->x, root->next->y);
+         glVertex2i(root->x, 600-root->y);
+         glVertex2i(root->next->x, 600-root->next->y);
 
          root = root->next;
       }
