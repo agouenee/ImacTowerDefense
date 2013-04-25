@@ -16,7 +16,7 @@ void reshape() {
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(-100., 100., -100., 100.);
+  gluOrtho2D(0., 600., 0., 600.);
 }
 
 int main(int argc, char** argv) {
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
    }
    SDL_Surface* screen = NULL;
-   if(NULL == (screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_DOUBLEBUF))) {
+   if(NULL == (screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_OPENGL | SDL_RESIZABLE))) {
       fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
       return EXIT_FAILURE;
    }
@@ -40,19 +40,15 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
    }
 
-   SDL_Rect positionMap;
-   positionMap.x = 0;
-   positionMap.y = 0;
-
-   SDL_BlitSurface(image, NULL, screen, &positionMap);
-   SDL_Flip(screen);
+   //SDL_BlitSurface(image, NULL, screen, &positionMap);
+   //SDL_Flip(screen);
 
    SDL_FreeSurface(image);
 
    // Initialisation des variables
    // Chargement carte
-   loadMap("data/map-test.itd");
-
+   Map map = loadMap("data/map-test.itd");
+   Node* root = map.listNodes;
    reshape();
 
    // Boucle événements
@@ -61,7 +57,18 @@ int main(int argc, char** argv) {
       Uint32 startTime = SDL_GetTicks();
 
       // Dessin
-      //SDL_GL_SwapBuffers();
+      glBegin(GL_LINES);
+      glColor3ub(255, 255, 255);
+
+      while(root->next != NULL) {
+         glVertex2i(root->x, root->y);
+         glVertex2i(root->next->x, root->next->y);
+
+         root = root->next;
+      }
+
+      glEnd();
+      SDL_GL_SwapBuffers();
       /* ****** */
 
       SDL_Event e;

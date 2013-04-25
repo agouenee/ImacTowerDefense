@@ -5,6 +5,7 @@
 
 // Vérification de la validité de la carte itd et création de la map
 int createMap(FILE* itd_file, Map* map) {
+    int i;
 	// Première ligne : @ITD 1
 	char code[5];
 	int version;
@@ -136,6 +137,7 @@ int createMap(FILE* itd_file, Map* map) {
     }
     // Nombre de noeuds
     fscanf(itd_file, "%d\n", &val1);
+    long posFile = ftell(itd_file);
     // Nombre de lignes restantes
     unsigned int nbLignes = 1;
     int c;
@@ -151,8 +153,8 @@ int createMap(FILE* itd_file, Map* map) {
     else {
         (*map).nbNodes = val1;
     }
-
     // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
+<<<<<<< HEAD
     // Re-positionnement du curseur de lecture dans le fichier après le nombre de noeuds
     fseek(itd_file, 0, SEEK_SET);
     char ligne[256];
@@ -162,6 +164,8 @@ int createMap(FILE* itd_file, Map* map) {
         i++;
     }
     // Chargement de l'image pour avoir accès à ses dimensions
+=======
+>>>>>>> 1fd61d00d759e3a6d3deb3e5485893674030dda5
     // Suppression du caractère '\n' de trop à la fin du nom du fichier 
     i = 0;
     while(i < strlen(filename)) {
@@ -189,11 +193,32 @@ int createMap(FILE* itd_file, Map* map) {
         i++;
     }
     
+<<<<<<< HEAD
+=======
+    //printf("height: %d\n width: %d\n", image->h, image->w);
+
+    // Création de la liste des noeuds
+    fseek(itd_file, posFile, SEEK_SET);
+    int currX, currY;
+    fscanf(itd_file, "%d %d\n", &currX, &currY);
+    Node* currNode = createNode(currX, currY);
+    Node* root = currNode;
+    for(i = 1; i < nbLignes; i++) {
+        fscanf(itd_file, "%d %d\n", &val1, &val2);
+        Node* node = createNode(val1, val2);
+        (*currNode).next = node;
+        currNode = (*currNode).next;
+    }
+    (*currNode).next = NULL;
+
+    (*map).listNodes = root;
+
+>>>>>>> 1fd61d00d759e3a6d3deb3e5485893674030dda5
     return 1;
 }
 
 // Chargement et ouverture de l'image (IM_1)
-void loadMap(char* itd_fileName) {
+Map loadMap(char* itd_fileName) {
     // Ouverture fichier (r: lecture seule)
     FILE* itd_file = fopen(itd_fileName, "r");
     if(itd_file == NULL) {
@@ -207,6 +232,7 @@ void loadMap(char* itd_fileName) {
         if(createMap(itd_file, &map)) {
             // Carte valide
             printf("Map créée\n");
+            return map;
         }
     }
 }
