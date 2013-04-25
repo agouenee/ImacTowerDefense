@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
    reshape();
 
    // Boucle événements
+   glClear(GL_COLOR_BUFFER_BIT);
    int loop = 1;
    while(loop) {
       Uint32 startTime = SDL_GetTicks();
