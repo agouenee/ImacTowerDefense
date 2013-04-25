@@ -153,29 +153,42 @@ int createMap(FILE* itd_file, Map* map) {
     }
 
     // Vérification de la correspondance des coordonnées de chaque noeud à des pixels de l'image
-    // Suppression du caractère '\n' de trop à la fin du nom du fichier 
+    // Re-positionnement du curseur de lecture dans le fichier après le nombre de noeuds
+    fseek(itd_file, 0, SEEK_SET);
+    char ligne[256];
     int i = 0;
+    while(i < 9) { // Si le fichier .itd est correct, il y a obligatoirement 9 lignes avant les coordonnées des noeuds
+        fgets(ligne, 256, itd_file);
+        i++;
+    }
+    // Chargement de l'image pour avoir accès à ses dimensions
+    // Suppression du caractère '\n' de trop à la fin du nom du fichier 
+    i = 0;
     while(i < strlen(filename)) {
         if(filename[i] == '\n') {
             filename[i] = '\0';
         }
         i++;
     }
-    // Chargement de l'image pour avoir accès à ses dimensions
+    // Chargement de l'image
     char file[256] = "images/";
     strcat(file, filename);
-
     SDL_Surface* image = IMG_Load(file);
     if(image == NULL) {
         fprintf(stderr, "impossible de charger l'image %s\n", file);
         return 0;
     }
+    // Vérification
+    i = 0;
+    while(i < nbLignes) {
+        fscanf(itd_file, "%d %d\n", &val2, &val3);
+        if(val2 > image->w || val3 > image->h || val2 < 0 || val3 < 0) {
+            fprintf(stderr, "Error itd file node coordinates\n");
+            return 0;
+        }
+        i++;
+    }
     
-    //fscanf(itd_file, "%d %d\n", &val1, &val2);
-    //printf("%d %d\n", val1, val2);
-
-    //printf("height: %d\n width: %d\n", image->h, image->w);
-
     return 1;
 }
 
