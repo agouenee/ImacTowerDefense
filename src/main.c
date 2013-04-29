@@ -6,11 +6,14 @@
 #include <stdio.h>
 
 #include "Map.h"
+#include "tools.h"
 
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
-static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
+static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 10;
+
+GLuint texture;
 
 void reshape() {
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -40,10 +43,7 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
    }
 
-   //SDL_BlitSurface(image, NULL, screen, &positionMap);
-   //SDL_Flip(screen);
-
-   SDL_FreeSurface(image);
+   texture = loadTexture("images/boutin.png");
 
    // Initialisation des variables
    // Chargement carte
@@ -57,18 +57,32 @@ int main(int argc, char** argv) {
    while(loop) {
       Uint32 startTime = SDL_GetTicks();
 
-      // Dessin
+      // Dessin du chemin
       glBegin(GL_LINES);
       glColor3ub(255, 255, 255);
 
       while(root->next != NULL) {
-         glVertex2i(root->x, 600-root->y);
-         glVertex2i(root->next->x, 600-root->next->y);
+         glVertex2d(root->x, 600-root->y);
+         glVertex2d(root->next->x, 600-root->next->y);
 
          root = root->next;
       }
 
       glEnd();
+
+      glEnable(GL_TEXTURE_2D);
+      glBindTexture(GL_TEXTURE_2D, texture);
+
+      glBegin(GL_QUADS);
+      glTexCoord2d(0, 1); glVertex2d(0, 0);
+      glTexCoord2d(1, 1); glVertex2d(100, 0);
+      glTexCoord2d(1, 0); glVertex2d(100, 100);
+      glTexCoord2d(0, 0); glVertex2d(0, 100);
+      glEnd();
+
+      glBindTexture(GL_TEXTURE_2D, 0);
+      glDisable(GL_TEXTURE_2D);
+
       SDL_GL_SwapBuffers();
       /* ****** */
 
