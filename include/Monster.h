@@ -3,7 +3,7 @@
 
 typedef enum {
 	// A définir
-	SLOW_MONSTER, FAST_MONSTER
+	BOUTIN, BARJOT
 }MonsterType;
 
 typedef struct monster {
