@@ -30,7 +30,7 @@ GLuint loadTexture(char* filename) {
 	    exit(1);
  	}
 
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, format,
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, format,
     GL_UNSIGNED_BYTE, image->pixels);
 
    glBindTexture(GL_TEXTURE_2D, 0);

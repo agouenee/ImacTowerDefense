@@ -33,19 +33,20 @@ int main(int argc, char** argv) {
       fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
       return EXIT_FAILURE;
    }
+
+   // Initialisation des variables
+
    SDL_WM_SetCaption("ImacTowerDefense", NULL);
 
-   // Affichage de la map
+   texture = loadTexture("images/boutin.png");
+
+   // Chargement de la map
    char* filename = "images/map-test.ppm";
    SDL_Surface* image = IMG_Load(filename);
    if(image == NULL) {
       fprintf(stderr, "impossible de charger l'image %s\n", filename);
       return EXIT_FAILURE;
    }
-
-   texture = loadTexture("images/boutin.png");
-
-   // Initialisation des variables
    // Chargement carte
    Map map = loadMap("data/map-test.itd");
    Node* root = map.listNodes;
@@ -71,6 +72,8 @@ int main(int argc, char** argv) {
       glEnd();
 
       glEnable(GL_TEXTURE_2D);
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glBindTexture(GL_TEXTURE_2D, texture);
 
       glBegin(GL_QUADS);
@@ -81,6 +84,7 @@ int main(int argc, char** argv) {
       glEnd();
 
       glBindTexture(GL_TEXTURE_2D, 0);
+      glDisable(GL_BLEND);
       glDisable(GL_TEXTURE_2D);
 
       SDL_GL_SwapBuffers();
