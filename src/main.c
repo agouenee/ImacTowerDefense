@@ -38,6 +38,11 @@ int main(int argc, char** argv) {
 
    SDL_WM_SetCaption("ImacTowerDefense", NULL);
 
+   SDL_Surface* boutin = IMG_Load("images/boutin.png");
+   if(boutin == NULL) {
+      fprintf(stderr, "impossible de charger l'image boutin.png \n");
+      return EXIT_FAILURE;
+   }
    texture = loadTexture("images/boutin.png");
 
    // Chargement de la map
@@ -50,6 +55,7 @@ int main(int argc, char** argv) {
    // Chargement carte
    Map map = loadMap("data/map-test.itd");
    Node* root = map.listNodes;
+   Node* first = root;
    reshape();
 
    // Boucle événements
@@ -77,10 +83,10 @@ int main(int argc, char** argv) {
       glBindTexture(GL_TEXTURE_2D, texture);
 
       glBegin(GL_QUADS);
-      glTexCoord2d(0, 1); glVertex2d(0, 0);
-      glTexCoord2d(1, 1); glVertex2d(100, 0);
-      glTexCoord2d(1, 0); glVertex2d(100, 100);
-      glTexCoord2d(0, 0); glVertex2d(0, 100);
+      glTexCoord2d(0, 0); glVertex2d(first->x-boutin->w, 600-first->y+boutin->h*0.5);
+      glTexCoord2d(0, 1); glVertex2d(first->x-boutin->w, 600-first->y-boutin->h*0.5);
+      glTexCoord2d(1, 1); glVertex2d(first->x, 600-first->y-boutin->h*0.5);
+      glTexCoord2d(1, 0); glVertex2d(first->x, 600-first->y+boutin->h*0.5);
       glEnd();
 
       glBindTexture(GL_TEXTURE_2D, 0);
