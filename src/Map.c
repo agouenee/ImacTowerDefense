@@ -1,3 +1,6 @@
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +37,10 @@ int createMap(FILE* itd_file, Map* map) {
 		return 0;
 	}
 	// Valeur : nom du fichier PPM
-    char filename[30];
+    char* filename = (char*) malloc(sizeof(char)*30);
+    if(filename == NULL) {
+        fprintf(stderr, "Error memory allocation [filename]\n");
+    }
     fgets(filename, 30, itd_file);
     //printf("%s", filename);               GERER L'ABSENCE DE POINT !
 	char* extension = strchr(filename, '.');
@@ -200,6 +206,9 @@ int createMap(FILE* itd_file, Map* map) {
 
     (*map).listNodes = root;
 
+    // Destruction des données de l'image chargée
+    SDL_FreeSurface(image);
+
     return 1;
 }
 
@@ -225,4 +234,16 @@ Map loadMap(char* itd_fileName) {
             exit(1);
         }
     }
+}
+
+// Dessin du chemin à partir des coordonnées des noeuds
+void drawPath(Node* root) {
+    glBegin(GL_LINES);
+    while(root->next != NULL) {
+        glVertex2d(root->x, 600-root->y);
+        glVertex2d(root->next->x, 600-root->next->y);
+
+        root = root->next;
+    }
+    glEnd();
 }

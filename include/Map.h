@@ -20,5 +20,6 @@ typedef struct map {
 
 int createMap(FILE* itd_file, Map* map);
 Map loadMap(char* itd_fileName);
+void drawPath(Node* root);
 
 #endif
