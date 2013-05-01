@@ -23,6 +23,9 @@ void reshape() {
 }
 
 int main(int argc, char** argv) {
+   // Initialisation des variables
+   int positionX, positionY;
+
    // Initialisation SDL
    if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
       fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -34,8 +37,6 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
    }
 
-   // Initialisation des variables
-
    SDL_WM_SetCaption("ImacTowerDefense", NULL);
 
    SDL_Surface* boutin = IMG_Load("images/boutin.png");
@@ -46,23 +47,30 @@ int main(int argc, char** argv) {
    texture = loadTexture("images/boutin.png");
 
    // Chargement de la map
+      // Chargement de l'image ppm
    char* filename = "images/map-test.ppm";
    SDL_Surface* image = IMG_Load(filename);
    if(image == NULL) {
       fprintf(stderr, "impossible de charger l'image %s\n", filename);
       return EXIT_FAILURE;
    }
-   // Chargement carte
+      // Chargement du fichier itd
    Map map = loadMap("data/map-test.itd");
    Node* root = map.listNodes;
+   Node* node = root;
    Node* first = root;
+   // Initialisation de la position des monstres
+   positionX = node->x;
+   positionY = node->y;
    reshape();
 
    // Boucle événements
    glClear(GL_COLOR_BUFFER_BIT);
    int loop = 1;
    while(loop) {
+      root = first;
       Uint32 startTime = SDL_GetTicks();
+      glClear(GL_COLOR_BUFFER_BIT);
 
       // Dessin du chemin
       glBegin(GL_LINES);
@@ -77,16 +85,37 @@ int main(int argc, char** argv) {
 
       glEnd();
 
+      if(node->next->y == positionY) {
+         if(node->next->x > positionX) {
+            positionX += 1;
+         }
+         else {
+            positionX -= 1;
+         }   
+      }
+      else {
+         if(node->next->y > positionY) {
+            positionY += 1;
+         }
+         else {
+            positionY -= 1;
+         }
+      }
+
+      if(positionX == node->next->x && positionY == node->next->y) {
+         node = node->next;
+      }
+
       glEnable(GL_TEXTURE_2D);
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glBindTexture(GL_TEXTURE_2D, texture);
 
       glBegin(GL_QUADS);
-      glTexCoord2d(0, 0); glVertex2d(first->x-boutin->w, 600-first->y+boutin->h*0.5);
-      glTexCoord2d(0, 1); glVertex2d(first->x-boutin->w, 600-first->y-boutin->h*0.5);
-      glTexCoord2d(1, 1); glVertex2d(first->x, 600-first->y-boutin->h*0.5);
-      glTexCoord2d(1, 0); glVertex2d(first->x, 600-first->y+boutin->h*0.5);
+      glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
+      glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
+      glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
+      glTexCoord2d(1, 1); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
       glEnd();
 
       glBindTexture(GL_TEXTURE_2D, 0);
