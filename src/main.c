@@ -93,44 +93,46 @@ int main(int argc, char** argv) {
       drawPath(root);
 
       // Monstres
-      if(node->next->y == positionY) {
-         if(node->next->x > positionX) {
-            positionX += 1;
+      if(node->next != NULL) {
+         if(node->next->y == positionY) {
+            if(node->next->x > positionX) {
+               positionX += 1;
+            }
+            else {
+               positionX -= 1;
+            }   
          }
          else {
-            positionX -= 1;
-         }   
-      }
-      else {
-         if(node->next->y > positionY) {
-            positionY += 1;
+            if(node->next->y > positionY) {
+               positionY += 1;
+            }
+            else {
+               positionY -= 1;
+            }
          }
-         else {
-            positionY -= 1;
+
+         if(positionX == node->next->x && positionY == node->next->y) {
+            node = node->next;
          }
+
+         glEnable(GL_TEXTURE_2D);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glBindTexture(GL_TEXTURE_2D, texture);
+
+         glBegin(GL_QUADS);
+
+         glColor3ub(255, 255, 255); // couleur neutre
+         glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
+         glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
+         glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
+         glTexCoord2d(1, 1); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
+         glEnd();
+
+         glBindTexture(GL_TEXTURE_2D, 0);
+         glDisable(GL_BLEND);
+         glDisable(GL_TEXTURE_2D);
       }
-
-      if(positionX == node->next->x && positionY == node->next->y) {
-         node = node->next;
-      }
-
-      glEnable(GL_TEXTURE_2D);
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glBindTexture(GL_TEXTURE_2D, texture);
-
-      glBegin(GL_QUADS);
-
-      glColor3ub(255, 255, 255); // couleur neutre
-      glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-      glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-      glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-      glTexCoord2d(1, 1); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-      glEnd();
-
-      glBindTexture(GL_TEXTURE_2D, 0);
-      glDisable(GL_BLEND);
-      glDisable(GL_TEXTURE_2D);
 
       SDL_GL_SwapBuffers();
       /* ****** */
