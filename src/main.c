@@ -13,6 +13,7 @@
 
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 10;
 
+GLuint mapBackground;
 GLuint texture;
 
 void reshape() {
@@ -39,52 +40,59 @@ int main(int argc, char** argv) {
 
    SDL_WM_SetCaption("ImacTowerDefense", NULL);
 
+   // Chargement carte itd
+   Map map = loadMap("data/map-test.itd");
+   // Chargement carte ppm
+   char fileName[256] = "images/"; strcat(fileName, map.image);
+   SDL_Surface* background = IMG_Load(fileName);
+   if(background == NULL) {
+      fprintf(stderr, "Impossible de charger l'image %s\n", fileName);
+      return EXIT_FAILURE;
+   }
+   mapBackground = loadTexture(fileName);
+
+   // Monstres
    SDL_Surface* boutin = IMG_Load("images/boutin.png");
    if(boutin == NULL) {
       fprintf(stderr, "impossible de charger l'image boutin.png \n");
       return EXIT_FAILURE;
    }
    texture = loadTexture("images/boutin.png");
-
-   // Chargement de la map
-      // Chargement de l'image ppm
-   char* filename = "images/map-test.ppm";
-   SDL_Surface* image = IMG_Load(filename);
-   if(image == NULL) {
-      fprintf(stderr, "impossible de charger l'image %s\n", filename);
-      return EXIT_FAILURE;
-   }
-      // Chargement du fichier itd
-   Map map = loadMap("data/map-test.itd");
+   // Noeuds
    Node* root = map.listNodes;
    Node* node = root;
    Node* first = root;
    // Initialisation de la position des monstres
    positionX = node->x;
    positionY = node->y;
+
    reshape();
 
+
    // Boucle événements
-   glClear(GL_COLOR_BUFFER_BIT);
    int loop = 1;
    while(loop) {
       root = first;
       Uint32 startTime = SDL_GetTicks();
       glClear(GL_COLOR_BUFFER_BIT);
 
+      // Carte
+      glEnable(GL_TEXTURE_2D);
+         glBindTexture(GL_TEXTURE_2D, mapBackground);
+         glBegin(GL_QUADS);
+            glColor3ub(255, 255, 255); // couleur neutre
+            glTexCoord2d(0, 0); glVertex2f(0, background->h);
+            glTexCoord2d(0, 1); glVertex2f(0, 0);
+            glTexCoord2d(1, 1); glVertex2f(background->w, 0);
+            glTexCoord2d(1, 0); glVertex2f(background->w, background->h);
+         glEnd();
+      glDisable(GL_TEXTURE_2D);
+      
       // Dessin du chemin
-      glBegin(GL_LINES);
-      glColor3ub(255, 255, 255);
+      glColor3ub(map.pathColor.r, map.pathColor.g, map.pathColor.b);
+      drawPath(root);
 
-      while(root->next != NULL) {
-         glVertex2d(root->x, 600-root->y);
-         glVertex2d(root->next->x, 600-root->next->y);
-
-         root = root->next;
-      }
-
-      glEnd();
-
+      // Monstres
       if(node->next->y == positionY) {
          if(node->next->x > positionX) {
             positionX += 1;
@@ -112,6 +120,8 @@ int main(int argc, char** argv) {
       glBindTexture(GL_TEXTURE_2D, texture);
 
       glBegin(GL_QUADS);
+
+      glColor3ub(255, 255, 255); // couleur neutre
       glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
       glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
       glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
@@ -170,6 +180,10 @@ int main(int argc, char** argv) {
          SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
       }
    }
+
+   // Destruction des données des images chargées
+   SDL_FreeSurface(background);
+   SDL_FreeSurface(boutin);
 
    SDL_Quit();
    return EXIT_SUCCESS;
