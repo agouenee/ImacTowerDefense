@@ -11,7 +11,8 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
-static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 10;
+// 1 image pour 100 ms (0.1 secondes) = 10 images pour 1000 ms
+static const Uint32 FRAMERATE_MILLISECONDS = 10 / 1000;
 
 GLuint mapBackground;
 GLuint texture;
