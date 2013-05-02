@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "Map.h"
+#include "Tower.h"
 #include "tools.h"
 
 #define WINDOW_WIDTH 600
@@ -65,6 +66,13 @@ int main(int argc, char** argv) {
    // Initialisation de la position des monstres
    positionX = node->x;
    positionY = node->y;
+
+
+   // Tours
+   /*Tower* t1 = createTower(ROCKET);
+   Tower* t2 = createTower(LASER);
+   Tower* t3 = createTower(MITRAILLETTE);
+   Tower* t4 = createTower(HYBRIDE);*/
 
    reshape();
 
