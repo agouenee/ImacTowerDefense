@@ -29,6 +29,14 @@ int main(int argc, char** argv) {
    // Initialisation des variables
    int positionX, positionY;
 
+   int nbTowers = -1;
+   int xClicked = 0, yClicked = 0;
+   int towerTest = 0;
+
+   Tower* t_first = NULL;
+   Tower* t_last = NULL;
+   Tower* t = NULL;
+
    // Initialisation SDL
    if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
       fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -67,13 +75,6 @@ int main(int argc, char** argv) {
    // Initialisation de la position des monstres
    positionX = node->x;
    positionY = node->y;
-
-
-   // Tours
-   /*Tower* t1 = createTower(ROCKET);
-   Tower* t2 = createTower(LASER);
-   Tower* t3 = createTower(MITRAILLETTE);
-   Tower* t4 = createTower(HYBRIDE);*/
 
    reshape();
 
@@ -130,7 +131,6 @@ int main(int argc, char** argv) {
          glBindTexture(GL_TEXTURE_2D, texture);
 
          glBegin(GL_QUADS);
-
          glColor3ub(255, 255, 255); // couleur neutre
          glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
          glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
@@ -142,6 +142,14 @@ int main(int argc, char** argv) {
          glDisable(GL_BLEND);
          glDisable(GL_TEXTURE_2D);
       }
+
+      // Tours
+      if(t_first != NULL) {
+         constructTower(t_first);
+      }
+      /*unsigned char pick_col[3];
+      glReadPixels(xClicked, yClicked, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col);*/
+
 
       SDL_GL_SwapBuffers();
       /* ****** */
@@ -156,6 +164,27 @@ int main(int argc, char** argv) {
             case SDL_MOUSEBUTTONDOWN:
                switch(e.button.button) {
                   case SDL_BUTTON_LEFT:
+                     xClicked = e.button.x;
+                     yClicked = e.button.y;
+                     //printf("%d %d\n", xClicked, yClicked);
+                     nbTowers++;
+                     // Création de la première tour
+                     if(nbTowers == 0) {
+                        t_first = createTower(ROCKET, xClicked, yClicked);
+                        nbTowers++;
+                        t_last = t_first;
+                     }
+                     // Autres tours
+                     else if(nbTowers > 1) {
+                        // Vérification de la position
+                        towerTest = checkPosTower(t_first, xClicked, yClicked);
+                        if(towerTest == 1) {
+                           t = createTower(ROCKET, xClicked, yClicked);
+                           (*t_last).next = t;
+                           t_last = t;
+                        }
+                     }
+                     //printf("%d %d %d\n", pick_col[0], pick_col[1], pick_col[2]);
                      break;
                   case SDL_BUTTON_RIGHT:
                      break;
