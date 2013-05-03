@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-LDFLAGS = -lSDL -lGLU -lGL -lm -lSDL_image
+LDFLAGS = -lSDL -lGLU -lGL -lm -lSDL_image -lglut
 
 APP_BIN = itd
 
