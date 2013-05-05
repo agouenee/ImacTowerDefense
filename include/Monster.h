@@ -13,4 +13,6 @@ typedef struct monster {
 	float speed;
 }Monster;
 
+void drawMonster(Node* node, int positionX, int positionY);
+
 #endif
