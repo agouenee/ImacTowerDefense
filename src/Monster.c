@@ -6,6 +6,43 @@
 #include "tools.h"
 #include "Monster.h"
 
+Monster* addMonster(Monster* monsterList, MonsterType type, int posX, int posY) {
+	if(monsterList == NULL) {
+		fprintf(stderr, "pointer is NULL in addMonster function");
+        exit(1);
+	}	
+
+	Monster* newMonster = (Monster*) malloc(sizeof(Monster));
+	if(newMonster == NULL) {
+		fprintf(stderr, "Error allocation memory");
+        exit(1);
+	}
+
+	(*newMonster).posX = posX;
+	(*newMonster).posY = posY;
+	(*newMonster).type = type;
+
+	// VALEURS A MODIFIER
+	if(type == BOUTIN) {
+		(*newMonster).life = 10;
+		(*newMonster).resistance = 10;
+		(*newMonster).speed = 10;
+	}
+	else if(type == BARJOT) {
+		(*newMonster).life = 20;
+		(*newMonster).resistance = 20;
+		(*newMonster).speed = 20;
+	}
+	else {
+		fprintf(stderr, "Unknown monster type");
+		free(newMonster);
+        exit(1);
+	}
+
+	(*newMonster).next = monsterList;
+
+	return newMonster;
+}
 void drawMonster(Node* node, int positionX, int positionY) {
 	SDL_Surface* boutin = IMG_Load("images/boutin.png");
    	if(boutin == NULL) {
@@ -13,7 +50,7 @@ void drawMonster(Node* node, int positionX, int positionY) {
       	exit(1);
    	}
    	GLuint texture = loadTexture("images/boutin.png");
-   	
+
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
