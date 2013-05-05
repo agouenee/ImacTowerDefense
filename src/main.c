@@ -15,9 +15,10 @@
 // 1 image pour 100 ms (0.1 secondes) = 10 images pour 1000 ms
 static const Uint32 FRAMERATE_MILLISECONDS = 10 / 1000;
 
+GLuint menu;
+GLuint buttons;
 GLuint mapBackground;
 GLuint texture;
-GLuint menu;
 
 void reshape() {
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -38,6 +39,7 @@ int main(int argc, char** argv) {
    Tower* t_first = NULL;
    Tower* t_last = NULL;
    Tower* t = NULL;
+   TowerType type = EMPTY;
 
    // Initialisation SDL
    if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -54,6 +56,14 @@ int main(int argc, char** argv) {
 
    // Chargement menu
    menu = loadTexture("images/menu.jpg");
+
+   // Chargement interface joueur (boutons)
+   SDL_Surface* interface = IMG_Load("images/buttons.png");
+   if(interface == NULL) {
+      fprintf(stderr, "Impossible de charger l'image buttons.png\n");
+      return EXIT_FAILURE;
+   }
+   buttons = loadTexture("images/buttons.png");
 
    // Chargement carte itd
    Map map = loadMap("data/map-test.itd");
@@ -96,7 +106,6 @@ int main(int argc, char** argv) {
          glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, menu);
             glBegin(GL_QUADS);
-               glColor3ub(255, 255, 255); // couleur neutre
                glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
                glTexCoord2d(0, 1); glVertex2f(0, 0);
                glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
@@ -105,11 +114,27 @@ int main(int argc, char** argv) {
          glDisable(GL_TEXTURE_2D);
       }
       else {
+         // Interface joueur (boutons)
+         glEnable(GL_TEXTURE_2D);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glBindTexture(GL_TEXTURE_2D, buttons);
+
+            glBegin(GL_QUADS);
+               glTexCoord2d(0, 0); glVertex2f(600, interface->h);
+               glTexCoord2d(0, 1); glVertex2f(600, 0);
+               glTexCoord2d(1, 1); glVertex2f(interface->w + 600, 0);
+               glTexCoord2d(1, 0); glVertex2f(interface->w + 600, interface->h);
+            glEnd();
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glDisable(GL_BLEND);
+         glDisable(GL_TEXTURE_2D);
+
          // Carte
          glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, mapBackground);
             glBegin(GL_QUADS);
-               glColor3ub(255, 255, 255); // couleur neutre
                glTexCoord2d(0, 0); glVertex2f(0, background->h);
                glTexCoord2d(0, 1); glVertex2f(0, 0);
                glTexCoord2d(1, 1); glVertex2f(background->w, 0);
@@ -144,22 +169,12 @@ int main(int argc, char** argv) {
                node = node->next;
             }
 
-         glBegin(GL_QUADS);
-         glColor3ub(255, 255, 255); // couleur neutre
-         glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-         glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-         glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-         glTexCoord2d(1, 1); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-         glEnd();
-
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glBindTexture(GL_TEXTURE_2D, texture);
 
             glBegin(GL_QUADS);
-
-            glColor3ub(255, 255, 255); // couleur neutre
             glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
             glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
             glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
@@ -176,9 +191,7 @@ int main(int argc, char** argv) {
       if(t_first != NULL) {
          constructTower(t_first);
       }
-      /*unsigned char pick_col[3];
-      glReadPixels(xClicked, yClicked, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col);*/
-
+      /*unsigned char pick_col[3];*/
 
       SDL_GL_SwapBuffers();
       /* ****** */
@@ -196,24 +209,59 @@ int main(int argc, char** argv) {
                      xClicked = e.button.x;
                      yClicked = e.button.y;
                      //printf("%d %d\n", xClicked, yClicked);
-                     nbTowers++;
-                     // Création de la première tour
-                     if(nbTowers == 0) {
-                        t_first = createTower(ROCKET, xClicked, yClicked);
-                        nbTowers++;
-                        t_last = t_first;
-                     }
-                     // Autres tours
-                     else if(nbTowers > 1) {
-                        // Vérification de la position
-                        towerTest = checkPosTower(t_first, xClicked, yClicked);
-                        if(towerTest == 1) {
-                           t = createTower(ROCKET, xClicked, yClicked);
-                           (*t_last).next = t;
-                           t_last = t;
+                     // Si clic dans l'interface joueur)
+                     if(xClicked >= 600) {
+                        // Si clic sur bouton "ROCKET"
+                        if(xClicked >= 606 && xClicked <= 747 && yClicked >= 528 && yClicked <= 558) {
+                           printf("ROCKET !\n");
+                           type = ROCKET;
+                        }
+                        // Si clic sur bouton "MITRAILLETTE"
+                        if(xClicked >= 753 && xClicked <= 893 && yClicked >= 528 && yClicked <= 558) {
+                           printf("MITRAILLETTE !\n");
+                           type = MITRAILLETTE;
+                        }
+                        // Si clic sur bouton "LASER"
+                        if(xClicked >= 606 && xClicked <= 747 && yClicked >= 562 && yClicked <= 592) {
+                           printf("LASER !\n");
+                           type = LASER;
+                        }
+                        // Si clic sur bouton "HYBRIDE"
+                        if(xClicked >= 753 && xClicked <= 893 && yClicked >= 562 && yClicked <= 592) {
+                           printf("HYBRIDE !\n");
+                           type = HYBRIDE;
                         }
                      }
-                     //printf("%d %d %d\n", pick_col[0], pick_col[1], pick_col[2]);
+                     // Si clic sur la carte
+                     else {
+                        // GERER LA DETECTION DES ZONES CONSTRUCTIBLES !
+                        /*glReadPixels(xClicked, yClicked, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col); 
+                        printf("%d %d %d\n", pick_col[0], pick_col[1], pick_col[2]);*/
+                        if(type != EMPTY) {
+                           nbTowers++;
+                           // Création de la première tour
+                           if(nbTowers == 0) {
+                              t_first = createTower(type, xClicked, yClicked);
+                              nbTowers++;
+                              t_last = t_first;
+                              type = EMPTY;
+                           }
+                           // Autres tours
+                           else if(nbTowers > 1) {
+                              // Vérification de la position
+                              towerTest = checkPosTower(t_first, xClicked, yClicked);
+                              if(towerTest == 1) {
+                                 t = createTower(type, xClicked, yClicked);
+                                 (*t_last).next = t;
+                                 t_last = t;
+                                 type = EMPTY;
+                              }
+                           }      
+                        }
+                        else {
+                           printf("Sélectionner une tour à construire !\n");
+                        }
+                     }
                      break;
                   case SDL_BUTTON_RIGHT:
                      break;

@@ -5,7 +5,7 @@
 #include "stdio.h"
 
 typedef enum {
-	ROCKET, LASER, MITRAILLETTE, HYBRIDE
+	ROCKET, LASER, MITRAILLETTE, HYBRIDE, EMPTY
 }TowerType;
 
 typedef struct tower {

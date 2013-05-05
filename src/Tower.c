@@ -36,12 +36,16 @@ Tower* createTower(TowerType type, int posX, int posY) {
 		(*newTower).cadence = 30;		// Un tir toutes les 3s.
 		(*newTower).price = 100.0;		// Prix de 100€
 	}
-	else { // HYBRIDE
+	else if(type == HYBRIDE) {
 		(*newTower).puissance = 40;	
 		(*newTower).reach = 100;		// Portée de 100 pixels
 		(*newTower).cadence = 50;		// Un tir toutes les 5s.
 		(*newTower).price = 500.0;		// Prix de 500€
 	}
+	/*else { // EMPTY
+		fprintf(stderr, "type EMPTY \n");
+        return NULL;
+	}*/
 
 	(*newTower).next = NULL;
 
@@ -95,7 +99,7 @@ void constructTower(Tower* t_first) {
 		    }
 		    tourTexture = loadTexture("images/towers/mitraillette.png");
 		}
-		else { // HYBRIDE
+		else if((*currTower).type == HYBRIDE) {
 			tourImg = IMG_Load("images/towers/hybride.png");
 		    if(tourImg == NULL) {
 		        fprintf(stderr, "impossible de charger l'image hybride.png \n");
