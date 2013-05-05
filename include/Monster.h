@@ -11,8 +11,12 @@ typedef struct monster {
 	unsigned int life;
 	unsigned int resistance;
 	float speed;
+	int posX;
+	int posY;
+	struct monster* next;
 }Monster;
 
 void drawMonster(Node* node, int positionX, int positionY);
+Monster* addMonster(Monster* monsterList, MonsterType type, int posX, int posY);
 
 #endif
