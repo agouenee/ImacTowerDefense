@@ -31,7 +31,7 @@ void reshape() {
 int main(int argc, char** argv) {
 	// Initialisation des variables
 	int game = 0;
-	int positionX, positionY;
+	int posX, posY;
 	int cpt = 0;
 
 	int nbTowers = -1;
@@ -42,6 +42,8 @@ int main(int argc, char** argv) {
 	Tower* t_last = NULL;
 	Tower* t = NULL;
 	TowerType type = EMPTY;
+
+	int nbMonsters = 0;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -90,8 +92,11 @@ int main(int argc, char** argv) {
 	Node* node = root;
 	Node* first = root;
 	// Initialisation de la position des monstres
-	positionX = node->x;
-	positionY = node->y;
+	posX = node->x;
+	posY = node->y;
+
+	MonsterType monsterType = BOUTIN;
+	Monster* rootMonster = createMonster(monsterType, posX, posY, node->next);
 
 	reshape();
 
@@ -149,28 +154,13 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(node->next != NULL) {
-				if(node->next->y == positionY) {
-					if(node->next->x > positionX) {
-						positionX += 1;
-					}
-					else {
-						positionX -= 1;
-					}   
-				}
-				else {
-					if(node->next->y > positionY) {
-						positionY += 1;
-					}
-					else {
-						positionY -= 1;
-					}
-				}
-		  		if(positionX == node->next->x && positionY == node->next->y) {
-					node = node->next;
-		  		}
-				drawMonster(node, positionX, positionY);
+			/*if(cpt%50 == 0 && nbMonsters < 3) {
+				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
+				rootMonster = addMonster(rootMonster, newMonster);
+				nbMonsters++;
 			}
+			cpt++;*/
+			drawMonsters(rootMonster);
 		}
 
 		// Tours

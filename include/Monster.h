@@ -14,9 +14,13 @@ typedef struct monster {
 	int posX;
 	int posY;
 	struct monster* next;
+	struct node* nextNode;
 }Monster;
 
-void drawMonster(Node* node, int positionX, int positionY);
-Monster* addMonster(Monster* monsterList, MonsterType type, int posX, int posY);
+Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
+Monster* addMonster(Monster* monsterList, Monster* addMonster);
+Monster* rmvMonster(Monster* monsterList, Monster* monster);
+void drawMonsters(Monster* root);
+void drawMonster(Monster* monster);
 
 #endif
