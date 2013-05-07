@@ -54,16 +54,28 @@ Tower* createTower(TowerType type, int posX, int posY) {
 
 // Vérification de la validité de l'emplacement de la tour
 int checkPosTower(Tower* t_first, int posX, int posY) {
-	Tower* currTower = t_first;
-	while(currTower != NULL) {
-		if(posX >= ((*currTower).posX + 30) || posX <= ((*currTower).posX - 30) || posY >= ((*currTower).posY + 30) || posY <= ((*currTower).posY - 30)) {
-			currTower = (*currTower).next;
-		}
-		else {
-			fprintf(stderr, "il y a déjà une tour ici\n");
-			return 0;
+	// Est-ce que la tour est sur une zone constructible ?
+	unsigned char pick_col[3];
+	glReadPixels(posX, posY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col);
+	if(pick_col[0] != 120 && pick_col[1] && pick_col[2]) {
+		fprintf(stderr, "zone non constructible\n");
+		return 0;
+	}
+
+	if(t_first != NULL) {
+		Tower* currTower = t_first;
+		while(currTower != NULL) {
+			// Est-ce que la tour est sur une autre ?
+			if(posX >= ((*currTower).posX + 30) || posX <= ((*currTower).posX - 30) || posY >= ((*currTower).posY + 30) || posY <= ((*currTower).posY - 30)) {
+				currTower = (*currTower).next;
+			}
+			else {
+				fprintf(stderr, "il y a déjà une tour ici\n");
+				return 0;
+			}
 		}
 	}
+
 	return 1;
 }
 
@@ -115,10 +127,10 @@ void constructTower(Tower* t_first) {
 	    glBindTexture(GL_TEXTURE_2D, tourTexture);
 	    
 		glBegin(GL_QUADS);
-			glTexCoord2d(0, 0); glVertex2f((*currTower).posX - tourImg->w * 0.5, 600 - (*currTower).posY - tourImg->h * 0.5);
-			glTexCoord2d(0, 1); glVertex2f((*currTower).posX - tourImg->w * 0.5, 600 - (*currTower).posY + tourImg->h * 0.5);
-			glTexCoord2d(1, 1); glVertex2f((*currTower).posX + tourImg->w * 0.5, 600 - (*currTower).posY + tourImg->h * 0.5);
-			glTexCoord2d(1, 0); glVertex2f((*currTower).posX + tourImg->w * 0.5, 600 - (*currTower).posY - tourImg->h * 0.5);
+			glTexCoord2d(0, 0); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
+			glTexCoord2d(0, 1); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
+			glTexCoord2d(1, 1); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
+			glTexCoord2d(1, 0); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
 		glEnd();
 	    
 	    glBindTexture(GL_TEXTURE_2D, 0);

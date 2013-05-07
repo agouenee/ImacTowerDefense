@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 	int posX, posY;
 	int cpt = 0;
 
-	int nbTowers = -1;
+	int nbTowers = 0;
 	int xClicked = 0, yClicked = 0;
 	int towerTest = 0;
 
@@ -167,7 +167,6 @@ int main(int argc, char** argv) {
 		if(t_first != NULL) {
 			constructTower(t_first);
 		}
-		/*unsigned char pick_col[3];*/
 
 		SDL_GL_SwapBuffers();
 		/* ****** */
@@ -183,54 +182,53 @@ int main(int argc, char** argv) {
 					switch(e.button.button) {
 						case SDL_BUTTON_LEFT:
 							xClicked = e.button.x;
-							yClicked = e.button.y;
-							//printf("%d %d\n", xClicked, yClicked);
+							yClicked = 600-e.button.y;
+							/*printf("%d %d\n", xClicked, yClicked);*/
 							// Si clic dans l'interface joueur)
 							if(xClicked >= 600) {
 								// Si clic sur bouton "ROCKET"
-								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 528 && yClicked <= 558) {
+								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 43 && yClicked <= 73) {
 									printf("ROCKET !\n");
 									type = ROCKET;
 								}
 								// Si clic sur bouton "MITRAILLETTE"
-								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 528 && yClicked <= 558) {
+								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 43 && yClicked <= 73) {
 									printf("MITRAILLETTE !\n");
 									type = MITRAILLETTE;
 								}
 								// Si clic sur bouton "LASER"
-								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 562 && yClicked <= 592) {
+								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 7 && yClicked <= 37) {
 									printf("LASER !\n");
 									type = LASER;
 								}
 								// Si clic sur bouton "HYBRIDE"
-								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 562 && yClicked <= 592) {
+								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 7 && yClicked <= 37) {
 									printf("HYBRIDE !\n");
 									type = HYBRIDE;
 								}
 							}
 							// Si clic sur la carte
 							else {
-								// GERER LA DETECTION DES ZONES CONSTRUCTIBLES !
-								/*glReadPixels(xClicked, yClicked, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col); 
-								printf("%d %d %d\n", pick_col[0], pick_col[1], pick_col[2]);*/
 								if(type != EMPTY) {
-									nbTowers++;
 									// Création de la première tour
 									if(nbTowers == 0) {
-										t_first = createTower(type, xClicked, yClicked);
-										nbTowers++;
-										t_last = t_first;
-										type = EMPTY;
+										// Vérification de la position
+										towerTest = checkPosTower(t_first, xClicked, yClicked);
+										if(towerTest == 1) {
+											t_first = createTower(type, xClicked, yClicked);
+											t_last = t_first;
+											nbTowers++;
+										}
 									}
 									// Autres tours
-									else if(nbTowers > 1) {
+									else if(nbTowers >= 1) {
 										// Vérification de la position
 										towerTest = checkPosTower(t_first, xClicked, yClicked);
 										if(towerTest == 1) {
 											t = createTower(type, xClicked, yClicked);
 											(*t_last).next = t;
 											t_last = t;
-											type = EMPTY;
+											nbTowers++;
 										}
 									}      
 								}
