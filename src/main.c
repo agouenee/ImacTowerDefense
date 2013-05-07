@@ -154,12 +154,12 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			/*if(cpt%50 == 0 && nbMonsters < 3) {
+			if(cpt%50 == 0 && nbMonsters < 3) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				nbMonsters++;
 			}
-			cpt++;*/
+			cpt++;
 			drawMonsters(rootMonster);
 		}
 
