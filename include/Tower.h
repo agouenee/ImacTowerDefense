@@ -21,6 +21,9 @@ typedef struct tower {
 
 Tower* createTower(TowerType type, int posX, int posY);
 int checkPosTower(Tower* t_first, int posX, int posY);
+TowerType constructTowerType(int posX, int posY);
 void constructTower(Tower* t_first);
+Tower* constructTowerSelected(Tower* t_first, int posX, int posY);
+void displayTowerFeatures(Tower* t);
 
 #endif

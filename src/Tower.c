@@ -42,10 +42,6 @@ Tower* createTower(TowerType type, int posX, int posY) {
 		(*newTower).cadence = 50;		// Un tir toutes les 5s.
 		(*newTower).price = 500.0;		// Prix de 500€
 	}
-	/*else { // EMPTY
-		fprintf(stderr, "type EMPTY \n");
-        return NULL;
-	}*/
 
 	(*newTower).next = NULL;
 
@@ -77,6 +73,33 @@ int checkPosTower(Tower* t_first, int posX, int posY) {
 	}
 
 	return 1;
+}
+
+// Détermination du type de tour à construire
+TowerType constructTowerType(int posX, int posY) {
+	TowerType type = EMPTY;
+	// Si clic sur bouton "ROCKET"
+	if(posX >= 606 && posX <= 747 && posY >= 43 && posY <= 73) {
+		printf("ROCKET !\n");
+		type = ROCKET;
+	}
+	// Si clic sur bouton "MITRAILLETTE"
+	if(posX >= 753 && posX <= 893 && posY >= 43 && posY <= 73) {
+		printf("MITRAILLETTE !\n");
+		type = MITRAILLETTE;
+	}
+	// Si clic sur bouton "LASER"
+	if(posX >= 606 && posX <= 747 && posY >= 7 && posY <= 37) {
+		printf("LASER !\n");
+		type = LASER;
+	}
+	// Si clic sur bouton "HYBRIDE"
+	if(posX >= 753 && posX <= 893 && posY >= 7 && posY <= 37) {
+		printf("HYBRIDE !\n");
+		type = HYBRIDE;
+	}
+
+	return type;
 }
 
 // Construction (affichage) des tours sur la carte
@@ -138,5 +161,82 @@ void constructTower(Tower* t_first) {
 	    glDisable(GL_TEXTURE_2D);
 
 	    currTower = (*currTower).next;
+    }
+}
+
+// Sélection d'une tour construite au survol de la souris
+Tower* constructTowerSelected(Tower* t_first, int posX, int posY) {
+	if(t_first != NULL) {
+		Tower* currTower = t_first;
+		while(currTower != NULL) {
+			// Est-ce que la souris survole une tour ?
+			if(posX >= ((*currTower).posX - 15) && posX <= ((*currTower).posX + 15) && posY >= ((*currTower).posY - 15) && posY <= ((*currTower).posY + 15)) {
+				return currTower;
+			}
+			else {
+				currTower = (*currTower).next;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// Affichage des caractéristiques de la tour survolée
+void displayTowerFeatures(Tower* t) {
+	SDL_Surface* featuresImg;
+	GLuint featuresTexture;
+
+	if(t != NULL) {
+		// Chargement des caractéristiqes de la tour en fonction de son type
+		if((*t).type == ROCKET) {
+			featuresImg = IMG_Load("images/interface/rocket.png");
+		    if(featuresImg == NULL) {
+		        fprintf(stderr, "impossible de charger l'image interface/rocket.png \n");
+		        exit(1);
+		    }
+		    featuresTexture = loadTexture("images/interface/rocket.png");
+		}
+		else if((*t).type == LASER) {
+			featuresImg = IMG_Load("images/interface/laser.png");
+		    if(featuresImg == NULL) {
+		        fprintf(stderr, "impossible de charger l'image interface/laser.png \n");
+		        exit(1);
+		    }
+		    featuresTexture = loadTexture("images/interface/laser.png");		
+		}
+		else if((*t).type == MITRAILLETTE) {
+			featuresImg = IMG_Load("images/interface/mitraillette.png");
+		    if(featuresImg == NULL) {
+		        fprintf(stderr, "impossible de charger l'image interface/mitraillette.png \n");
+		        exit(1);
+		    }
+		    featuresTexture = loadTexture("images/interface/mitraillette.png");
+		}
+		else if((*t).type == HYBRIDE) {
+			featuresImg = IMG_Load("images/interface/hybride.png");
+		    if(featuresImg == NULL) {
+		        fprintf(stderr, "impossible de charger l'image interface/hybride.png \n");
+		        exit(1);
+		    }
+		    featuresTexture = loadTexture("images/interface/hybride.png");
+		}
+		
+		// Affichage de la texture sur la carte
+		glEnable(GL_TEXTURE_2D);
+	    glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	    glBindTexture(GL_TEXTURE_2D, featuresTexture);
+	    
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0); glVertex2f((*t).posX - featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY + featuresImg->h * 0.5 + featuresImg->h / 2);
+			glTexCoord2d(0, 1); glVertex2f((*t).posX - featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY - featuresImg->h * 0.5 + featuresImg->h / 2);
+			glTexCoord2d(1, 1); glVertex2f((*t).posX + featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY - featuresImg->h * 0.5 + featuresImg->h / 2);
+			glTexCoord2d(1, 0); glVertex2f((*t).posX + featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY + featuresImg->h * 0.5 + featuresImg->h / 2);
+		glEnd();
+	    
+	    glBindTexture(GL_TEXTURE_2D, 0);
+	    glDisable(GL_BLEND);
+	    glDisable(GL_TEXTURE_2D);
     }
 }

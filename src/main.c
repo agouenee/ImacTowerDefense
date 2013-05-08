@@ -35,12 +35,13 @@ int main(int argc, char** argv) {
 	int cpt = 0;
 
 	int nbTowers = 0;
-	int xClicked = 0, yClicked = 0;
+	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
 
 	Tower* t_first = NULL;
 	Tower* t_last = NULL;
 	Tower* t = NULL;
+	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
 
 	int nbMonsters = 0;
@@ -62,12 +63,12 @@ int main(int argc, char** argv) {
 	menu = loadTexture("images/menu.jpg");
 
 	// Chargement interface joueur (boutons)
-	SDL_Surface* interface = IMG_Load("images/buttons.png");
+	SDL_Surface* interface = IMG_Load("images/interface/buttons.png");
 	if(interface == NULL) {
 		fprintf(stderr, "Impossible de charger l'image buttons.png\n");
 		return EXIT_FAILURE;
 	}
-	buttons = loadTexture("images/buttons.png");
+	buttons = loadTexture("images/interface/buttons.png");
 
 	// Chargement carte itd
 	Map map = loadMap("data/map-test.itd");
@@ -165,7 +166,13 @@ int main(int argc, char** argv) {
 
 		// Tours
 		if(t_first != NULL) {
+			// Construction de la tour
 			constructTower(t_first);
+			// Affichage des caractéristiques de la tour survolée
+			t_selected = constructTowerSelected(t_first, xOver, yOver);
+			if(t_selected != NULL) {
+				displayTowerFeatures(t_selected);
+			}	
 		}
 
 		SDL_GL_SwapBuffers();
@@ -177,6 +184,15 @@ int main(int argc, char** argv) {
 				loop = 0;
 				break;
 			}
+			// Mouvement souris (survol)
+			if(type != EMPTY) {
+				if(e.type == SDL_MOUSEMOTION) {
+					xOver = e.motion.x;
+	        		yOver = 600-e.motion.y;
+					break;
+				}
+			}
+
 			switch(e.type) {
 				case SDL_MOUSEBUTTONDOWN:
 					switch(e.button.button) {
@@ -184,28 +200,10 @@ int main(int argc, char** argv) {
 							xClicked = e.button.x;
 							yClicked = 600-e.button.y;
 							/*printf("%d %d\n", xClicked, yClicked);*/
-							// Si clic dans l'interface joueur)
+							// Si clic dans l'interface joueur
 							if(xClicked >= 600) {
-								// Si clic sur bouton "ROCKET"
-								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 43 && yClicked <= 73) {
-									printf("ROCKET !\n");
-									type = ROCKET;
-								}
-								// Si clic sur bouton "MITRAILLETTE"
-								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 43 && yClicked <= 73) {
-									printf("MITRAILLETTE !\n");
-									type = MITRAILLETTE;
-								}
-								// Si clic sur bouton "LASER"
-								if(xClicked >= 606 && xClicked <= 747 && yClicked >= 7 && yClicked <= 37) {
-									printf("LASER !\n");
-									type = LASER;
-								}
-								// Si clic sur bouton "HYBRIDE"
-								if(xClicked >= 753 && xClicked <= 893 && yClicked >= 7 && yClicked <= 37) {
-									printf("HYBRIDE !\n");
-									type = HYBRIDE;
-								}
+								// Sélection du type de tour à construire
+								type = constructTowerType(xClicked, yClicked);
 							}
 							// Si clic sur la carte
 							else {
@@ -230,7 +228,7 @@ int main(int argc, char** argv) {
 											t_last = t;
 											nbTowers++;
 										}
-									}      
+									}
 								}
 								else {
 									printf("Sélectionner une tour à construire !\n");
