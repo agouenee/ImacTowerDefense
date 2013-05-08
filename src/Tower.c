@@ -79,22 +79,22 @@ int checkPosTower(Tower* t_first, int posX, int posY) {
 TowerType constructTowerType(int posX, int posY) {
 	TowerType type = EMPTY;
 	// Si clic sur bouton "ROCKET"
-	if(posX >= 606 && posX <= 747 && posY >= 43 && posY <= 73) {
+	if(posX >= 642 && posX <= 705 && posY >= 150 && posY <= 165) {
 		printf("ROCKET !\n");
 		type = ROCKET;
 	}
 	// Si clic sur bouton "MITRAILLETTE"
-	if(posX >= 753 && posX <= 893 && posY >= 43 && posY <= 73) {
+	if(posX >= 790 && posX <= 854 && posY >= 150 && posY <= 165) {
 		printf("MITRAILLETTE !\n");
 		type = MITRAILLETTE;
 	}
 	// Si clic sur bouton "LASER"
-	if(posX >= 606 && posX <= 747 && posY >= 7 && posY <= 37) {
+	if(posX >= 642 && posX <= 705 && posY >= 12 && posY <= 31) {
 		printf("LASER !\n");
 		type = LASER;
 	}
 	// Si clic sur bouton "HYBRIDE"
-	if(posX >= 753 && posX <= 893 && posY >= 7 && posY <= 37) {
+	if(posX >= 790 && posX <= 854 && posY >= 12 && posY <= 31) {
 		printf("HYBRIDE !\n");
 		type = HYBRIDE;
 	}
