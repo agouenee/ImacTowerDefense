@@ -17,6 +17,12 @@ typedef struct monster {
 	struct node* nextNode;
 }Monster;
 
+typedef struct monsterList {
+	struct monster* root;
+	int nbMonster;
+}MonsterList;
+
+
 int countMonsters(Monster* root);
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
 Monster* addMonster(Monster* monsterList, Monster* addMonster);
