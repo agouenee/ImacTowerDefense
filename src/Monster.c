@@ -6,6 +6,14 @@
 #include "tools.h"
 #include "Monster.h"
 
+int countMonsters(Monster* root) {
+	int cpt = 1;
+	while((*root).next != NULL) {
+		cpt++;
+		root = (*root).next;
+	}
+	return cpt;
+}
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 	if(nextNode == NULL) {
 		fprintf(stderr, "pointer is NULL in createMonster function \n");
@@ -32,6 +40,8 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 		fprintf(stderr, "Unknown monster type \n");
 		exit(1);
 	}
+	(*newMonster).posX = posX;
+	(*newMonster).posY = posY;
 	(*newMonster).nextNode = nextNode;
 	(*newMonster).next = NULL;
 
@@ -85,12 +95,19 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 	return root;
 }
 void drawMonsters(Monster* root) {
-	while((*root).next != NULL) {
-		drawMonster(root);
+	SDL_Surface* boutin = IMG_Load("images/boutin.png");
+	if(boutin == NULL) {
+		fprintf(stderr, "impossible de charger l'image boutin.png \n");
+		exit(1);
+	}
+	GLuint texture = loadTexture("images/boutin.png");
+
+	while(root != NULL) {
+		drawMonster(root, boutin, texture);
 		root = (*root).next;
 	}
 }
-void drawMonster(Monster* monster) {
+void drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	if(monster->nextNode != NULL) {
 		if(monster->nextNode->y == monster->posY) {
 			if(monster->nextNode->x > monster->posX) {
@@ -111,13 +128,6 @@ void drawMonster(Monster* monster) {
   		if(monster->posX == monster->nextNode->x && monster->posY == monster->nextNode->y) {
 			monster->nextNode = monster->nextNode->next;
   		}
-
-		SDL_Surface* boutin = IMG_Load("images/boutin.png");
-		if(boutin == NULL) {
-			fprintf(stderr, "impossible de charger l'image boutin.png \n");
-			exit(1);
-		}
-		GLuint texture = loadTexture("images/boutin.png");
 
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);

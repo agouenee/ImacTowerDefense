@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 	// Initialisation des variables
 	int game = 0;
 	int posX, posY;
-	int cpt = 0;
+	int cpt = 1;
 
 	int nbTowers = 0;
 	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
 
-	int nbMonsters = 0;
+	int nbMonsters = 1;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -155,7 +155,8 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%50 == 0 && nbMonsters < 3) {
+			if(cpt%100 == 0 && nbMonsters < 3) {
+				printf("%d\n", nbMonsters);
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				nbMonsters++;

@@ -17,10 +17,11 @@ typedef struct monster {
 	struct node* nextNode;
 }Monster;
 
+int countMonsters(Monster* root);
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
 Monster* addMonster(Monster* monsterList, Monster* addMonster);
 Monster* rmvMonster(Monster* monsterList, Monster* monster);
 void drawMonsters(Monster* root);
-void drawMonster(Monster* monster);
+void drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture);
 
 #endif
