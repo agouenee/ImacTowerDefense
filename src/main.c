@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Game.h"
 #include "Map.h"
 #include "Tower.h"
 #include "Monster.h"
@@ -30,10 +31,10 @@ void reshape() {
 
 int main(int argc, char** argv) {
 	// Initialisation des variables
-	int game = 0;
 	int posX, posY;
 	int cpt = 1;
 
+		// Tours
 	int nbTowers = 0;
 	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
@@ -44,6 +45,7 @@ int main(int argc, char** argv) {
 	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
 
+		// Monstres
 	int nbMonsters = 1;
 
 	// Initialisation SDL
@@ -81,23 +83,21 @@ int main(int argc, char** argv) {
 	}
 	mapBackground = loadTexture(fileName);
 
-	// Monstres
-	SDL_Surface* boutin = IMG_Load("images/boutin.png");
-	if(boutin == NULL) {
-		fprintf(stderr, "impossible de charger l'image boutin.png \n");
-		return EXIT_FAILURE;
-	}
-	texture = loadTexture("images/boutin.png");
 	// Noeuds
 	Node* root = map.listNodes;
-	Node* node = root;
 	Node* first = root;
 	// Initialisation de la position des monstres
-	posX = node->x;
-	posY = node->y;
+	posX = root->x;
+	posY = root->y;
 
+	// Création du premier monstre
 	MonsterType monsterType = BOUTIN;
-	Monster* rootMonster = createMonster(monsterType, posX, posY, node->next);
+	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
+
+	// Initialisation du jeu
+	Game game;
+	game.nbMonsterLists = 1;
+	game.start = 0;
 
 	reshape();
 
@@ -109,7 +109,7 @@ int main(int argc, char** argv) {
 		Uint32 startTime = SDL_GetTicks();
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		if(game == 0) {
+		if(game.start == 0) {
 			// Menu
 			glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, menu);
@@ -156,7 +156,6 @@ int main(int argc, char** argv) {
 
 			// Monstres
 			if(cpt%100 == 0 && nbMonsters < 3) {
-				printf("%d\n", nbMonsters);
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				nbMonsters++;
@@ -250,7 +249,7 @@ int main(int argc, char** argv) {
 				case SDL_KEYDOWN:
 					switch(e.key.keysym.sym) {
 						case 's' :
-							game = 1;
+							game.start = 1;
 							break;
 						case 'q' :
 							loop = 0;
@@ -274,7 +273,6 @@ int main(int argc, char** argv) {
 
 	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
-	SDL_FreeSurface(boutin);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
