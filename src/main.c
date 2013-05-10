@@ -49,7 +49,6 @@ int main(int argc, char** argv) {
 	int reach = 0;
 	int cadence = 1;
 
-
 		// Monstres
 	Monster* monsterToKill = NULL;
 	int tmp = 1;
@@ -311,7 +310,6 @@ int main(int argc, char** argv) {
 					switch(e.key.keysym.sym) {
 						case 's' :
 							game.start = 1;
-							game.over = 0;
 							break;
 						case 'q' :
 							loop = 0;
@@ -335,6 +333,7 @@ int main(int argc, char** argv) {
 
 	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
+	SDL_FreeSurface(interface);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
