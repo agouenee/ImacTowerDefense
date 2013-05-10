@@ -18,6 +18,8 @@
 static const Uint32 FRAMERATE_MILLISECONDS = 10 / 1000;
 
 GLuint menu;
+GLuint gameOver;
+GLuint gameWin;
 GLuint buttons;
 GLuint mapBackground;
 GLuint texture;
@@ -63,6 +65,10 @@ int main(int argc, char** argv) {
 
 	// Chargement menu
 	menu = loadTexture("images/menu.jpg");
+	// chargement image game over
+	gameOver = loadTexture("images/game-over.jpg");
+	// chargement image game win
+	gameWin = loadTexture("images/game-win.jpg");
 
 	// Chargement interface joueur (boutons)
 	SDL_Surface* interface = IMG_Load("images/interface/buttons.png");
@@ -121,6 +127,28 @@ int main(int argc, char** argv) {
 				glEnd();
 			glDisable(GL_TEXTURE_2D);
 		}
+		else if(game.over == 1) {
+			glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, gameOver);
+				glBegin(GL_QUADS);
+					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
+					glTexCoord2d(0, 1); glVertex2f(0, 0);
+					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
+					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+				glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
+		else if(game.win == 1) {
+			glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, gameWin);
+				glBegin(GL_QUADS);
+					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
+					glTexCoord2d(0, 1); glVertex2f(0, 0);
+					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
+					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+				glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
 		else {
 			// Interface joueur (boutons)
 			glEnable(GL_TEXTURE_2D);
@@ -161,7 +189,9 @@ int main(int argc, char** argv) {
 				nbMonsters++;
 			}
 			cpt++;
-			drawMonsters(rootMonster);
+			if(drawMonsters(rootMonster) == 0) {
+				game.over = 1;
+			}
 		}
 
 		// Tours
@@ -250,6 +280,7 @@ int main(int argc, char** argv) {
 					switch(e.key.keysym.sym) {
 						case 's' :
 							game.start = 1;
+							game.over = 0;
 							break;
 						case 'q' :
 							loop = 0;

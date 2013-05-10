@@ -4,7 +4,7 @@
 typedef struct game {
 	int start;
 	int win;
-	int lost;
+	int over;
 	int nbMonsterLists;
 	float budget; 
 }Game;

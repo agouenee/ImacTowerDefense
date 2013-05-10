@@ -94,7 +94,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 
 	return root;
 }
-void drawMonsters(Monster* root) {
+int drawMonsters(Monster* root) {
 	SDL_Surface* boutin = IMG_Load("images/boutin.png");
 	if(boutin == NULL) {
 		fprintf(stderr, "impossible de charger l'image boutin.png \n");
@@ -103,11 +103,17 @@ void drawMonsters(Monster* root) {
 	GLuint texture = loadTexture("images/boutin.png");
 
 	while(root != NULL) {
-		drawMonster(root, boutin, texture);
+		if(drawMonster(root, boutin, texture) == 0) {
+			return 0;
+		}
 		root = (*root).next;
 	}
+
+	SDL_FreeSurface(boutin);
+
+	return 1;
 }
-void drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
+int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	if(monster->nextNode != NULL) {
 		if(monster->nextNode->y == monster->posY) {
 			if(monster->nextNode->x > monster->posX) {
@@ -144,30 +150,8 @@ void drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
+
+		return 1;
 	}
+	return 0;
 }
-/*
-void drawMonster(int positionX, int positionY) {
-	SDL_Surface* boutin = IMG_Load("images/boutin.png");
-	if(boutin == NULL) {
-		fprintf(stderr, "impossible de charger l'image boutin.png \n");
-		exit(1);
-	}
-	GLuint texture = loadTexture("images/boutin.png");
-
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 1); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-	glTexCoord2d(0, 0); glVertex2d(positionX - boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-	glTexCoord2d(1, 0); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY + boutin->h * 0.5);
-	glTexCoord2d(1, 1); glVertex2d(positionX + boutin->w * 0.5, 600 - positionY - boutin->h * 0.5);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-}*/
