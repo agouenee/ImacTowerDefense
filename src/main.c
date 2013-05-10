@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%100 == 0 && monsterList.nbMonsters < 10) {
+			if(cpt%50 == 0 && monsterList.nbMonsters < 10) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				monsterList.nbMonsters += 1;
