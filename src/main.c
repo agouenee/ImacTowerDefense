@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Game.h"
 #include "Map.h"
 #include "Tower.h"
 #include "Monster.h"
@@ -17,6 +18,8 @@
 static const Uint32 FRAMERATE_MILLISECONDS = 10 / 1000;
 
 GLuint menu;
+GLuint gameOver;
+GLuint gameWin;
 GLuint buttons;
 GLuint mapBackground;
 GLuint texture;
@@ -30,10 +33,10 @@ void reshape() {
 
 int main(int argc, char** argv) {
 	// Initialisation des variables
-	int game = 0;
 	int posX, posY;
 	int cpt = 1;
 
+		// Tours
 	int nbTowers = 0;
 	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
@@ -46,6 +49,7 @@ int main(int argc, char** argv) {
 	int reach = 0;
 	int cadence = 1;
 
+		// Monstres
 	int nbMonsters = 1;
 	Monster* monsterToKill = NULL;
 
@@ -66,6 +70,10 @@ int main(int argc, char** argv) {
 
 	// Chargement menu
 	menu = loadTexture("images/menu.jpg");
+	// chargement image game over
+	gameOver = loadTexture("images/game-over.jpg");
+	// chargement image game win
+	gameWin = loadTexture("images/game-win.jpg");
 
 	// Chargement interface joueur (boutons)
 	SDL_Surface* interface = IMG_Load("images/interface/buttons.png");
@@ -86,23 +94,21 @@ int main(int argc, char** argv) {
 	}
 	mapBackground = loadTexture(fileName);
 
-	// Monstres
-	SDL_Surface* boutin = IMG_Load("images/boutin.png");
-	if(boutin == NULL) {
-		fprintf(stderr, "impossible de charger l'image boutin.png \n");
-		return EXIT_FAILURE;
-	}
-	texture = loadTexture("images/boutin.png");
 	// Noeuds
 	Node* root = map.listNodes;
-	Node* node = root;
 	Node* first = root;
 	// Initialisation de la position des monstres
-	posX = node->x;
-	posY = node->y;
+	posX = root->x;
+	posY = root->y;
 
+	// Création du premier monstre
 	MonsterType monsterType = BOUTIN;
-	Monster* rootMonster = createMonster(monsterType, posX, posY, node->next);
+	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
+
+	// Initialisation du jeu
+	Game game;
+	game.nbMonsterLists = 1;
+	game.start = 0;
 
 	reshape();
 
@@ -114,10 +120,32 @@ int main(int argc, char** argv) {
 		Uint32 startTime = SDL_GetTicks();
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		if(game == 0) {
+		if(game.start == 0) {
 			// Menu
 			glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, menu);
+				glBegin(GL_QUADS);
+					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
+					glTexCoord2d(0, 1); glVertex2f(0, 0);
+					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
+					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+				glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
+		else if(game.over == 1) {
+			glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, gameOver);
+				glBegin(GL_QUADS);
+					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
+					glTexCoord2d(0, 1); glVertex2f(0, 0);
+					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
+					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+				glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
+		else if(game.win == 1) {
+			glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, gameWin);
 				glBegin(GL_QUADS);
 					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
 					glTexCoord2d(0, 1); glVertex2f(0, 0);
@@ -161,13 +189,17 @@ int main(int argc, char** argv) {
 
 			// Monstres
 			if(cpt%100 == 0 && nbMonsters < 3) {
-				printf("%d\n", nbMonsters);
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				nbMonsters++;
 			}
 			cpt++;
+
 			drawMonsters(rootMonster);
+
+			if(drawMonsters(rootMonster) == 0) {
+				game.over = 1;
+			}
 
 			// Tours
 			if(t_first != NULL) {
@@ -276,7 +308,8 @@ int main(int argc, char** argv) {
 				case SDL_KEYDOWN:
 					switch(e.key.keysym.sym) {
 						case 's' :
-							game = 1;
+							game.start = 1;
+							game.over = 0;
 							break;
 						case 'q' :
 							loop = 0;
@@ -300,7 +333,6 @@ int main(int argc, char** argv) {
 
 	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
-	SDL_FreeSurface(boutin);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
