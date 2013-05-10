@@ -2,6 +2,7 @@
 #include <SDL/SDL_image.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <math.h>
 
 #include "tools.h"
 #include "Tower.h"
@@ -20,26 +21,26 @@ Tower* createTower(TowerType type, int posX, int posY) {
 	(*newTower).type = type;
 	if(type == ROCKET) {
 		(*newTower).puissance = 100;
-		(*newTower).reach = 60;			// Portée de 60 pixels
-		(*newTower).cadence = 100;		// Un tir toutes les 10s.
+		(*newTower).reach = 130;		// Portée de 130 pixels
+		(*newTower).cadence = 100;		// Un tir toutes les 2s.
 		(*newTower).price = 200.0;		// Prix de 200€
 	}
 	else if(type == LASER) {
 		(*newTower).puissance = 60;
-		(*newTower).reach = 40;			// Portée de 40 pixels	
-		(*newTower).cadence = 10;		// Un tir toutes les 1s.
+		(*newTower).reach = 100;		// Portée de 100 pixels	
+		(*newTower).cadence = 25;		// Un tir toutes les 0.5s.
 		(*newTower).price = 300.0;		// Prix de 300€
 	}
 	else if(type == MITRAILLETTE) {
 		(*newTower).puissance = 30;
-		(*newTower).reach = 30;			// Portée de 30 pixels
-		(*newTower).cadence = 30;		// Un tir toutes les 3s.
+		(*newTower).reach = 80;			// Portée de 80 pixels
+		(*newTower).cadence = 15;		// Un tir toutes les 0.3s.
 		(*newTower).price = 100.0;		// Prix de 100€
 	}
 	else if(type == HYBRIDE) {
 		(*newTower).puissance = 40;	
-		(*newTower).reach = 100;		// Portée de 100 pixels
-		(*newTower).cadence = 50;		// Un tir toutes les 5s.
+		(*newTower).reach = 200;		// Portée de 200 pixels
+		(*newTower).cadence = 50;		// Un tir toutes les 1s.
 		(*newTower).price = 500.0;		// Prix de 500€
 	}
 
@@ -239,4 +240,24 @@ void displayTowerFeatures(Tower* t) {
 	    glDisable(GL_BLEND);
 	    glDisable(GL_TEXTURE_2D);
     }
+}
+
+
+// Détection des monstres par les tours
+int reachTowerMonster(Tower* t, int posX, int posY) {
+	if(t != NULL) {
+		Tower* currTower = t;
+		while(currTower != NULL) {
+			// Calcul de la distance entre le monstre et la tour
+			float distance = sqrt((((*currTower).posX - posX)*((*currTower).posX - posX)) + (((*currTower).posY - (600-posY))*((*currTower).posY - (600-posY))));
+			// Si la distance est inférieure ou égale à la portée de la tour
+			if(distance <= (*currTower).reach) {
+				// BIM !
+				return 1;
+			}
+			currTower = (*currTower).next;
+		}
+	}
+	
+	return 0;
 }

@@ -43,8 +43,13 @@ int main(int argc, char** argv) {
 	Tower* t = NULL;
 	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
+	int reach = 0;
+	int cadence = 1;
 
 	int nbMonsters = 1;
+	Monster* monsterToKill = NULL;
+
+	int tmp = 1;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -163,17 +168,38 @@ int main(int argc, char** argv) {
 			}
 			cpt++;
 			drawMonsters(rootMonster);
-		}
 
-		// Tours
-		if(t_first != NULL) {
-			// Construction de la tour
-			constructTower(t_first);
-			// Affichage des caractéristiques de la tour survolée
-			t_selected = constructTowerSelected(t_first, xOver, yOver);
-			if(t_selected != NULL) {
-				displayTowerFeatures(t_selected);
-			}	
+			// Tours
+			if(t_first != NULL) {
+				// Construction de la tour
+				constructTower(t_first);
+				// Affichage des caractéristiques de la tour survolée
+				t_selected = constructTowerSelected(t_first, xOver, yOver);
+				if(t_selected != NULL) {
+					displayTowerFeatures(t_selected);
+				}
+				// Attaque des tours
+				if(rootMonster != NULL) {
+					monsterToKill = rootMonster;
+					while((*monsterToKill).next != NULL) {
+						// Test de la distance tour/monstre
+						reach = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
+						// Si le monstre est à la portée de la tour
+						if(reach == 1) {
+							if(cadence == 1) {
+								printf("BIM ! %d\n", tmp);
+								tmp++;
+							}
+							cadence++;
+							if(cadence == (*t_first).cadence) {
+								cadence = 1;
+							}
+						}
+						monsterToKill = (*monsterToKill).next;
+					}
+				}
+			}
+
 		}
 
 		SDL_GL_SwapBuffers();
