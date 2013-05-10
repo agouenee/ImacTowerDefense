@@ -19,7 +19,7 @@ typedef struct monster {
 
 typedef struct monsterList {
 	struct monster* root;
-	int nbMonster;
+	int nbMonsters;
 }MonsterList;
 
 

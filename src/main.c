@@ -47,9 +47,6 @@ int main(int argc, char** argv) {
 	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
 
-		// Monstres
-	int nbMonsters = 1;
-
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -99,7 +96,10 @@ int main(int argc, char** argv) {
 	// Création du premier monstre
 	MonsterType monsterType = BOUTIN;
 	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
-
+	// Création de la première liste de monstres
+	MonsterList monsterList;
+	monsterList.root = rootMonster;
+	monsterList.nbMonsters = 1;
 	// Initialisation du jeu
 	Game game;
 	game.nbMonsterLists = 1;
@@ -183,10 +183,10 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%100 == 0 && nbMonsters < 3) {
+			if(cpt%100 == 0 && monsterList.nbMonsters < 10) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
-				nbMonsters++;
+				monsterList.nbMonsters += 1;
 			}
 			cpt++;
 			if(drawMonsters(rootMonster) == 0) {
