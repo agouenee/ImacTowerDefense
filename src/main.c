@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 	int posX, posY;
 	int cpt = 1;
 
-		// Tours
+	// Tours
 	int nbTowers = 0;
 	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
@@ -49,9 +49,8 @@ int main(int argc, char** argv) {
 	int reach = 0;
 	int cadence = 1;
 
-		// Monstres
+	// Monstres
 	Monster* monsterToKill = NULL;
-	int tmp = 1;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -163,6 +162,7 @@ int main(int argc, char** argv) {
 				glBindTexture(GL_TEXTURE_2D, buttons);
 
 				glBegin(GL_QUADS);
+					glColor4ub(255, 255, 255, 255); // Opacité 100%
 					glTexCoord2d(0, 0); glVertex2f(600, interface->h);
 					glTexCoord2d(0, 1); glVertex2f(600, 0);
 					glTexCoord2d(1, 1); glVertex2f(interface->w + 600, 0);
@@ -198,9 +198,9 @@ int main(int argc, char** argv) {
 
 			drawMonsters(rootMonster);
 
-			if(drawMonsters(rootMonster) == 0) {
+			/*if(drawMonsters(rootMonster) == 0) {
 				game.over = 1;
-			}
+			}*/
 
 			// Tours
 			if(t_first != NULL) {
@@ -220,12 +220,17 @@ int main(int argc, char** argv) {
 						// Si le monstre est à la portée de la tour
 						if(reach == 1) {
 							if(cadence == 1) {
-								printf("BIM ! %d\n", tmp);
-								tmp++;
+								/* GERER LA RESISTANCE */
+								(*monsterToKill).life -= 1;
+								//printf("BIM !\n");
 							}
 							cadence++;
 							if(cadence == (*t_first).cadence) {
 								cadence = 1;
+							}
+							// Suppression des monstres tués
+							if((*monsterToKill).life == 0) {
+								rootMonster = rmvMonster(rootMonster, monsterToKill);
 							}
 						}
 						monsterToKill = (*monsterToKill).next;

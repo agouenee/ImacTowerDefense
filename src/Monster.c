@@ -63,6 +63,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 		fprintf(stderr, "pointer is NULL in rmvMonster function \n");
 		exit(1);
 	}
+
 	Monster* root = monsterList;
 	Monster* rmvMonster;
 
@@ -141,6 +142,7 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		glBegin(GL_QUADS);
+		glColor4ub(255, 255, 255, (*monster).life*255/10); /* GERER LA RESISTANCE ET LES POINTS DE VIE MAX. */
 		glTexCoord2d(0, 1); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY - boutin->h * 0.5);
 		glTexCoord2d(0, 0); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);
 		glTexCoord2d(1, 0); glVertex2d(monster->posX + boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);

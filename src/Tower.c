@@ -63,7 +63,7 @@ int checkPosTower(Tower* t_first, int posX, int posY) {
 		Tower* currTower = t_first;
 		while(currTower != NULL) {
 			// Est-ce que la tour est sur une autre ?
-			if(posX >= ((*currTower).posX + 30) || posX <= ((*currTower).posX - 30) || posY >= ((*currTower).posY + 30) || posY <= ((*currTower).posY - 30)) {
+			if(posX >= ((*currTower).posX + 45) || posX <= ((*currTower).posX - 45) || posY >= ((*currTower).posY + 90) || posY <= ((*currTower).posY - 90)) {
 				currTower = (*currTower).next;
 			}
 			else {
@@ -151,10 +151,11 @@ void constructTower(Tower* t_first) {
 	    glBindTexture(GL_TEXTURE_2D, tourTexture);
 	    
 		glBegin(GL_QUADS);
-			glTexCoord2d(0, 0); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
-			glTexCoord2d(0, 1); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
-			glTexCoord2d(1, 1); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
-			glTexCoord2d(1, 0); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
+			glColor4ub(255, 255, 255, 255); // Opacité 100%
+			glTexCoord2d(0, 0); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
+			glTexCoord2d(0, 1); glVertex2f((*currTower).posX - tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
+			glTexCoord2d(1, 1); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY - tourImg->h * 0.5);
+			glTexCoord2d(1, 0); glVertex2f((*currTower).posX + tourImg->w * 0.5, (*currTower).posY + tourImg->h * 0.5);
 		glEnd();
 	    
 	    glBindTexture(GL_TEXTURE_2D, 0);
@@ -230,6 +231,7 @@ void displayTowerFeatures(Tower* t) {
 	    glBindTexture(GL_TEXTURE_2D, featuresTexture);
 	    
 		glBegin(GL_QUADS);
+			glColor4ub(255, 255, 255, 255); // Opacité 100%
 			glTexCoord2d(0, 0); glVertex2f((*t).posX - featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY + featuresImg->h * 0.5 + featuresImg->h / 2);
 			glTexCoord2d(0, 1); glVertex2f((*t).posX - featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY - featuresImg->h * 0.5 + featuresImg->h / 2);
 			glTexCoord2d(1, 1); glVertex2f((*t).posX + featuresImg->w * 0.5 + featuresImg->w / 2.5, (*t).posY - featuresImg->h * 0.5 + featuresImg->h / 2);
