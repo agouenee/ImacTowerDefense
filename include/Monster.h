@@ -1,8 +1,9 @@
 #ifndef ITD_MONSTER___
 #define ITD_MONSTER___
 
+#define NB_MONSTER_LIST_MAX 20
+
 typedef enum {
-	// A définir
 	BOUTIN, BARJOT
 }MonsterType;
 
@@ -21,6 +22,11 @@ typedef struct monsterList {
 	struct monster* root;
 	int nbMonsters;
 }MonsterList;
+
+typedef struct monsterLists {
+	MonsterList lists[NB_MONSTER_LIST_MAX];
+	int nbLists;
+}MonsterLists;
 
 
 int countMonsters(Monster* root);
