@@ -198,9 +198,9 @@ int main(int argc, char** argv) {
 
 			drawMonsters(rootMonster);
 
-			/*if(drawMonsters(rootMonster) == 0) {
-				game.over = 1;
-			}*/
+			if(drawMonsters(rootMonster) == 0) {
+				//game.over = 1;
+			}
 
 			// Tours
 			if(t_first != NULL) {
