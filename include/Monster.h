@@ -11,7 +11,8 @@ typedef struct monster {
 	MonsterType type;
 	unsigned int life;
 	unsigned int resistance;
-	float speed;
+	int move;
+	int speedDelay;
 	int posX;
 	int posY;
 	struct monster* next;

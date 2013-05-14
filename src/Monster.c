@@ -29,12 +29,14 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
 		(*newMonster).resistance = 10;
-		(*newMonster).speed = 1;
+		(*newMonster).move = 2;
+		(*newMonster).speedDelay = 2;
 	}
 	else if(type == BARJOT) {
 		(*newMonster).life = 20;
 		(*newMonster).resistance = 20;
-		(*newMonster).speed = 2;
+		(*newMonster).move = 1;
+		(*newMonster).speedDelay = 1;
 	}
 	else {
 		fprintf(stderr, "Unknown monster type \n");
@@ -116,27 +118,34 @@ int drawMonsters(Monster* root) {
 }
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	if(monster->nextNode != NULL) {
-		if(monster->nextNode->y == monster->posY) {
-			if(monster->nextNode->x > monster->posX) {
-				monster->posX += monster->speed;
+		if(monster->move == monster->speedDelay) {
+			if(monster->nextNode->y == monster->posY) {
+				if(monster->nextNode->x > monster->posX) {
+					monster->posX += 1;
+				}
+				else {
+					monster->posX -= 1;
+				}   
 			}
 			else {
-				monster->posX -= monster->speed;
-			}   
+				if(monster->nextNode->y > monster->posY) {
+					monster->posY += 1;
+				}
+				else {
+					monster->posY -= 1;
+				}
+			}
+			if(monster->posX == monster->nextNode->x && monster->posY == monster->nextNode->y) {
+				monster->nextNode = monster->nextNode->next;
+			}
+
+			monster->move = 0;
 		}
 		else {
-			if(monster->nextNode->y > monster->posY) {
-				monster->posY += monster->speed;
-			}
-			else {
-				monster->posY -= monster->speed;
-			}
+			monster->move += 1;
 		}
-  		if(monster->posX == monster->nextNode->x && monster->posY == monster->nextNode->y) {
-			monster->nextNode = monster->nextNode->next;
-  		}
 
-  		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture(GL_TEXTURE_2D, texture);
