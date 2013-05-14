@@ -136,13 +136,13 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 			monster->nextNode = monster->nextNode->next;
   		}
 
-		glEnable(GL_TEXTURE_2D);
+  		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		glBegin(GL_QUADS);
-		glColor4ub(255, 255, 255, (*monster).life*255/10); /* GERER LA RESISTANCE ET LES POINTS DE VIE MAX. */
+		glColor4ub(255, 255, 255, (*monster).life*255/10); /* GERER LES POINTS DE VIE MAX. */
 		glTexCoord2d(0, 1); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY - boutin->h * 0.5);
 		glTexCoord2d(0, 0); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);
 		glTexCoord2d(1, 0); glVertex2d(monster->posX + boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);

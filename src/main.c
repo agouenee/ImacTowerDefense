@@ -51,6 +51,7 @@ int main(int argc, char** argv) {
 
 	// Monstres
 	Monster* monsterToKill = NULL;
+	//int nbMonsters = 0;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -189,7 +190,7 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%50 == 0 && monsterList.nbMonsters < 10) {
+			if(cpt%50 == 0 && monsterList.nbMonsters < 5) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				monsterList.nbMonsters += 1;
@@ -199,7 +200,7 @@ int main(int argc, char** argv) {
 			drawMonsters(rootMonster);
 
 			if(drawMonsters(rootMonster) == 0) {
-				//game.over = 1;
+				game.over = 1;
 			}
 
 			// Tours
@@ -214,30 +215,38 @@ int main(int argc, char** argv) {
 				// Attaque des tours
 				if(rootMonster != NULL) {
 					monsterToKill = rootMonster;
-					while((*monsterToKill).next != NULL) {
+					while(monsterToKill != NULL) { /* fuckin' segmentation fault */
 						// Test de la distance tour/monstre
 						reach = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
 						// Si le monstre est à la portée de la tour
 						if(reach == 1) {
 							if(cadence == 1) {
-								/* GERER LA RESISTANCE */
-								(*monsterToKill).life -= 1;
-								//printf("BIM !\n");
+								/* GERER RESISTANCE / PUISSANCE DES MONSTRES / TOURS */
+								if((*monsterToKill).life > 0) {
+									(*monsterToKill).life -= 1;
+									//printf("ET BIM !\n");
+								}
+								// Suppression des monstres
+								else {
+									rootMonster = rmvMonster(rootMonster, rootMonster);
+									printf("DEAD !\n");
+								}
 							}
 							cadence++;
 							if(cadence == (*t_first).cadence) {
 								cadence = 1;
 							}
-							// Suppression des monstres tués
-							if((*monsterToKill).life == 0) {
-								rootMonster = rmvMonster(rootMonster, monsterToKill);
-							}
+							reach = 0;
 						}
 						monsterToKill = (*monsterToKill).next;
+
+						/*if(rootMonster != NULL) {
+							nbMonsters = countMonsters(rootMonster);
+							printf("Nb monstres: %d\n", nbMonsters);
+						}*/
 					}
 				}
 			}
-
 		}
 
 		SDL_GL_SwapBuffers();
