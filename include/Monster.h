@@ -34,7 +34,7 @@ int countMonsters(Monster* root);
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
 Monster* addMonster(Monster* monsterList, Monster* addMonster);
 Monster* rmvMonster(Monster* monsterList, Monster* monster);
-int drawMonsters(Monster* root);
+int drawMonsters(MonsterLists lists);
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture);
 
 #endif
