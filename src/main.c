@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
 	// Initialisation des variables
 	int posX, posY;
 	int cpt = 1;
+	int i = 0;
 
 	// Tours
 	int nbTowers = 0;
@@ -201,7 +202,7 @@ int main(int argc, char** argv) {
 			if(cpt%100 == 0) {
 				// Création d'un nouveau monstre
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
-				
+
 				if(cpt%700 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
 					MonsterList newList;
 					rootMonster = newMonster;
@@ -236,8 +237,8 @@ int main(int argc, char** argv) {
 					displayTowerFeatures(t_selected);
 				}
 				// Attaque des tours
-				if(rootMonster != NULL) {
-					monsterToKill = rootMonster;
+				for(i = 0; i < monsterLists.nbLists; i++) {
+					monsterToKill = monsterLists.lists[i].root;
 					while(monsterToKill != NULL) {
 						// Test de la distance tour/monstre
 						t_shoot = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
@@ -277,6 +278,7 @@ int main(int argc, char** argv) {
 							}*/
 							t_shoot = NULL;
 						}
+
 						monsterToKill = (*monsterToKill).next;
 					}
 				}
