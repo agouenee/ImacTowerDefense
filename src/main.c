@@ -247,36 +247,23 @@ int main(int argc, char** argv) {
 							if(cadence%(*t_shoot).cadence == 0) {
 								if((*monsterToKill).life > 0) {
 									// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
-									//degat = ((*t_shoot).puissance/100 + ((*monsterToKill).resistance/100)) / 2;
-									(*monsterToKill).life -= 1;
-									//printf("BIM ! %d\n", cadence);
-								}
-								// Suppression des monstres
-								/*if((*monsterToKill).life <= 0) {
-									rootMonster = rmvMonster(rootMonster, rootMonster);
-									printf("DEAD !\n");
-								}*/
-							}
-							cadence++;
-							/*if(cadence == 1) {
-								// GERER RESISTANCE / PUISSANCE DES MONSTRES / TOURS
-								if((*monsterToKill).life > 0) {
-									// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
 									degat = ((*t_shoot).puissance/100 + ((*monsterToKill).resistance/100)) / 2;
-									printf("BIM\n");
 									(*monsterToKill).life -= degat;
 								}
-								// Suppression des monstres
-								if((*monsterToKill).life <= 0) {
-									rootMonster = rmvMonster(rootMonster, rootMonster);
-									//printf("DEAD !\n");
-								}
 							}
 							cadence++;
-							if(cadence == (*t_shoot).cadence) {
-								cadence = 1;
-							}*/
-							t_shoot = NULL;
+							//t_shoot = NULL;
+						}
+						// Suppression des monstres
+						if((*monsterToKill).life <= 0) {
+							monsterToKill = rmvMonster(monsterLists.lists[i].root, monsterToKill);
+							if(monsterToKill == NULL) {
+								printf("NULL\n");
+							}
+							if((*monsterToKill).next == NULL) {
+								printf("NEXT NULL\n");
+							}
+							printf("DEAD !\n");
 						}
 
 						monsterToKill = (*monsterToKill).next;

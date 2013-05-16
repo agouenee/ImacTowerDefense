@@ -156,7 +156,7 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		glBegin(GL_QUADS);
-		glColor4ub(255, 255, 255, (*monster).life*255/10); /* GERER LES POINTS DE VIE MAX. */
+		glColor3ub(255, 255, 255); // couleur neutre
 		glTexCoord2d(0, 1); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY - boutin->h * 0.5);
 		glTexCoord2d(0, 0); glVertex2d(monster->posX - boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);
 		glTexCoord2d(1, 0); glVertex2d(monster->posX + boutin->w * 0.5, 600 - monster->posY + boutin->h * 0.5);
