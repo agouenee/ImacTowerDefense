@@ -46,8 +46,9 @@ int main(int argc, char** argv) {
 	Tower* t = NULL;
 	Tower* t_selected = NULL;
 	TowerType type = EMPTY;
-	int reach = 0;
+	Tower* t_shoot = NULL;
 	int cadence = 1;
+	int degat = 0;
 
 	// Monstres
 	Monster* monsterToKill = NULL;
@@ -190,7 +191,7 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%50 == 0 && monsterList.nbMonsters < 5) {
+			if(cpt%100 == 0 && monsterList.nbMonsters < 10) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				rootMonster = addMonster(rootMonster, newMonster);
 				monsterList.nbMonsters += 1;
@@ -215,35 +216,46 @@ int main(int argc, char** argv) {
 				// Attaque des tours
 				if(rootMonster != NULL) {
 					monsterToKill = rootMonster;
-					while(monsterToKill != NULL) { /* fuckin' segmentation fault */
+					while(monsterToKill != NULL) {
 						// Test de la distance tour/monstre
-						reach = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
+						t_shoot = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
 						// Si le monstre est à la portée de la tour
-						if(reach == 1) {
-							if(cadence == 1) {
-								/* GERER RESISTANCE / PUISSANCE DES MONSTRES / TOURS */
+						if(t_shoot != NULL) {
+							if(cadence%(*t_shoot).cadence == 0) {
 								if((*monsterToKill).life > 0) {
+									// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
+									//degat = ((*t_shoot).puissance/100 + ((*monsterToKill).resistance/100)) / 2;
 									(*monsterToKill).life -= 1;
-									//printf("ET BIM !\n");
+									//printf("BIM ! %d\n", cadence);
 								}
 								// Suppression des monstres
-								else {
+								if((*monsterToKill).life <= 0) {
 									rootMonster = rmvMonster(rootMonster, rootMonster);
 									printf("DEAD !\n");
 								}
 							}
 							cadence++;
-							if(cadence == (*t_first).cadence) {
-								cadence = 1;
+							/*if(cadence == 1) {
+								// GERER RESISTANCE / PUISSANCE DES MONSTRES / TOURS
+								if((*monsterToKill).life > 0) {
+									// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
+									degat = ((*t_shoot).puissance/100 + ((*monsterToKill).resistance/100)) / 2;
+									printf("BIM\n");
+									(*monsterToKill).life -= degat;
+								}
+								// Suppression des monstres
+								if((*monsterToKill).life <= 0) {
+									rootMonster = rmvMonster(rootMonster, rootMonster);
+									//printf("DEAD !\n");
+								}
 							}
-							reach = 0;
+							cadence++;
+							if(cadence == (*t_shoot).cadence) {
+								cadence = 1;
+							}*/
+							t_shoot = NULL;
 						}
 						monsterToKill = (*monsterToKill).next;
-
-						/*if(rootMonster != NULL) {
-							nbMonsters = countMonsters(rootMonster);
-							printf("Nb monstres: %d\n", nbMonsters);
-						}*/
 					}
 				}
 			}

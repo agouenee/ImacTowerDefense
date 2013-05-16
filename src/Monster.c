@@ -28,7 +28,7 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
-		(*newMonster).resistance = 10;
+		(*newMonster).resistance = 100;
 		(*newMonster).move = 2;
 		(*newMonster).speedDelay = 2;
 	}

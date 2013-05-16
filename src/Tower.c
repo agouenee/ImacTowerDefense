@@ -20,27 +20,27 @@ Tower* createTower(TowerType type, int posX, int posY) {
 
 	(*newTower).type = type;
 	if(type == ROCKET) {
-		(*newTower).puissance = 100;
+		(*newTower).puissance = 500;
 		(*newTower).reach = 130;		// Portée de 130 pixels
-		(*newTower).cadence = 100;		// Un tir toutes les 2s.
+		(*newTower).cadence = 120;		// Un tir toutes les 2s.
 		(*newTower).price = 200.0;		// Prix de 200€
 	}
 	else if(type == LASER) {
-		(*newTower).puissance = 60;
+		(*newTower).puissance = 400;
 		(*newTower).reach = 100;		// Portée de 100 pixels	
-		(*newTower).cadence = 25;		// Un tir toutes les 0.5s.
+		(*newTower).cadence = 30;		// Un tir toutes les 0.5s.
 		(*newTower).price = 300.0;		// Prix de 300€
 	}
 	else if(type == MITRAILLETTE) {
-		(*newTower).puissance = 30;
+		(*newTower).puissance = 200;
 		(*newTower).reach = 80;			// Portée de 80 pixels
-		(*newTower).cadence = 15;		// Un tir toutes les 0.3s.
+		(*newTower).cadence = 20;		// Un tir toutes les 0.3s.
 		(*newTower).price = 100.0;		// Prix de 100€
 	}
 	else if(type == HYBRIDE) {
-		(*newTower).puissance = 40;	
+		(*newTower).puissance = 300;	
 		(*newTower).reach = 200;		// Portée de 200 pixels
-		(*newTower).cadence = 50;		// Un tir toutes les 1s.
+		(*newTower).cadence = 60;		// Un tir toutes les 1s.
 		(*newTower).price = 500.0;		// Prix de 500€
 	}
 
@@ -244,9 +244,8 @@ void displayTowerFeatures(Tower* t) {
     }
 }
 
-
 // Détection des monstres par les tours
-int reachTowerMonster(Tower* t, int posX, int posY) {
+Tower* reachTowerMonster(Tower* t, int posX, int posY) {
 	if(t != NULL) {
 		Tower* currTower = t;
 		while(currTower != NULL) {
@@ -254,12 +253,12 @@ int reachTowerMonster(Tower* t, int posX, int posY) {
 			float distance = sqrt((((*currTower).posX - posX)*((*currTower).posX - posX)) + (((*currTower).posY - (600-posY))*((*currTower).posY - (600-posY))));
 			// Si la distance est inférieure ou égale à la portée de la tour
 			if(distance <= (*currTower).reach) {
-				// BIM !
-				return 1;
+				// Retour la puissance de la tour
+				return currTower;
 			}
 			currTower = (*currTower).next;
 		}
 	}
 	
-	return 0;
+	return NULL;
 }

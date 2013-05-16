@@ -9,7 +9,7 @@ typedef enum {
 
 typedef struct monster {
 	MonsterType type;
-	unsigned int life;
+	int life;
 	unsigned int resistance;
 	int move;
 	int speedDelay;
