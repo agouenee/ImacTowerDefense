@@ -28,7 +28,7 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
-		(*newMonster).resistance = 10;
+		(*newMonster).resistance = 5;
 		(*newMonster).move = 0;
 		(*newMonster).speedDelay = 0;
 	}
@@ -111,7 +111,7 @@ int drawMonsters(MonsterLists lists) {
 		monster = lists.lists[i].root;
 		while(monster != NULL) {
 			if(drawMonster(monster, boutin, texture) == 0) {
-				return 0;
+				//return 0;
 			}
 			monster = (*monster).next;
 		}

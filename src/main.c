@@ -114,7 +114,6 @@ int main(int argc, char** argv) {
 
 	// Initialisation du jeu
 	Game game;
-	game.nbMonsterLists = 1;
 	game.start = 0;
 	game.over = 0;
 	game.win = 0;
@@ -202,26 +201,28 @@ int main(int argc, char** argv) {
 				// Création d'un nouveau monstre
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 				
-				if(cpt%700 == 0 && monsterLists.nbLists <= 20) {
+				if(cpt%700 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
 					MonsterList newList;
 					rootMonster = newMonster;
 					newList.root = rootMonster;
 					currentList = newList;
+					currentList.nbMonsters = 1;
 
 					monsterLists.nbLists += 1;
 					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
+
 				}
 				else if(currentList.nbMonsters < 5) {
 					// Ajout du monstre
 					rootMonster = addMonster(rootMonster, newMonster);
 					monsterLists.lists[monsterLists.nbLists - 1].root = rootMonster;
+					currentList.nbMonsters += 1;
 				}
-				currentList.nbMonsters += 1;
 			}
 			cpt++;
 
 			if(drawMonsters(monsterLists) == 0) {
-				game.over = 1;
+				//game.over = 1; 
 			}
 
 			// Tours
