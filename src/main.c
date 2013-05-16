@@ -104,13 +104,20 @@ int main(int argc, char** argv) {
 	MonsterType monsterType = BOUTIN;
 	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
 	// Création de la première liste de monstres
-	MonsterList monsterList;
-	monsterList.root = rootMonster;
-	monsterList.nbMonsters = 1;
+	MonsterList currentList;
+	currentList.root = rootMonster;
+	currentList.nbMonsters = 1;
+
+	// Création du tableau des listes de monstre
+	MonsterLists monsterLists;
+	monsterLists.nbLists = 1;
+	monsterLists.lists[monsterLists.nbLists - 1] = currentList;
+
 	// Initialisation du jeu
 	Game game;
-	game.nbMonsterLists = 1;
 	game.start = 0;
+	game.over = 0;
+	game.win = 0;
 
 	reshape();
 
@@ -191,17 +198,32 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%100 == 0 && monsterList.nbMonsters < 10) {
+			if(cpt%100 == 0) {
+				// Création d'un nouveau monstre
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
-				rootMonster = addMonster(rootMonster, newMonster);
-				monsterList.nbMonsters += 1;
+				
+				if(cpt%700 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
+					MonsterList newList;
+					rootMonster = newMonster;
+					newList.root = rootMonster;
+					currentList = newList;
+					currentList.nbMonsters = 1;
+
+					monsterLists.nbLists += 1;
+					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
+
+				}
+				else if(currentList.nbMonsters < 5) {
+					// Ajout du monstre
+					rootMonster = addMonster(rootMonster, newMonster);
+					monsterLists.lists[monsterLists.nbLists - 1].root = rootMonster;
+					currentList.nbMonsters += 1;
+				}
 			}
 			cpt++;
 
-			drawMonsters(rootMonster);
-
-			if(drawMonsters(rootMonster) == 0) {
-				game.over = 1;
+			if(drawMonsters(monsterLists) == 0) {
+				//game.over = 1; 
 			}
 
 			// Tours
@@ -229,10 +251,10 @@ int main(int argc, char** argv) {
 									//printf("BIM ! %d\n", cadence);
 								}
 								// Suppression des monstres
-								if((*monsterToKill).life <= 0) {
+								/*if((*monsterToKill).life <= 0) {
 									rootMonster = rmvMonster(rootMonster, rootMonster);
 									printf("DEAD !\n");
-								}
+								}*/
 							}
 							cadence++;
 							/*if(cadence == 1) {

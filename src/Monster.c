@@ -29,12 +29,12 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
 		(*newMonster).resistance = 100;
-		(*newMonster).move = 2;
-		(*newMonster).speedDelay = 2;
+		(*newMonster).move = 0;
+		(*newMonster).speedDelay = 0;
 	}
 	else if(type == BARJOT) {
 		(*newMonster).life = 20;
-		(*newMonster).resistance = 20;
+		(*newMonster).resistance = 200;
 		(*newMonster).move = 1;
 		(*newMonster).speedDelay = 1;
 	}
@@ -97,7 +97,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 
 	return root;
 }
-int drawMonsters(Monster* root) {
+int drawMonsters(MonsterLists lists) {
 	SDL_Surface* boutin = IMG_Load("images/boutin.png");
 	if(boutin == NULL) {
 		fprintf(stderr, "impossible de charger l'image boutin.png \n");
@@ -105,11 +105,16 @@ int drawMonsters(Monster* root) {
 	}
 	GLuint texture = loadTexture("images/boutin.png");
 
-	while(root != NULL) {
-		if(drawMonster(root, boutin, texture) == 0) {
-			return 0;
+	Monster* monster;
+	int i = 0;
+	for(i = 0; i < lists.nbLists; i++) {
+		monster = lists.lists[i].root;
+		while(monster != NULL) {
+			if(drawMonster(monster, boutin, texture) == 0) {
+				//return 0;
+			}
+			monster = (*monster).next;
 		}
-		root = (*root).next;
 	}
 
 	SDL_FreeSurface(boutin);
