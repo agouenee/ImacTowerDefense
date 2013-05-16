@@ -167,6 +167,14 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 
+		glBegin(GL_QUADS);
+		glColor3ub(255, 0, 0);
+		glVertex2d(monster->posX - (boutin->w - monster->life)*0.5, 600 - monster->posY + 40);
+		glVertex2d(monster->posX - (boutin->w - monster->life)*0.5, 600 - monster->posY + 30);
+		glVertex2d(monster->posX + (boutin->w + monster->life)*0.5, 600 - monster->posY + 30);
+		glVertex2d(monster->posX + (boutin->w + monster->life)*0.5, 600 - monster->posY + 40);
+		glEnd();
+
 		return 1;
 	}
 	return 0;
