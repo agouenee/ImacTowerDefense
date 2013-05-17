@@ -89,6 +89,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 			}
 			else {
 				(*monsterList).next = NULL;
+				break;
 			}
 			free(rmvMonster);
 		}
