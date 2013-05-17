@@ -21,6 +21,7 @@ GLuint menu;
 GLuint gameOver;
 GLuint gameWin;
 GLuint buttons;
+GLuint figures;
 GLuint mapBackground;
 GLuint texture;
 
@@ -83,6 +84,13 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 	buttons = loadTexture("images/interface/buttons.png");
+	// Texture chiffres budget
+	SDL_Surface* figuresIMG = IMG_Load("images/interface/figures.png");
+	if(figuresIMG == NULL) {
+		fprintf(stderr, "Impossible de charger l'image figures.png\n");
+		return EXIT_FAILURE;
+	}
+	figures = loadTexture("images/interface/figures.png");
 
 	// Chargement carte itd
 	Map map = loadMap("data/map-test.itd");
@@ -120,6 +128,7 @@ int main(int argc, char** argv) {
 	game.start = 0;
 	game.over = 0;
 	game.win = 0;
+	game.budget = 543210;
 
 	reshape();
 
@@ -183,6 +192,9 @@ int main(int argc, char** argv) {
 				glBindTexture(GL_TEXTURE_2D, 0);
 				glDisable(GL_BLEND);
 			glDisable(GL_TEXTURE_2D);
+
+			// Budget
+			displayBudget(figuresIMG, figures, game.budget);
 
 			// Carte
 			glEnable(GL_TEXTURE_2D);
@@ -313,6 +325,7 @@ int main(int argc, char** argv) {
 										if(towerTest == 1) {
 											t_first = createTower(type, xClicked, yClicked);
 											t_last = t_first;
+											game.budget -= (*t_first).price;
 											nbTowers++;
 										}
 									}
@@ -324,6 +337,7 @@ int main(int argc, char** argv) {
 											t = createTower(type, xClicked, yClicked);
 											(*t_last).next = t;
 											t_last = t;
+											game.budget -= (*t).price;
 											nbTowers++;
 										}
 									}

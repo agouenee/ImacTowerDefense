@@ -23,25 +23,25 @@ Tower* createTower(TowerType type, int posX, int posY) {
 		(*newTower).puissance = 500;
 		(*newTower).reach = 130;		// Portée de 130 pixels
 		(*newTower).cadence = 20;		// Un tir toutes les 2s. (20*1/10 de seconde)
-		(*newTower).price = 200.0;		// Prix de 200€
+		(*newTower).price = 200;		// Prix de 200€
 	}
 	else if(type == LASER) {
 		(*newTower).puissance = 400;
 		(*newTower).reach = 100;		// Portée de 100 pixels	
 		(*newTower).cadence = 5;		// Un tir toutes les 0.5s. (5*1/10 de seconde)
-		(*newTower).price = 300.0;		// Prix de 300€
+		(*newTower).price = 300;		// Prix de 300€
 	}
 	else if(type == MITRAILLETTE) {
 		(*newTower).puissance = 200;
 		(*newTower).reach = 80;			// Portée de 80 pixels
 		(*newTower).cadence = 3;		// Un tir toutes les 0.3s. (3*1/10 de seconde)
-		(*newTower).price = 100.0;		// Prix de 100€
+		(*newTower).price = 100;		// Prix de 100€
 	}
 	else if(type == HYBRIDE) {
 		(*newTower).puissance = 300;	
 		(*newTower).reach = 200;		// Portée de 200 pixels
 		(*newTower).cadence = 10;		// Un tir toutes les 1s. (10*1/10 de seconde)
-		(*newTower).price = 500.0;		// Prix de 500€
+		(*newTower).price = 500;		// Prix de 500€
 	}
 
 	(*newTower).next = NULL;
