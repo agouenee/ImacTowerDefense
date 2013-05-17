@@ -14,7 +14,7 @@
 #define WINDOW_WIDTH 900
 #define WINDOW_HEIGHT 600
 
-// 1 image pour 100 ms (0.1 secondes) = 10 images pour 1000 ms
+// 100 ms = 1/10ème de seconde
 static const Uint32 FRAMERATE_MILLISECONDS = 100;
 
 GLuint menu;
@@ -32,7 +32,7 @@ void reshape() {
 }
 
 int main(int argc, char** argv) {
-	int actualTime, prevTime, elapsedTime = 0;
+	Uint32 actualTime, prevTime, elapsedTime = 0;
 	// Initialisation des variables
 	int posX, posY;
 	int cpt = 1;
@@ -53,8 +53,8 @@ int main(int argc, char** argv) {
 	int degat = 0;
 
 	// Monstres
-	Monster* monsterToKill = NULL;
-	//int nbMonsters = 0;
+	Monster* monsterToKill;
+	Monster* monsterToRmv;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
 	int loop = 1;
 	while(loop) {
 		root = first;
-		Uint32 actualTime = SDL_GetTicks();
+		actualTime = SDL_GetTicks();
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if(game.start == 0) {
@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
 				// Création d'un nouveau monstre
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 
-				if(cpt%700 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
+				if(cpt%150 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
 					MonsterList newList;
 					rootMonster = newMonster;
 					newList.root = rootMonster;
@@ -237,9 +237,11 @@ int main(int argc, char** argv) {
 				if(t_selected != NULL) {
 					displayTowerFeatures(t_selected);
 				}
+				int j =0;
 				// Attaque des tours
 				for(i = 0; i < monsterLists.nbLists; i++) {
 					monsterToKill = monsterLists.lists[i].root;
+					j = 0;
 					while(monsterToKill != NULL) {
 						// Test de la distance tour/monstre
 						t_shoot = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
@@ -257,17 +259,17 @@ int main(int argc, char** argv) {
 						}
 						// Suppression des monstres
 						if((*monsterToKill).life <= 0) {
-							monsterToKill = rmvMonster(monsterLists.lists[i].root, monsterToKill);
-							if(monsterToKill == NULL) {
-								printf("NULL\n");
-							}
-							if((*monsterToKill).next == NULL) {
-								printf("NEXT NULL\n");
-							}
+							printf("monster n %d\n",j);
+							monsterToRmv = monsterToKill;
+							monsterToKill = (*monsterToKill).next;
+							monsterLists.lists[i].root = rmvMonster(monsterLists.lists[i].root, monsterToRmv);
+							printf("%d\n", countMonsters(monsterLists.lists[i].root));
 							printf("DEAD !\n");
 						}
-
-						monsterToKill = (*monsterToKill).next;
+						else {
+							monsterToKill = (*monsterToKill).next;
+						}
+						j++;
 					}
 				}
 			}
