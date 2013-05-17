@@ -15,7 +15,7 @@
 #define WINDOW_HEIGHT 600
 
 // 1 image pour 100 ms (0.1 secondes) = 10 images pour 1000 ms
-static const Uint32 FRAMERATE_MILLISECONDS = 10 / 1000;
+static const Uint32 FRAMERATE_MILLISECONDS = 100;
 
 GLuint menu;
 GLuint gameOver;
@@ -32,6 +32,7 @@ void reshape() {
 }
 
 int main(int argc, char** argv) {
+	int actualTime, prevTime, elapsedTime = 0;
 	// Initialisation des variables
 	int posX, posY;
 	int cpt = 1;
@@ -127,7 +128,7 @@ int main(int argc, char** argv) {
 	int loop = 1;
 	while(loop) {
 		root = first;
-		Uint32 startTime = SDL_GetTicks();
+		Uint32 actualTime = SDL_GetTicks();
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if(game.start == 0) {
@@ -199,7 +200,7 @@ int main(int argc, char** argv) {
 			drawPath(root);
 
 			// Monstres
-			if(cpt%100 == 0) {
+			if(cpt%40 == 0) {
 				// Création d'un nouveau monstre
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 
@@ -375,10 +376,11 @@ int main(int argc, char** argv) {
 					break;
 			}
 		}
-		Uint32 elapsedTime = SDL_GetTicks() - startTime;
+		elapsedTime = actualTime - prevTime;
 		if(elapsedTime < FRAMERATE_MILLISECONDS) {
 			SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
 		}
+		prevTime = actualTime;
 	}
 
 	// Destruction des données des images chargées
