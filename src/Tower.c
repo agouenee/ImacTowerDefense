@@ -70,7 +70,7 @@ int checkPosTower(Tower* t_first, int posX, int posY) {
 		Tower* currTower = t_first;
 		while(currTower != NULL) {
 			// Est-ce que la tour est sur une autre ?
-			if(posX >= ((*currTower).posX + 45) || posX <= ((*currTower).posX - 45) || posY >= ((*currTower).posY + 90) || posY <= ((*currTower).posY - 90)) {
+			if(posX >= ((*currTower).posX + 40) || posX <= ((*currTower).posX - 40) || posY >= ((*currTower).posY + 50) || posY <= ((*currTower).posY - 50)) {
 				currTower = (*currTower).next;
 			}
 			else {
@@ -179,7 +179,7 @@ Tower* constructTowerSelected(Tower* t_first, int posX, int posY) {
 		Tower* currTower = t_first;
 		while(currTower != NULL) {
 			// Est-ce que la souris survole une tour ?
-			if(posX >= ((*currTower).posX - 15) && posX <= ((*currTower).posX + 15) && posY >= ((*currTower).posY - 15) && posY <= ((*currTower).posY + 15)) {
+			if(posX >= ((*currTower).posX - 30) && posX <= ((*currTower).posX + 30) && posY >= ((*currTower).posY - 30) && posY <= ((*currTower).posY + 30)) {
 				return currTower;
 			}
 			else {

@@ -69,10 +69,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 0
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.1, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.1, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.1, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.1, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -80,10 +80,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 1
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.1, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.1, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.2, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.2, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.1, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.1, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.2, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.2, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -91,10 +91,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 2
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.2, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.2, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.3, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.3, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.2, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.2, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.3, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.3, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();		
 			break;
 
@@ -102,10 +102,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 3
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.3, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.3, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.4, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.4, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.3, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.3, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.4, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.4, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();			
 			break;
 
@@ -113,10 +113,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 4
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.4, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.4, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.5, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.5, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.4, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.4, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.5, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.5, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -124,10 +124,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 5
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.5, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.5, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.6, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.6, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.5, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.5, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.6, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.6, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -135,10 +135,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 6
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.6, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.6, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.7, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.7, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.6, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.6, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.7, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.7, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -146,10 +146,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 7
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.7, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.7, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.8, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.8, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.7, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.7, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.8, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.8, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();			
 			break;
 
@@ -157,10 +157,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 8
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.8, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.8, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.9, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(0.9, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.8, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.8, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.9, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(0.9, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
@@ -168,10 +168,10 @@ void displayFigure(SDL_Surface* figuresIMG, int figure, int pos) {
 			// 9
 			glBegin(GL_QUADS);
 				//glColor4ub(255, 255, 255, 255); // Opacité 100%
-				glTexCoord2d(0.9, 0); glVertex2f(pos + 600, 500 + figuresIMG->h * 0.5);
-				glTexCoord2d(0.9, 1); glVertex2f(pos + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(1, 1); glVertex2f(pos + 29 + 600, 500 - figuresIMG->h * 0.5);
-				glTexCoord2d(1, 0); glVertex2f(pos + 29 + 600, 500 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.9, 0); glVertex2f(pos + 580, 304 + figuresIMG->h * 0.5);
+				glTexCoord2d(0.9, 1); glVertex2f(pos + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(1, 1); glVertex2f(pos + 29 + 580, 304 - figuresIMG->h * 0.5);
+				glTexCoord2d(1, 0); glVertex2f(pos + 29 + 580, 304 + figuresIMG->h * 0.5);
 			glEnd();
 			break;
 
