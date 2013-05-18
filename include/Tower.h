@@ -19,7 +19,7 @@ typedef struct tower {
 	struct tower* next;
 }Tower;
 
-Tower* createTower(TowerType type, int posX, int posY);
+Tower* createTower(TowerType type, int posX, int posY, int budget);
 int checkPosTower(Tower* t_first, int posX, int posY);
 TowerType constructTowerType(int posX, int posY);
 void constructTower(Tower* t_first);

@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
 	game.start = 0;
 	game.over = 0;
 	game.win = 0;
-	game.budget = 543210;
+	game.budget = 400;
 
 	reshape();
 
@@ -325,10 +325,16 @@ int main(int argc, char** argv) {
 										// Vérification de la position
 										towerTest = checkPosTower(t_first, xClicked, yClicked);
 										if(towerTest == 1) {
-											t_first = createTower(type, xClicked, yClicked);
-											t_last = t_first;
-											game.budget -= (*t_first).price;
-											nbTowers++;
+											t_first = createTower(type, xClicked, yClicked, game.budget);
+											// Vérification du prix
+											if(t_first != NULL) {
+												t_last = t_first;
+												game.budget -= (*t_first).price;
+												nbTowers++;
+											}
+											else {
+												printf("Pas assez de budget !\n");
+											}
 										}
 									}
 									// Autres tours
@@ -336,11 +342,17 @@ int main(int argc, char** argv) {
 										// Vérification de la position
 										towerTest = checkPosTower(t_first, xClicked, yClicked);
 										if(towerTest == 1) {
-											t = createTower(type, xClicked, yClicked);
-											(*t_last).next = t;
-											t_last = t;
-											game.budget -= (*t).price;
-											nbTowers++;
+											t = createTower(type, xClicked, yClicked, game.budget);
+											// Vérification du prix
+											if(t != NULL) {
+												(*t_last).next = t;
+												t_last = t;
+												game.budget -= (*t).price;
+												nbTowers++;												
+											}
+											else {
+												printf("Pas assez de budget !\n");
+											}
 										}
 									}
 								}

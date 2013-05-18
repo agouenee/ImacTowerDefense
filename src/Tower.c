@@ -8,7 +8,7 @@
 #include "Tower.h"
 
 // Création d'une tour
-Tower* createTower(TowerType type, int posX, int posY) {
+Tower* createTower(TowerType type, int posX, int posY, int budget) {
 	Tower* newTower = (Tower*) malloc(sizeof(Tower));
 	if(newTower == NULL) {
 		fprintf(stderr, "Error allocation memory");
@@ -46,7 +46,14 @@ Tower* createTower(TowerType type, int posX, int posY) {
 
 	(*newTower).next = NULL;
 
-	return newTower;
+	// Vérification du prix de la tour par rapport au budget
+	if(budget >= (*newTower).price) {
+		return newTower;
+	}
+	else {
+		return NULL;
+	}
+	
 }
 
 // Vérification de la validité de l'emplacement de la tour
