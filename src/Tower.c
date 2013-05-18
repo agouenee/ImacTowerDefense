@@ -171,6 +171,9 @@ void constructTower(Tower* t_first) {
 
 	    currTower = (*currTower).next;
     }
+
+    glDeleteTextures(1, &tourTexture);
+    SDL_FreeSurface(tourImg);
 }
 
 // Sélection d'une tour construite au survol de la souris
@@ -249,6 +252,9 @@ void displayTowerFeatures(Tower* t) {
 	    glDisable(GL_BLEND);
 	    glDisable(GL_TEXTURE_2D);
     }
+
+    glDeleteTextures(1, &featuresTexture);
+    SDL_FreeSurface(featuresImg);
 }
 
 // Détection des monstres par les tours

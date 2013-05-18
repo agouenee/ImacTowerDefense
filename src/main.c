@@ -399,8 +399,17 @@ int main(int argc, char** argv) {
 	}
 
 	// Destruction des données des images chargées
+	glDeleteTextures(1, &menu);
+	glDeleteTextures(1, &gameOver);
+	glDeleteTextures(1, &gameWin);
+	glDeleteTextures(1, &buttons);
+	glDeleteTextures(1, &figures);
+	glDeleteTextures(1, &mapBackground);
+	glDeleteTextures(1, &texture);
+
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(interface);
+	SDL_FreeSurface(figuresIMG);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
