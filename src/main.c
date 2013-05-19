@@ -229,10 +229,8 @@ int main(int argc, char** argv) {
 					monsterType = BARJOT;
 				}
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
-
 				// Nouvelle liste de monstre
 				if(cpt%150 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
-					printf("Liste n%d\n", game.nbListsSend);
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
@@ -289,7 +287,6 @@ int main(int argc, char** argv) {
 								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
 								degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
 								(*closest).monster->life -= degat;
-								//printf("BIM!\n");
 							}
 							// Suppression des monstres
 							if((*closest).monster->life <= 0) {
@@ -303,7 +300,8 @@ int main(int argc, char** argv) {
 									//monsterToKill = (*monsterToKill).next;
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
-								//printf("DEAD !\n");
+								game.budget += 5;
+								printf("DEAD !\n");
 							}
 						}
 						cadence++;

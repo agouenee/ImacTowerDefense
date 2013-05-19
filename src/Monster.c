@@ -153,6 +153,7 @@ int drawMonsters(MonsterLists lists) {
 	}
 
 	SDL_FreeSurface(boutin);
+	SDL_FreeSurface(barjot);
 
 	return 1;
 }
