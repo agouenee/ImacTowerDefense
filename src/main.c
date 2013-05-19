@@ -271,8 +271,6 @@ int main(int argc, char** argv) {
 						}
 						// Suppression des monstres
 						if((*monsterToKill).life <= 0) {
-							printf("%d\n", monsterLists.lists[i]->nbMonsters);
-							printf("monster n %d\n",j);
 							monsterLists.lists[i]->nbMonsters -= 1;
 							monsterToRmv = monsterToKill;
 							if(monsterLists.lists[i]->nbMonsters == 0) {
