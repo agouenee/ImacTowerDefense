@@ -104,7 +104,8 @@ int main(int argc, char** argv) {
 	pauseBackground = loadTexture("images/interface/pause.png");
 
 	// Chargement carte itd
-	Map map = loadMap("data/map-test.itd");
+	char itdFile[256] = "data/"; strcat(itdFile, argv[1]); /* argv[1] = 1er argument passé au programme à son exécution */
+	Map map = loadMap(itdFile);
 	// Chargement carte ppm
 	char fileName[256] = "images/"; strcat(fileName, map.image);
 	SDL_Surface* background = IMG_Load(fileName);
