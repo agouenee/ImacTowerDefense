@@ -2,6 +2,7 @@
 #include <SDL/SDL_image.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <math.h>
 #include "Node.h"
 #include "tools.h"
 #include "Monster.h"
@@ -139,12 +140,12 @@ int drawMonsters(MonsterLists lists) {
 		while(monster != NULL) {
 			if((*monster).type == BARJOT) {
 				if(drawMonster(monster, barjot, textureBarjot) == 0) {
-				//return 0;
+					return 0;
 				}
 			}
 			else {
 				if(drawMonster(monster, boutin, textureBoutin) == 0) {
-				//return 0;
+					return 0;
 				}
 			}
 			monster = (*monster).next;
@@ -214,8 +215,6 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	}
 	return 0;
 }
-
-
 MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists) {
 	if(currTower != NULL) {
 		Monster* monsterToKill = NULL;

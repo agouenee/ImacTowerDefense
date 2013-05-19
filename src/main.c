@@ -120,6 +120,7 @@ int main(int argc, char** argv) {
 	MonsterList* currentList = createMonsterList();
 	(*currentList).root = rootMonster;
 	(*currentList).nbMonsters = 1;
+	(*currentList).nbMonstersSend = 1;
 
 	// Création du tableau des listes de monstre
 	MonsterLists monsterLists;
@@ -132,6 +133,8 @@ int main(int argc, char** argv) {
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
+	game.nbListsSend = 1;
+	game.nbListsKilled = 0;
 
 	reshape();
 
@@ -228,26 +231,28 @@ int main(int argc, char** argv) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 
 				// Nouvelle liste de monstre
-				if(cpt%150 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
+				if(cpt%150 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
+					printf("Liste n%d\n", game.nbListsSend);
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
 					(*newList).nbMonsters = 1;
+					(*newList).nbMonstersSend = 1;
 					currentList = newList;
 
 					monsterLists.nbLists += 1;
+					game.nbListsSend += 1;
 					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
-
 				}
-				else if((*currentList).nbMonsters < 5) {
+				else if((*currentList).nbMonstersSend < 5) {
 					// Ajout du monstre à la liste actuelle
 					rootMonster = addMonster(rootMonster, newMonster);
 					monsterLists.lists[monsterLists.nbLists - 1]->root = rootMonster;
 					(*currentList).nbMonsters += 1;
+					(*currentList).nbMonstersSend += 1;
 				}
 			}
 			cpt++;
-
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
 				//game.over = 1; 
@@ -284,7 +289,7 @@ int main(int argc, char** argv) {
 								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
 								degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
 								(*closest).monster->life -= degat;
-								printf("BIM!\n");
+								//printf("BIM!\n");
 							}
 							// Suppression des monstres
 							if((*closest).monster->life <= 0) {
@@ -292,18 +297,21 @@ int main(int argc, char** argv) {
 								monsterToRmv = (*closest).monster;
 								if(monsterLists.lists[(*closest).listNum]->nbMonsters == 0) {
 									rmvMonsterList(&monsterLists, (*closest).listNum);
+									game.nbListsKilled += 1;
 								}
 								else {
 									//monsterToKill = (*monsterToKill).next;
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
-								printf("DEAD !\n");
+								//printf("DEAD !\n");
 							}
 						}
 						cadence++;
 					}
-
 					currTower = (*currTower).next;
+				}
+				if(game.nbListsKilled == NB_MONSTER_LIST_MAX) {
+					game.win = 1;
 				}
 
 				/*int j =0;
