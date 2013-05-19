@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "Game.h"
 #include "Map.h"
@@ -33,11 +34,12 @@ void reshape() {
 }
 
 int main(int argc, char** argv) {
-	Uint32 actualTime, prevTime, elapsedTime = 0;
 	// Initialisation des variables
 	int posX, posY;
 	int cpt = 1;
 	int i = 0;
+	Uint32 actualTime, prevTime, elapsedTime = 0;
+	srand(time(NULL));
 
 	// Tours
 	int nbTowers = 0;
@@ -56,6 +58,7 @@ int main(int argc, char** argv) {
 	// Monstres
 	Monster* monsterToKill;
 	Monster* monsterToRmv;
+	int monsterTypeInt = 0;
 
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -214,8 +217,17 @@ int main(int argc, char** argv) {
 			// Monstres
 			if(cpt%40 == 0) {
 				// Création d'un nouveau monstre
+				// Type aléatoire
+				monsterTypeInt = rand()%2;
+				if(monsterTypeInt == 0) {
+					monsterType = BOUTIN;
+				}
+				else {
+					monsterType = BARJOT;
+				}
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 
+				// Nouvelle liste de monstre
 				if(cpt%150 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
@@ -228,7 +240,7 @@ int main(int argc, char** argv) {
 
 				}
 				else if((*currentList).nbMonsters < 5) {
-					// Ajout du monstre
+					// Ajout du monstre à la liste actuelle
 					rootMonster = addMonster(rootMonster, newMonster);
 					monsterLists.lists[monsterLists.nbLists - 1]->root = rootMonster;
 					(*currentList).nbMonsters += 1;
@@ -236,6 +248,7 @@ int main(int argc, char** argv) {
 			}
 			cpt++;
 
+			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
 				//game.over = 1; 
 			}
