@@ -284,7 +284,6 @@ int main(int argc, char** argv) {
 								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
 								degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
 								(*closest).monster->life -= degat;
-								printf("BIM!\n");
 							}
 							// Suppression des monstres
 							if((*closest).monster->life <= 0) {
@@ -297,6 +296,7 @@ int main(int argc, char** argv) {
 									//monsterToKill = (*monsterToKill).next;
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
+								game.budget += 5;
 								printf("DEAD !\n");
 							}
 						}
