@@ -132,6 +132,7 @@ int main(int argc, char** argv) {
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
+	game.wave = 1;
 
 	reshape();
 
@@ -198,6 +199,9 @@ int main(int argc, char** argv) {
 
 			// Budget
 			displayBudget(figuresIMG, figures, game.budget);
+
+			// Vagues de monstres éliminées
+			displayWave(figuresIMG, figures, game.wave);
 
 			// Carte
 			glEnable(GL_TEXTURE_2D);
@@ -291,6 +295,7 @@ int main(int argc, char** argv) {
 								monsterToRmv = (*closest).monster;
 								if(monsterLists.lists[(*closest).listNum]->nbMonsters == 0) {
 									rmvMonsterList(&monsterLists, (*closest).listNum);
+									game.wave += 1;
 								}
 								else {
 									//monsterToKill = (*monsterToKill).next;
@@ -298,7 +303,7 @@ int main(int argc, char** argv) {
 								}
 								printf("DEAD !\n");
 								// Gain d'argent en fonction de la vague du monstre
-								game.budget += ((*closest).listNum + 1) * 5;
+								game.budget += game.wave * 5;
 							}
 						}
 						cadence++;

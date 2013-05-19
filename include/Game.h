@@ -5,12 +5,14 @@ typedef struct game {
 	int start;
 	int win;
 	int over;
-	int budget; 
+	int budget;
+	int wave;
 }Game;
 
 
+void displayWave(SDL_Surface* figuresIMG, GLuint figures, int wave);
 void displayBudget(SDL_Surface* figuresIMG, GLuint figures, int budget);
 int posFigure(int i);
-void displayFigure(SDL_Surface* figuresIMG, int figure, int pos);
+void displayFigure(SDL_Surface* figuresIMG, int figure, int posX, int posY);
 
 #endif
