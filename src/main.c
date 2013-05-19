@@ -203,7 +203,7 @@ int main(int argc, char** argv) {
 			displayBudget(figuresIMG, figures, game.budget);
 
 			// Vagues de monstres éliminées
-			displayWave(figuresIMG, figures, game.nbListsKilled);
+			displayWave(figuresIMG, figures, game.nbListsSend);
 
 			// Carte
 			glEnable(GL_TEXTURE_2D);
