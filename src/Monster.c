@@ -29,19 +29,20 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
 		(*newMonster).resistance = 100;
-		(*newMonster).move = 0;
-		(*newMonster).speedDelay = 0;
+		(*newMonster).move = 1;
+		(*newMonster).speedDelay = 1;
 	}
 	else if(type == BARJOT) {
 		(*newMonster).life = 20;
 		(*newMonster).resistance = 200;
-		(*newMonster).move = 1;
-		(*newMonster).speedDelay = 1;
+		(*newMonster).move = 0;
+		(*newMonster).speedDelay = 0;
 	}
 	else {
 		fprintf(stderr, "Unknown monster type \n");
 		exit(1);
 	}
+	(*newMonster).type = type;
 	(*newMonster).posX = posX;
 	(*newMonster).posY = posY;
 	(*newMonster).nextNode = nextNode;
@@ -123,15 +124,28 @@ int drawMonsters(MonsterLists lists) {
 		fprintf(stderr, "impossible de charger l'image boutin.png \n");
 		exit(1);
 	}
-	GLuint texture = loadTexture("images/boutin.png");
+	SDL_Surface* barjot = IMG_Load("images/barjot.png");
+	if(barjot == NULL) {
+		fprintf(stderr, "impossible de charger l'image barjot.png \n");
+		exit(1);
+	}
+	GLuint textureBoutin = loadTexture("images/boutin.png");
+	GLuint textureBarjot = loadTexture("images/barjot.png");
 
 	Monster* monster;
 	int i = 0;
 	for(i = 0; i < lists.nbLists; i++) {
 		monster = lists.lists[i]->root;
 		while(monster != NULL) {
-			if(drawMonster(monster, boutin, texture) == 0) {
+			if((*monster).type == BARJOT) {
+				if(drawMonster(monster, barjot, textureBarjot) == 0) {
 				//return 0;
+				}
+			}
+			else {
+				if(drawMonster(monster, boutin, textureBoutin) == 0) {
+				//return 0;
+				}
 			}
 			monster = (*monster).next;
 		}
@@ -187,12 +201,13 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 
+		// Jauge de vie
 		glBegin(GL_QUADS);
 		glColor3ub(255, 0, 0);
-		glVertex2d(monster->posX, 600 - monster->posY + 40);
-		glVertex2d(monster->posX, 600 - monster->posY + 30);
-		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 30);
-		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 40);
+		glVertex2d(monster->posX, 600 - monster->posY + 45);
+		glVertex2d(monster->posX, 600 - monster->posY + 35);
+		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 35);
+		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 45);
 		glEnd();
 
 		return 1;
