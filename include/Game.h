@@ -6,7 +6,8 @@ typedef struct game {
 	int win;
 	int over;
 	int budget;
-	int wave;
+	int nbListsSend; // Nombre de vagues de monstres envoyées
+	int nbListsKilled; // Nombre de vagues de monstres éliminées
 }Game;
 
 

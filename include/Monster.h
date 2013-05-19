@@ -23,7 +23,8 @@ typedef struct monster {
 
 typedef struct monsterList {
 	struct monster* root;
-	int nbMonsters;
+	int nbMonsters; // Nombre actuel de monstres
+	int nbMonstersSend; // Nombre de monstre envoyés
 }MonsterList;
 
 typedef struct monsterLists {

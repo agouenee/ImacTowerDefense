@@ -120,6 +120,7 @@ int main(int argc, char** argv) {
 	MonsterList* currentList = createMonsterList();
 	(*currentList).root = rootMonster;
 	(*currentList).nbMonsters = 1;
+	(*currentList).nbMonstersSend = 1;
 
 	// Création du tableau des listes de monstre
 	MonsterLists monsterLists;
@@ -132,7 +133,8 @@ int main(int argc, char** argv) {
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
-	game.wave = 1;
+	game.nbListsSend = 1;
+	game.nbListsKilled = 0;
 
 	reshape();
 
@@ -201,7 +203,7 @@ int main(int argc, char** argv) {
 			displayBudget(figuresIMG, figures, game.budget);
 
 			// Vagues de monstres éliminées
-			displayWave(figuresIMG, figures, game.wave);
+			displayWave(figuresIMG, figures, game.nbListsKilled);
 
 			// Carte
 			glEnable(GL_TEXTURE_2D);
@@ -230,28 +232,28 @@ int main(int argc, char** argv) {
 					monsterType = BARJOT;
 				}
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
-
 				// Nouvelle liste de monstre
-				if(cpt%150 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
+				if(cpt%150 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
 					(*newList).nbMonsters = 1;
+					(*newList).nbMonstersSend = 1;
 					currentList = newList;
 
 					monsterLists.nbLists += 1;
+					game.nbListsSend += 1;
 					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
-
 				}
-				else if((*currentList).nbMonsters < 5) {
+				else if((*currentList).nbMonstersSend < 5) {
 					// Ajout du monstre à la liste actuelle
 					rootMonster = addMonster(rootMonster, newMonster);
 					monsterLists.lists[monsterLists.nbLists - 1]->root = rootMonster;
 					(*currentList).nbMonsters += 1;
+					(*currentList).nbMonstersSend += 1;
 				}
 			}
 			cpt++;
-
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
 				//game.over = 1; 
@@ -295,7 +297,7 @@ int main(int argc, char** argv) {
 								monsterToRmv = (*closest).monster;
 								if(monsterLists.lists[(*closest).listNum]->nbMonsters == 0) {
 									rmvMonsterList(&monsterLists, (*closest).listNum);
-									game.wave += 1;
+									game.nbListsKilled += 1;
 								}
 								else {
 									//monsterToKill = (*monsterToKill).next;
@@ -303,13 +305,15 @@ int main(int argc, char** argv) {
 								}
 								printf("DEAD !\n");
 								// Gain d'argent en fonction de la vague du monstre
-								game.budget += game.wave * 5;
+								game.budget += game.nbListsSend * 5;
 							}
 						}
 						cadence++;
 					}
-
 					currTower = (*currTower).next;
+				}
+				if(game.nbListsKilled == NB_MONSTER_LIST_MAX) {
+					game.win = 1;
 				}
 
 				/*int j =0;
