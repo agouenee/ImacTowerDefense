@@ -258,7 +258,7 @@ void displayTowerFeatures(Tower* t) {
 }
 
 // Détection des monstres par les tours
-Tower* reachTowerMonster(Tower* t, int posX, int posY) {
+/*Tower* reachTowerMonster(Tower* t, int posX, int posY) {
 	if(t != NULL) {
 		Tower* currTower = t;
 		while(currTower != NULL) {
@@ -274,4 +274,4 @@ Tower* reachTowerMonster(Tower* t, int posX, int posY) {
 	}
 	
 	return NULL;
-}
+}*/

@@ -249,7 +249,51 @@ int main(int argc, char** argv) {
 				if(t_selected != NULL) {
 					displayTowerFeatures(t_selected);
 				}
-				int j =0;
+
+				// Attaque des tours
+				Tower* currTower = t_first;
+				while(currTower != NULL) {
+					// Récupération de la liste de monstres à la portée de la tour
+					MonsterToReach* m = reachTowerMonster(currTower, monsterLists);
+					if(m != NULL) {
+						// Détermination du monstre le plus proche de la tour
+						MonsterToReach* closest = m;
+						while(m != NULL) {
+							if((*m).distance < (*closest).distance) {
+								closest = m;
+							}
+							m = (*m).next;
+						}
+						// Tir de la tour en fonction de sa cadence
+						if(cadence%(*currTower).cadence == 0) {
+							// Si le monstre le plus proche de la tour n'est pas encore décédé (=D)
+							if((*closest).monster->life > 0) {
+								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
+								degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
+								(*closest).monster->life -= degat;
+								printf("BIM!\n");
+							}
+							// Suppression des monstres
+							if((*closest).monster->life <= 0) {
+								monsterLists.lists[(*closest).listNum]->nbMonsters -= 1;
+								monsterToRmv = (*closest).monster;
+								if(monsterLists.lists[(*closest).listNum]->nbMonsters == 0) {
+									rmvMonsterList(&monsterLists, (*closest).listNum);
+								}
+								else {
+									//monsterToKill = (*monsterToKill).next;
+									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
+								}
+								printf("DEAD !\n");
+							}
+						}
+						cadence++;
+					}
+
+					currTower = (*currTower).next;
+				}
+
+				/*int j =0;
 				// Attaque des tours
 				for(i = 0; i < monsterLists.nbLists; i++) {
 					monsterToKill = monsterLists.lists[i]->root;
@@ -287,7 +331,7 @@ int main(int argc, char** argv) {
 						}
 						j++;
 					}
-				}
+				}*/
 			}
 		}
 

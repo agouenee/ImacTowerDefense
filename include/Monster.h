@@ -1,6 +1,8 @@
 #ifndef ITD_MONSTER___
 #define ITD_MONSTER___
 
+#include "Tower.h"
+
 #define NB_MONSTER_LIST_MAX 20
 
 typedef enum {
@@ -29,6 +31,14 @@ typedef struct monsterLists {
 	int nbLists;
 }MonsterLists;
 
+// Structure liste stockant les monstres à la portée d'une tour 
+typedef struct monsterToReach {
+	int distance;
+	Monster* monster;
+	int listNum;
+	struct monsterToReach* next;
+}MonsterToReach;
+
 
 int countMonsters(Monster* root);
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
@@ -38,5 +48,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster);
 void rmvMonsterList(MonsterLists* lists, int index);
 int drawMonsters(MonsterLists lists);
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture);
+
+MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists);
 
 #endif

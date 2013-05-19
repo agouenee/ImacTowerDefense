@@ -199,3 +199,40 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	}
 	return 0;
 }
+
+
+MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists) {
+	if(currTower != NULL) {
+		Monster* monsterToKill = NULL;
+		MonsterToReach* currMonster = NULL;
+		int i;
+		for(i = 0; i < monsterLists.nbLists; i++) {
+			monsterToKill = monsterLists.lists[i]->root;
+			//j = 0;
+			while(monsterToKill != NULL) {
+				// Calcul de la distance entre le monstre et la tour
+				float distance = sqrt((((*currTower).posX - (*monsterToKill).posX)*((*currTower).posX - (*monsterToKill).posX)) + (((*currTower).posY - (600-(*monsterToKill).posY))*((*currTower).posY - (600-(*monsterToKill).posY))));
+				// Si la distance est inférieure ou égale à la portée de la tour
+				if(distance <= (*currTower).reach) {
+					// Stockage du monstre et de sa distance à la tour dans une liste
+					MonsterToReach* new = (MonsterToReach*) malloc(sizeof(MonsterToReach));
+					if(new == NULL) {
+						fprintf(stderr, "Error memory allocation\n");
+						exit(1);
+					}
+					(*new).distance = distance;
+					(*new).monster = monsterToKill;
+					(*new).listNum = i;
+					(*new).next = currMonster;
+					currMonster = new;
+				}
+				monsterToKill = (*monsterToKill).next;
+			}
+		}
+
+		return currMonster;
+
+	}
+	
+	return NULL;
+}

@@ -25,6 +25,6 @@ TowerType constructTowerType(int posX, int posY);
 void constructTower(Tower* t_first);
 Tower* constructTowerSelected(Tower* t_first, int posX, int posY);
 void displayTowerFeatures(Tower* t);
-Tower* reachTowerMonster(Tower* t, int posX, int posY);
+//Tower* reachTowerMonster(Tower* t, int posX, int posY);
 
 #endif
