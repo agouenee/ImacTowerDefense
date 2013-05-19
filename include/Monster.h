@@ -25,15 +25,17 @@ typedef struct monsterList {
 }MonsterList;
 
 typedef struct monsterLists {
-	MonsterList lists[NB_MONSTER_LIST_MAX];
+	MonsterList* lists[NB_MONSTER_LIST_MAX];
 	int nbLists;
 }MonsterLists;
 
 
 int countMonsters(Monster* root);
 Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
+MonsterList* createMonsterList();
 Monster* addMonster(Monster* monsterList, Monster* addMonster);
 Monster* rmvMonster(Monster* monsterList, Monster* monster);
+void rmvMonsterList(MonsterLists* lists, int index);
 int drawMonsters(MonsterLists lists);
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture);
 

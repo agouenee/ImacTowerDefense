@@ -49,7 +49,17 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 
 	return newMonster;
 }
+MonsterList* createMonsterList() {
+	MonsterList* newList = (MonsterList*)malloc(sizeof(MonsterList));
+	if(newList == NULL) {
+		fprintf(stderr, "Error allocation memory \n");
+		exit(1);
+	}
+	(*newList).root = NULL;
+	(*newList).nbMonsters = 0;
 
+	return newList;
+}
 Monster* addMonster(Monster* monsterList, Monster* addMonster) {
 	if(monsterList == NULL || addMonster == NULL) {
 		fprintf(stderr, "pointer is NULL in addMonster function \n");
@@ -98,6 +108,15 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 
 	return root;
 }
+void rmvMonsterList(MonsterLists* lists, int index) {
+	int i = 0;
+	for(i = 0; i < (*lists).nbLists-1; i++) {
+		if(i >= index) {
+			(*lists).lists[i] = (*lists).lists[i+1]; 
+		}
+	}
+	(*lists).nbLists -= 1;
+}
 int drawMonsters(MonsterLists lists) {
 	SDL_Surface* boutin = IMG_Load("images/boutin.png");
 	if(boutin == NULL) {
@@ -109,7 +128,7 @@ int drawMonsters(MonsterLists lists) {
 	Monster* monster;
 	int i = 0;
 	for(i = 0; i < lists.nbLists; i++) {
-		monster = lists.lists[i].root;
+		monster = lists.lists[i]->root;
 		while(monster != NULL) {
 			if(drawMonster(monster, boutin, texture) == 0) {
 				//return 0;

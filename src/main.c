@@ -114,9 +114,9 @@ int main(int argc, char** argv) {
 	MonsterType monsterType = BOUTIN;
 	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
 	// Création de la première liste de monstres
-	MonsterList currentList;
-	currentList.root = rootMonster;
-	currentList.nbMonsters = 1;
+	MonsterList* currentList = createMonsterList();
+	(*currentList).root = rootMonster;
+	(*currentList).nbMonsters = 1;
 
 	// Création du tableau des listes de monstre
 	MonsterLists monsterLists;
@@ -217,21 +217,21 @@ int main(int argc, char** argv) {
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
 
 				if(cpt%150 == 0 && monsterLists.nbLists < NB_MONSTER_LIST_MAX) {
-					MonsterList newList;
+					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
-					newList.root = rootMonster;
+					(*newList).root = rootMonster;
+					(*newList).nbMonsters = 1;
 					currentList = newList;
-					currentList.nbMonsters = 1;
 
 					monsterLists.nbLists += 1;
 					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
 
 				}
-				else if(currentList.nbMonsters < 5) {
+				else if((*currentList).nbMonsters < 5) {
 					// Ajout du monstre
 					rootMonster = addMonster(rootMonster, newMonster);
-					monsterLists.lists[monsterLists.nbLists - 1].root = rootMonster;
-					currentList.nbMonsters += 1;
+					monsterLists.lists[monsterLists.nbLists - 1]->root = rootMonster;
+					(*currentList).nbMonsters += 1;
 				}
 			}
 			cpt++;
@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
 				int j =0;
 				// Attaque des tours
 				for(i = 0; i < monsterLists.nbLists; i++) {
-					monsterToKill = monsterLists.lists[i].root;
+					monsterToKill = monsterLists.lists[i]->root;
 					j = 0;
 					while(monsterToKill != NULL) {
 						// Test de la distance tour/monstre
@@ -271,11 +271,17 @@ int main(int argc, char** argv) {
 						}
 						// Suppression des monstres
 						if((*monsterToKill).life <= 0) {
+							printf("%d\n", monsterLists.lists[i]->nbMonsters);
 							printf("monster n %d\n",j);
+							monsterLists.lists[i]->nbMonsters -= 1;
 							monsterToRmv = monsterToKill;
-							monsterToKill = (*monsterToKill).next;
-							monsterLists.lists[i].root = rmvMonster(monsterLists.lists[i].root, monsterToRmv);
-							printf("%d\n", countMonsters(monsterLists.lists[i].root));
+							if(monsterLists.lists[i]->nbMonsters == 0) {
+								rmvMonsterList(&monsterLists, i);
+							}
+							else {
+								monsterToKill = (*monsterToKill).next;
+								monsterLists.lists[i]->root = rmvMonster(monsterLists.lists[i]->root, monsterToRmv);
+							}
 							printf("DEAD !\n");
 						}
 						else {
