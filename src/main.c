@@ -300,8 +300,9 @@ int main(int argc, char** argv) {
 									//monsterToKill = (*monsterToKill).next;
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
-								game.budget += 5;
 								printf("DEAD !\n");
+								// Gain d'argent en fonction de la vague du monstre
+								game.budget += ((*closest).listNum + 1) * 5;
 							}
 						}
 						cadence++;
