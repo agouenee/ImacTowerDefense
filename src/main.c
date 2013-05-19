@@ -24,6 +24,7 @@ GLuint gameWin;
 GLuint buttons;
 GLuint figures;
 GLuint mapBackground;
+GLuint pauseBackground;
 GLuint texture;
 
 void reshape() {
@@ -94,6 +95,13 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 	figures = loadTexture("images/interface/figures.png");
+	// Chargement écran pause
+	SDL_Surface* pause = IMG_Load("images/interface/pause.png");
+	if(pause == NULL) {
+		fprintf(stderr, "Impossible de charger l'image pause.png\n");
+		return EXIT_FAILURE;
+	}
+	pauseBackground = loadTexture("images/interface/pause.png");
 
 	// Chargement carte itd
 	Map map = loadMap("data/map-test.itd");
@@ -130,6 +138,7 @@ int main(int argc, char** argv) {
 	// Initialisation du jeu
 	Game game;
 	game.start = 0;
+	game.pause = 0;
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
@@ -220,6 +229,26 @@ int main(int argc, char** argv) {
 			glColor3ub(map.pathColor.r, map.pathColor.g, map.pathColor.b);
 			drawPath(root);
 
+			// Ecran jeu en pause
+			if(game.pause == 1) {
+				glEnable(GL_TEXTURE_2D);
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture(GL_TEXTURE_2D, pauseBackground);
+
+					glBegin(GL_QUADS);
+						glTexCoord2d(0, 0); glVertex2f(0, pause->h);
+						glTexCoord2d(0, 1); glVertex2f(0, 0);
+						glTexCoord2d(1, 1); glVertex2f(pause->w, 0);
+						glTexCoord2d(1, 0); glVertex2f(pause->w, pause->h);
+					glEnd();
+
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glDisable(GL_BLEND);					
+				glDisable(GL_TEXTURE_2D);
+			}
+
+		if(game.pause == 0) {
 			// Monstres
 			if(cpt%40 == 0) {
 				// Création d'un nouveau monstre
@@ -254,6 +283,7 @@ int main(int argc, char** argv) {
 				}
 			}
 			cpt++;
+		
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
 				//game.over = 1; 
@@ -357,6 +387,7 @@ int main(int argc, char** argv) {
 				}*/
 			}
 		}
+	}
 
 		SDL_GL_SwapBuffers();
 		/* ****** */
@@ -382,15 +413,24 @@ int main(int argc, char** argv) {
 						case SDL_BUTTON_LEFT:
 							xClicked = e.button.x;
 							yClicked = 600-e.button.y;
-							/*printf("%d %d\n", xClicked, yClicked);*/
+							//printf("%d %d\n", xClicked, yClicked);
 							// Si clic dans l'interface joueur
 							if(xClicked >= 600) {
+								// Clic sur pause/play
+								if(xClicked >= 720 && xClicked <= 745 && yClicked >= 516 && yClicked <= 542) {
+									game.pause = 1;
+								}
+								else if(xClicked >= 768 && xClicked <= 790 && yClicked >= 516 && yClicked <= 542) {
+									game.pause = 0;
+								}
 								// Sélection du type de tour à construire
-								type = constructTowerType(xClicked, yClicked);
+								if(game.pause == 0) {
+									type = constructTowerType(xClicked, yClicked);									
+								}
 							}
 							// Si clic sur la carte
 							else {
-								if(type != EMPTY) {
+								if(type != EMPTY && game.pause == 0) {
 									// Création de la première tour
 									if(nbTowers == 0) {
 										// Vérification de la position
@@ -427,7 +467,7 @@ int main(int argc, char** argv) {
 										}
 									}
 								}
-								else {
+								else if(game.pause == 0) {
 									printf("Sélectionner une tour à construire !\n");
 								}
 							}
@@ -445,6 +485,14 @@ int main(int argc, char** argv) {
 				break;*/
 				case SDL_KEYDOWN:
 					switch(e.key.keysym.sym) {
+						/*case 'p' :
+							if(game.pause == 0) {
+								game.pause = 1;
+							}
+							else {
+								game.pause = 0;
+							}
+							break;*/
 						case 's' :
 							game.start = 1;
 							break;
@@ -476,11 +524,13 @@ int main(int argc, char** argv) {
 	glDeleteTextures(1, &buttons);
 	glDeleteTextures(1, &figures);
 	glDeleteTextures(1, &mapBackground);
+	glDeleteTextures(1, &pauseBackground);
 	glDeleteTextures(1, &texture);
 
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(interface);
 	SDL_FreeSurface(figuresIMG);
+	SDL_FreeSurface(pause);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;

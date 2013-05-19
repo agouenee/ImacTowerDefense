@@ -3,6 +3,7 @@
 
 typedef struct game {
 	int start;
+	int pause;
 	int win;
 	int over;
 	int budget;
