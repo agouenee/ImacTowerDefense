@@ -9,7 +9,6 @@ typedef struct node {
 	int y;
 	struct node* next;
 }Node;
-typedef Node* Path;
 
 Node* createNode(int x, int y);
 

@@ -7,8 +7,7 @@
 #include "Node.h"
 
 typedef struct map {
-	char* image;
-	unsigned int energie; 	// Nb unité d'énergie produit par les centrales (wtf?!) 
+	char* image; 
 	Color pathColor;
 	Color nodeColor;
 	Color buildingAreaColor;
