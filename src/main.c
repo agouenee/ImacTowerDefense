@@ -24,6 +24,7 @@ GLuint gameWin;
 GLuint buttons;
 GLuint figures;
 GLuint mapBackground;
+GLuint pauseBackground;
 GLuint texture;
 
 void reshape() {
@@ -43,13 +44,14 @@ int main(int argc, char** argv) {
 
 	// Tours
 	int nbTowers = 0;
-	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
+	int xClicked = 0, yClicked = 0, xClickedRight = 0, yClickedRight = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
 
 	Tower* t_first = NULL;
 	Tower* t_last = NULL;
 	Tower* t = NULL;
 	Tower* t_selected = NULL;
+	Tower* t_rmv = NULL;
 	TowerType type = EMPTY;
 	Tower* t_shoot = NULL;
 	int cadence = 1;
@@ -94,9 +96,18 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 	figures = loadTexture("images/interface/figures.png");
+	// Chargement écran pause
+	SDL_Surface* pause = IMG_Load("images/interface/pause.png");
+	if(pause == NULL) {
+		fprintf(stderr, "Impossible de charger l'image pause.png\n");
+		return EXIT_FAILURE;
+	}
+	pauseBackground = loadTexture("images/interface/pause.png");
 
 	// Chargement carte itd
-	Map map = loadMap("data/map-test.itd");
+	char itdFile[256] = "data/"; strcat(itdFile, argv[1]); /* argv[1] = 1er argument passé au programme à son exécution */
+	Map map = loadMap(itdFile);
+
 	// Chargement carte ppm
 	char fileName[256] = "images/"; strcat(fileName, map.image);
 	SDL_Surface* background = IMG_Load(fileName);
@@ -130,6 +141,7 @@ int main(int argc, char** argv) {
 	// Initialisation du jeu
 	Game game;
 	game.start = 0;
+	game.pause = 0;
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
@@ -220,6 +232,26 @@ int main(int argc, char** argv) {
 			glColor3ub(map.pathColor.r, map.pathColor.g, map.pathColor.b);
 			drawPath(root);
 
+			// Ecran jeu en pause
+			if(game.pause == 1) {
+				glEnable(GL_TEXTURE_2D);
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture(GL_TEXTURE_2D, pauseBackground);
+
+					glBegin(GL_QUADS);
+						glTexCoord2d(0, 0); glVertex2f(0, pause->h);
+						glTexCoord2d(0, 1); glVertex2f(0, 0);
+						glTexCoord2d(1, 1); glVertex2f(pause->w, 0);
+						glTexCoord2d(1, 0); glVertex2f(pause->w, pause->h);
+					glEnd();
+
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glDisable(GL_BLEND);					
+				glDisable(GL_TEXTURE_2D);
+			}
+
+		if(game.pause == 0) {
 			// Monstres
 			if(cpt%40 == 0) {
 				// Création d'un nouveau monstre
@@ -254,6 +286,7 @@ int main(int argc, char** argv) {
 				}
 			}
 			cpt++;
+		
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
 				//game.over = 1; 
@@ -355,111 +388,160 @@ int main(int argc, char** argv) {
 						j++;
 					}
 				}*/
+
+			}
+		}
+	}
+
+	SDL_GL_SwapBuffers();
+	/* ****** */
+
+	SDL_Event e;
+	while(SDL_PollEvent(&e)) {
+		if(e.type == SDL_QUIT) {
+			loop = 0;
+			break;
+		}
+		// Mouvement souris (survol)
+		if(type != EMPTY) {
+			if(e.type == SDL_MOUSEMOTION) {
+				xOver = e.motion.x;
+	        	yOver = 600-e.motion.y;
+				break;
 			}
 		}
 
-		SDL_GL_SwapBuffers();
-		/* ****** */
+		switch(e.type) {
+			case SDL_MOUSEBUTTONDOWN:
+				switch(e.button.button) {
+					// Clic gauche
+					case SDL_BUTTON_LEFT:
+						xClicked = e.button.x;
+						yClicked = 600-e.button.y;
+						//printf("%d %d\n", xClicked, yClicked);
+						// Si clic dans l'interface joueur
+						if(xClicked >= 600) {
+							// Clic sur pause/play
+							if(xClicked >= 720 && xClicked <= 745 && yClicked >= 516 && yClicked <= 542) {
+								game.pause = 1;
+								printf("Jeu en pause\n");
+							}
+							else if(xClicked >= 768 && xClicked <= 790 && yClicked >= 516 && yClicked <= 542) {
+								game.pause = 0;
+							}
+							// Sélection du type de tour à construire
+							if(game.pause == 0) {
+								type = constructTowerType(xClicked, yClicked);									
+							}
+						}
+						// Si clic sur la carte
+						else {
+							if(type != EMPTY && game.pause == 0) {
+								// Création de la première tour
+								if(nbTowers == 0) {
+									// Vérification de la position
+									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									if(towerTest == 1) {
+										t_first = createTower(type, xClicked, yClicked, game.budget);
+										// Vérification du prix
+										if(t_first != NULL) {
+											t_last = t_first;
+											game.budget -= (*t_first).price;
+											nbTowers++;
+										}
+										else {
+											printf("Pas assez de budget !\n");
+										}
+									}
+								}
+								// Autres tours
+								else if(nbTowers >= 1) {
+									// Vérification de la position
+									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									if(towerTest == 1) {
+										t = createTower(type, xClicked, yClicked, game.budget);
+										// Vérification du prix
+										if(t != NULL) {
+											(*t_last).next = t;
+											t_last = t;
+											game.budget -= (*t).price;
+											nbTowers++;												
+										}
+										else {
+											printf("Pas assez de budget !\n");
+										}
+									}
+								}
+							}
+							else if(game.pause == 0) {
+								printf("Sélectionner une tour à construire !\n");
+							}
+						}
+						break;
 
-		SDL_Event e;
-		while(SDL_PollEvent(&e)) {
-			if(e.type == SDL_QUIT) {
-				loop = 0;
-				break;
-			}
-			// Mouvement souris (survol)
-			if(type != EMPTY) {
-				if(e.type == SDL_MOUSEMOTION) {
-					xOver = e.motion.x;
-	        		yOver = 600-e.motion.y;
-					break;
+					// Clic droit
+					case SDL_BUTTON_RIGHT:
+						xClickedRight = e.button.x;
+						yClickedRight = 600-e.button.y;
+						// Si clic sur la carte
+						if(xClicked < 600) {
+							// Si au moins une tour a été construite
+							if(t_first != NULL && game.pause == 0) {
+								// Sélection de la tour à supprimer
+								t_rmv = constructTowerSelected(t_first, xClickedRight, yClickedRight);
+								// Suppression d'une tour
+								if(t_rmv != NULL) {
+									t_first = rmvTower(t_first, t_rmv);
+									// Mise à jour du t_last (dernière tour de la liste)
+									if(t_first != NULL) {
+										Tower* new_last = t_first;
+										while((*new_last).next != NULL) {
+											new_last = (*new_last).next;
+										}
+										t_last = new_last;
+									}
+									game.budget += (*t_rmv).price;
+									nbTowers--;
+								}
+							}
+						}
+						break;
+					default:
+						break;
 				}
-			}
+				break;
 
-			switch(e.type) {
-				case SDL_MOUSEBUTTONDOWN:
-					switch(e.button.button) {
-						case SDL_BUTTON_LEFT:
-							xClicked = e.button.x;
-							yClicked = 600-e.button.y;
-							/*printf("%d %d\n", xClicked, yClicked);*/
-							// Si clic dans l'interface joueur
-							if(xClicked >= 600) {
-								// Sélection du type de tour à construire
-								type = constructTowerType(xClicked, yClicked);
-							}
-							// Si clic sur la carte
-							else {
-								if(type != EMPTY) {
-									// Création de la première tour
-									if(nbTowers == 0) {
-										// Vérification de la position
-										towerTest = checkPosTower(t_first, xClicked, yClicked);
-										if(towerTest == 1) {
-											t_first = createTower(type, xClicked, yClicked, game.budget);
-											// Vérification du prix
-											if(t_first != NULL) {
-												t_last = t_first;
-												game.budget -= (*t_first).price;
-												nbTowers++;
-											}
-											else {
-												printf("Pas assez de budget !\n");
-											}
-										}
-									}
-									// Autres tours
-									else if(nbTowers >= 1) {
-										// Vérification de la position
-										towerTest = checkPosTower(t_first, xClicked, yClicked);
-										if(towerTest == 1) {
-											t = createTower(type, xClicked, yClicked, game.budget);
-											// Vérification du prix
-											if(t != NULL) {
-												(*t_last).next = t;
-												t_last = t;
-												game.budget -= (*t).price;
-												nbTowers++;												
-											}
-											else {
-												printf("Pas assez de budget !\n");
-											}
-										}
-									}
-								}
-								else {
-									printf("Sélectionner une tour à construire !\n");
-								}
-							}
-							break;
-						case SDL_BUTTON_RIGHT:
-							break;
-						default:
-							break;
-					}
-					break;
-				/*case SDL_VIDEORESIZE:
+			/*case SDL_VIDEORESIZE:
 				WIDTH = e.resize.w;
 				HEIGHT = e.resize.h;
 				setVideoMode();
 				break;*/
-				case SDL_KEYDOWN:
-					switch(e.key.keysym.sym) {
-						case 's' :
-							game.start = 1;
-							break;
-						case 'q' :
-							loop = 0;
-							break;
-						case SDLK_ESCAPE: 
-							loop = 0;
-							break;
-						default: 
-							break;
-					}
-					break;
-				default:
-					break;
+
+			case SDL_KEYDOWN:
+				switch(e.key.keysym.sym) {
+					/*case 'p' :
+						if(game.pause == 0) {
+							game.pause = 1;
+						}
+						else {
+							game.pause = 0;
+						}
+						break;*/
+					case 's' :
+						game.start = 1;
+						break;
+					case 'q' :
+						loop = 0;
+						break;
+					case SDLK_ESCAPE: 
+						loop = 0;
+						break;
+					default: 
+						break;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 		elapsedTime = actualTime - prevTime;
@@ -469,18 +551,20 @@ int main(int argc, char** argv) {
 		prevTime = actualTime;
 	}
 
-	// Destruction des données des images chargées
+	// Suppression des textures
 	glDeleteTextures(1, &menu);
 	glDeleteTextures(1, &gameOver);
 	glDeleteTextures(1, &gameWin);
 	glDeleteTextures(1, &buttons);
 	glDeleteTextures(1, &figures);
 	glDeleteTextures(1, &mapBackground);
+	glDeleteTextures(1, &pauseBackground);
 	glDeleteTextures(1, &texture);
-
+	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(interface);
 	SDL_FreeSurface(figuresIMG);
+	SDL_FreeSurface(pause);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;

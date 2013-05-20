@@ -53,7 +53,46 @@ Tower* createTower(TowerType type, int posX, int posY, int budget) {
 	else {
 		return NULL;
 	}
-	
+}
+
+// Suppression d'une tour
+Tower* rmvTower(Tower* t_first, Tower* t) {
+	if(t_first == NULL) {
+		fprintf(stderr, "pointer is NULL in rmvTower function \n");
+		exit(1);
+	}
+
+	Tower* root = t_first;
+	Tower* t_rmv;
+
+	if(t == t_first) {
+		t_rmv = t;
+		if((*t_first).next != NULL) {
+			t_first = (*t_first).next;
+			free(t_rmv);
+			return t_first;
+		}
+		else {
+			free(t_rmv);
+			return NULL;
+		}
+	}
+	while(t_first != NULL) {
+		if((*t_first).next == t) {
+			t_rmv = (*t_first).next;
+			if((*t_rmv).next != NULL) {
+				(*t_first).next = (*t_rmv).next;
+			}
+			else {
+				(*t_first).next = NULL;
+				break;
+			}
+			free(t_rmv);
+		}
+		t_first = (*t_first).next;
+	}
+
+	return root;
 }
 
 // Vérification de la validité de l'emplacement de la tour
@@ -176,7 +215,7 @@ void constructTower(Tower* t_first) {
     SDL_FreeSurface(tourImg);
 }
 
-// Sélection d'une tour construite au survol de la souris
+// Sélection d'une tour construite
 Tower* constructTowerSelected(Tower* t_first, int posX, int posY) {
 	if(t_first != NULL) {
 		Tower* currTower = t_first;
