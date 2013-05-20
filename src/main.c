@@ -62,6 +62,11 @@ int main(int argc, char** argv) {
 	Monster* monsterToRmv;
 	int monsterTypeInt = 0;
 
+	if(argc <= 1) {
+		fprintf(stderr, "Veuillez indiquer la carte .itd à charger\n");
+		return EXIT_FAILURE;
+	}
+
 	// Initialisation SDL
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -105,6 +110,7 @@ int main(int argc, char** argv) {
 	pauseBackground = loadTexture("images/interface/pause.png");
 
 	// Chargement carte itd
+	printf("%d\n", argc);
 	char itdFile[256] = "data/"; strcat(itdFile, argv[1]); /* argv[1] = 1er argument passé au programme à son exécution */
 	Map map = loadMap(itdFile);
 
