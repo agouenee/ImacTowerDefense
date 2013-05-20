@@ -44,13 +44,14 @@ int main(int argc, char** argv) {
 
 	// Tours
 	int nbTowers = 0;
-	int xClicked = 0, yClicked = 0, xOver = 0, yOver = 0;
+	int xClicked = 0, yClicked = 0, xClickedRight = 0, yClickedRight = 0, xOver = 0, yOver = 0;
 	int towerTest = 0;
 
 	Tower* t_first = NULL;
 	Tower* t_last = NULL;
 	Tower* t = NULL;
 	Tower* t_selected = NULL;
+	Tower* t_rmv = NULL;
 	TowerType type = EMPTY;
 	Tower* t_shoot = NULL;
 	int cadence = 1;
@@ -294,6 +295,12 @@ int main(int argc, char** argv) {
 			if(t_first != NULL) {
 				// Construction de la tour
 				constructTower(t_first);
+				// Suppression d'une tour
+				if(t_rmv != NULL) {
+					t_first = rmvTower(t_first, t_rmv);
+					game.budget += (*t_rmv).price;
+					nbTowers--;
+				}
 				// Affichage des caractéristiques de la tour survolée
 				t_selected = constructTowerSelected(t_first, xOver, yOver);
 				if(t_selected != NULL) {
@@ -386,129 +393,146 @@ int main(int argc, char** argv) {
 						j++;
 					}
 				}*/
+
 			}
 		}
 	}
 
-		SDL_GL_SwapBuffers();
-		/* ****** */
+	SDL_GL_SwapBuffers();
+	/* ****** */
 
-		SDL_Event e;
-		while(SDL_PollEvent(&e)) {
-			if(e.type == SDL_QUIT) {
-				loop = 0;
+	SDL_Event e;
+	while(SDL_PollEvent(&e)) {
+		if(e.type == SDL_QUIT) {
+			loop = 0;
+			break;
+		}
+		// Mouvement souris (survol)
+		if(type != EMPTY) {
+			if(e.type == SDL_MOUSEMOTION) {
+				xOver = e.motion.x;
+	        	yOver = 600-e.motion.y;
 				break;
 			}
-			// Mouvement souris (survol)
-			if(type != EMPTY) {
-				if(e.type == SDL_MOUSEMOTION) {
-					xOver = e.motion.x;
-	        		yOver = 600-e.motion.y;
-					break;
-				}
-			}
+		}
 
-			switch(e.type) {
-				case SDL_MOUSEBUTTONDOWN:
-					switch(e.button.button) {
-						case SDL_BUTTON_LEFT:
-							xClicked = e.button.x;
-							yClicked = 600-e.button.y;
-							//printf("%d %d\n", xClicked, yClicked);
-							// Si clic dans l'interface joueur
-							if(xClicked >= 600) {
-								// Clic sur pause/play
-								if(xClicked >= 720 && xClicked <= 745 && yClicked >= 516 && yClicked <= 542) {
-									game.pause = 1;
-								}
-								else if(xClicked >= 768 && xClicked <= 790 && yClicked >= 516 && yClicked <= 542) {
-									game.pause = 0;
-								}
-								// Sélection du type de tour à construire
-								if(game.pause == 0) {
-									type = constructTowerType(xClicked, yClicked);									
-								}
+		switch(e.type) {
+			case SDL_MOUSEBUTTONDOWN:
+				switch(e.button.button) {
+					// Clic gauche
+					case SDL_BUTTON_LEFT:
+						xClicked = e.button.x;
+						yClicked = 600-e.button.y;
+						//printf("%d %d\n", xClicked, yClicked);
+						// Si clic dans l'interface joueur
+						if(xClicked >= 600) {
+							// Clic sur pause/play
+							if(xClicked >= 720 && xClicked <= 745 && yClicked >= 516 && yClicked <= 542) {
+								game.pause = 1;
+								printf("Jeu en pause\n");
 							}
-							// Si clic sur la carte
-							else {
-								if(type != EMPTY && game.pause == 0) {
-									// Création de la première tour
-									if(nbTowers == 0) {
-										// Vérification de la position
-										towerTest = checkPosTower(t_first, xClicked, yClicked);
-										if(towerTest == 1) {
-											t_first = createTower(type, xClicked, yClicked, game.budget);
-											// Vérification du prix
-											if(t_first != NULL) {
-												t_last = t_first;
-												game.budget -= (*t_first).price;
-												nbTowers++;
-											}
-											else {
-												printf("Pas assez de budget !\n");
-											}
+							else if(xClicked >= 768 && xClicked <= 790 && yClicked >= 516 && yClicked <= 542) {
+								game.pause = 0;
+							}
+							// Sélection du type de tour à construire
+							if(game.pause == 0) {
+								type = constructTowerType(xClicked, yClicked);									
+							}
+						}
+						// Si clic sur la carte
+						else {
+							if(type != EMPTY && game.pause == 0) {
+								// Création de la première tour
+								if(nbTowers == 0) {
+									// Vérification de la position
+									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									if(towerTest == 1) {
+										t_first = createTower(type, xClicked, yClicked, game.budget);
+										// Vérification du prix
+										if(t_first != NULL) {
+											t_last = t_first;
+											game.budget -= (*t_first).price;
+											nbTowers++;
 										}
-									}
-									// Autres tours
-									else if(nbTowers >= 1) {
-										// Vérification de la position
-										towerTest = checkPosTower(t_first, xClicked, yClicked);
-										if(towerTest == 1) {
-											t = createTower(type, xClicked, yClicked, game.budget);
-											// Vérification du prix
-											if(t != NULL) {
-												(*t_last).next = t;
-												t_last = t;
-												game.budget -= (*t).price;
-												nbTowers++;												
-											}
-											else {
-												printf("Pas assez de budget !\n");
-											}
+										else {
+											printf("Pas assez de budget !\n");
 										}
 									}
 								}
-								else if(game.pause == 0) {
-									printf("Sélectionner une tour à construire !\n");
+								// Autres tours
+								else if(nbTowers >= 1) {
+									// Vérification de la position
+									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									if(towerTest == 1) {
+										t = createTower(type, xClicked, yClicked, game.budget);
+										// Vérification du prix
+										if(t != NULL) {
+											(*t_last).next = t;
+											t_last = t;
+											game.budget -= (*t).price;
+											nbTowers++;												
+										}
+										else {
+											printf("Pas assez de budget !\n");
+										}
+									}
 								}
 							}
-							break;
-						case SDL_BUTTON_RIGHT:
-							break;
-						default:
-							break;
-					}
-					break;
-				/*case SDL_VIDEORESIZE:
+							else if(game.pause == 0) {
+								printf("Sélectionner une tour à construire !\n");
+							}
+						}
+						break;
+
+					// Clic droit
+					case SDL_BUTTON_RIGHT:
+						xClickedRight = e.button.x;
+						yClickedRight = 600-e.button.y;
+						// Si clic sur la carte
+						if(xClicked < 600) {
+							// Si au moins une tour a été construite
+							if(t_first != NULL) {
+								// Sélection de la tour à supprimer
+								t_rmv = constructTowerSelected(t_first, xClickedRight, yClickedRight);
+							}
+						}
+						break;
+					default:
+						break;
+				}
+				break;
+
+			/*case SDL_VIDEORESIZE:
 				WIDTH = e.resize.w;
 				HEIGHT = e.resize.h;
 				setVideoMode();
 				break;*/
-				case SDL_KEYDOWN:
-					switch(e.key.keysym.sym) {
-						/*case 'p' :
-							if(game.pause == 0) {
-								game.pause = 1;
-							}
-							else {
-								game.pause = 0;
-							}
-							break;*/
-						case 's' :
-							game.start = 1;
-							break;
-						case 'q' :
-							loop = 0;
-							break;
-						case SDLK_ESCAPE: 
-							loop = 0;
-							break;
-						default: 
-							break;
-					}
-					break;
-				default:
-					break;
+
+			case SDL_KEYDOWN:
+				switch(e.key.keysym.sym) {
+					/*case 'p' :
+						if(game.pause == 0) {
+							game.pause = 1;
+						}
+						else {
+							game.pause = 0;
+						}
+						break;*/
+					case 's' :
+						game.start = 1;
+						break;
+					case 'q' :
+						loop = 0;
+						break;
+					case SDLK_ESCAPE: 
+						loop = 0;
+						break;
+					default: 
+						break;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 		elapsedTime = actualTime - prevTime;
@@ -518,7 +542,7 @@ int main(int argc, char** argv) {
 		prevTime = actualTime;
 	}
 
-	// Destruction des données des images chargées
+	// Suppression des textures
 	glDeleteTextures(1, &menu);
 	glDeleteTextures(1, &gameOver);
 	glDeleteTextures(1, &gameWin);
@@ -527,7 +551,7 @@ int main(int argc, char** argv) {
 	glDeleteTextures(1, &mapBackground);
 	glDeleteTextures(1, &pauseBackground);
 	glDeleteTextures(1, &texture);
-
+	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(interface);
 	SDL_FreeSurface(figuresIMG);

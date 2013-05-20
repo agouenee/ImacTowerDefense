@@ -11,7 +11,6 @@ typedef struct game {
 	int nbListsKilled; // Nombre de vagues de monstres éliminées
 }Game;
 
-
 void displayWave(SDL_Surface* figuresIMG, GLuint figures, int wave);
 void displayBudget(SDL_Surface* figuresIMG, GLuint figures, int budget);
 int posFigure(int i);
