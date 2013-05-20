@@ -107,6 +107,7 @@ int main(int argc, char** argv) {
 	// Chargement carte itd
 	char itdFile[256] = "data/"; strcat(itdFile, argv[1]); /* argv[1] = 1er argument passé au programme à son exécution */
 	Map map = loadMap(itdFile);
+
 	// Chargement carte ppm
 	char fileName[256] = "images/"; strcat(fileName, map.image);
 	SDL_Surface* background = IMG_Load(fileName);
@@ -295,12 +296,6 @@ int main(int argc, char** argv) {
 			if(t_first != NULL) {
 				// Construction de la tour
 				constructTower(t_first);
-				// Suppression d'une tour
-				if(t_rmv != NULL) {
-					t_first = rmvTower(t_first, t_rmv);
-					game.budget += (*t_rmv).price;
-					nbTowers--;
-				}
 				// Affichage des caractéristiques de la tour survolée
 				t_selected = constructTowerSelected(t_first, xOver, yOver);
 				if(t_selected != NULL) {
@@ -491,9 +486,23 @@ int main(int argc, char** argv) {
 						// Si clic sur la carte
 						if(xClicked < 600) {
 							// Si au moins une tour a été construite
-							if(t_first != NULL) {
+							if(t_first != NULL && game.pause == 0) {
 								// Sélection de la tour à supprimer
 								t_rmv = constructTowerSelected(t_first, xClickedRight, yClickedRight);
+								// Suppression d'une tour
+								if(t_rmv != NULL) {
+									t_first = rmvTower(t_first, t_rmv);
+									// Mise à jour du t_last (dernière tour de la liste)
+									if(t_first != NULL) {
+										Tower* new_last = t_first;
+										while((*new_last).next != NULL) {
+											new_last = (*new_last).next;
+										}
+										t_last = new_last;
+									}
+									game.budget += (*t_rmv).price;
+									nbTowers--;
+								}
 							}
 						}
 						break;
