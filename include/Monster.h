@@ -11,7 +11,7 @@ typedef enum {
 
 typedef struct monster {
 	MonsterType type;
-	int life;
+	float life;
 	unsigned int resistance;
 	int move;
 	int speedDelay;
@@ -42,7 +42,7 @@ typedef struct monsterToReach {
 
 
 int countMonsters(Monster* root);
-Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode);
+Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int nbLists);
 MonsterList* createMonsterList();
 Monster* addMonster(Monster* monsterList, Monster* addMonster);
 Monster* rmvMonster(Monster* monsterList, Monster* monster);

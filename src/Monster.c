@@ -15,7 +15,7 @@ int countMonsters(Monster* root) {
 	}
 	return cpt;
 }
-Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
+Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int nbLists) {
 	if(nextNode == NULL) {
 		fprintf(stderr, "pointer is NULL in createMonster function \n");
 		exit(1);
@@ -29,13 +29,13 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 
 	if(type == BOUTIN) {
 		(*newMonster).life = 10;
-		(*newMonster).resistance = 100;
+		(*newMonster).resistance = 10;
 		(*newMonster).move = 1;
 		(*newMonster).speedDelay = 1;
 	}
 	else if(type == BARJOT) {
 		(*newMonster).life = 20;
-		(*newMonster).resistance = 200;
+		(*newMonster).resistance = 20;
 		(*newMonster).move = 0;
 		(*newMonster).speedDelay = 0;
 	}
@@ -43,6 +43,8 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode) {
 		fprintf(stderr, "Unknown monster type \n");
 		exit(1);
 	}
+	// Augmenter la résistance en fonction du nombre de listes envoyées
+	(*newMonster).resistance += 8*nbLists;
 	(*newMonster).type = type;
 	(*newMonster).posX = posX;
 	(*newMonster).posY = posY;

@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 	TowerType type = EMPTY;
 	Tower* t_shoot = NULL;
 	int cadence = 1;
-	int degat = 0;
+	float degat = 0;
 
 	// Monstres
 	Monster* monsterToKill;
@@ -110,7 +110,6 @@ int main(int argc, char** argv) {
 	pauseBackground = loadTexture("images/interface/pause.png");
 
 	// Chargement carte itd
-	printf("%d\n", argc);
 	char itdFile[256] = "data/"; strcat(itdFile, argv[1]); /* argv[1] = 1er argument passé au programme à son exécution */
 	Map map = loadMap(itdFile);
 
@@ -133,7 +132,7 @@ int main(int argc, char** argv) {
 
 	// Création du premier monstre
 	MonsterType monsterType = BOUTIN;
-	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next);
+	Monster* rootMonster = createMonster(monsterType, posX, posY, root->next, 0);
 	// Création de la première liste de monstres
 	MonsterList* currentList = createMonsterList();
 	(*currentList).root = rootMonster;
@@ -270,9 +269,9 @@ int main(int argc, char** argv) {
 				else {
 					monsterType = BARJOT;
 				}
-				Monster* newMonster = createMonster(monsterType, posX, posY, root->next);
+				Monster* newMonster = createMonster(monsterType, posX, posY, root->next, game.nbListsSend);
 				// Nouvelle liste de monstre
-				if(cpt%150 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
+				if(cpt%130 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
@@ -328,7 +327,8 @@ int main(int argc, char** argv) {
 							// Si le monstre le plus proche de la tour n'est pas encore décédé (=D)
 							if((*closest).monster->life > 0) {
 								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
-								degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
+								//degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
+								degat = (currTower->puissance - closest->monster->resistance) / 100.0;
 								(*closest).monster->life -= degat;
 							}
 							// Suppression des monstres

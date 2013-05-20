@@ -15,7 +15,7 @@ typedef struct tower {
 	unsigned int puissance;		// valeurs entre 0 et 100 (puissance, portée et cadence)
 	unsigned int reach;
 	unsigned int cadence;
-	int price;				// valeurs entre 0.0 et 500.0
+	int price;				// valeurs entre 0 et 500
 	struct tower* next;
 }Tower;
 
