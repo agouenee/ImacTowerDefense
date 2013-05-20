@@ -588,6 +588,23 @@ int main(int argc, char** argv) {
 		prevTime = actualTime;
 	}
 
+	// Libération mémoire
+	free(t_first);
+	free(t_last);
+	free(t);
+	/*free(t_selected);
+	//free(t_rmv);
+	free(t_shoot);*/
+	
+	/*free(monsterToKill);
+	free(monsterToRmv);*/
+
+	/*free(root);
+	free(first);*/
+
+	free(rootMonster);
+	free(currentList);
+
 	// Suppression des textures
 	glDeleteTextures(1, &menu);
 	glDeleteTextures(1, &gameOver);
