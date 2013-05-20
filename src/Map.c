@@ -51,21 +51,7 @@ int createMap(FILE* itd_file, Map* map) {
     else {
         (*map).image = filename;
     }
-    // Mot clé "energie"
-    fgets(keyword, 9, itd_file);
-    if(strcmp(keyword, "energie ") != 0) {
-        fprintf(stderr, "Error itd file keyword [energie]\n");
-        return 0;
-    }
-    // Valeur energie
-    fscanf(itd_file, "%d\n", &val1);
-    if(val1 < 0) {
-        fprintf(stderr, "Error itd file keyword value [energie]\n");
-        return 0;
-    }
-    else {
-        (*map).energie = val1;
-    }
+
     // Mot clé "chemin"
     fgets(keyword, 8, itd_file);
     if(strcmp(keyword, "chemin ") != 0) {

@@ -120,6 +120,7 @@ int main(int argc, char** argv) {
 	// Noeuds
 	Node* root = map.listNodes;
 	Node* first = root;
+
 	// Initialisation de la position des monstres
 	posX = root->x;
 	posY = root->y;

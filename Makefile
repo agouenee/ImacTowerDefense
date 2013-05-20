@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -g
 CFLAGS = -Wall
 LDFLAGS = -lSDL -lGLU -lGL -lm -lSDL_image -lglut
 
