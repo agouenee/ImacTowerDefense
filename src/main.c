@@ -37,6 +37,7 @@ void reshape() {
 
 int main(int argc, char** argv) {
 	// Initialisation des variables
+	int displayingHelp = 0;
 	int posX, posY;
 	int cpt = 1;
 	int i = 0;
@@ -157,7 +158,6 @@ int main(int argc, char** argv) {
 	Game game;
 	game.start = 0;
 	game.pause = 0;
-	game.help = 0;
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
@@ -268,7 +268,7 @@ int main(int argc, char** argv) {
 			}
 
 			// Ecran jeu aide
-			if(game.help == 1) {
+			if(displayingHelp == 1) {
 				glEnable(GL_TEXTURE_2D);
 					glEnable(GL_BLEND);
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -555,12 +555,12 @@ int main(int argc, char** argv) {
 			case SDL_KEYDOWN:
 				switch(e.key.keysym.sym) {
 					case 'h' :
-						if(game.help == 0) {
-							game.help = 1;
+						if(displayingHelp == 0) {
+							displayingHelp = 1;
 							game.pause = 1;
 						}
 						else {
-							game.help = 0;
+							displayingHelp = 0;
 							game.pause = 0;
 						}
 						break;
