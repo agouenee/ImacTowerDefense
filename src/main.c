@@ -25,6 +25,7 @@ GLuint buttons;
 GLuint figures;
 GLuint mapBackground;
 GLuint pauseBackground;
+GLuint helpBackground;
 GLuint texture;
 
 void reshape() {
@@ -108,6 +109,13 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 	pauseBackground = loadTexture("images/interface/pause.png");
+	// Chargement écran aide
+	SDL_Surface* help = IMG_Load("images/interface/help.png");
+	if(help == NULL) {
+		fprintf(stderr, "Impossible de charger l'image help.png\n");
+		return EXIT_FAILURE;
+	}
+	helpBackground = loadTexture("images/interface/help.png");
 
 	// Chargement carte itd
 	printf("%d\n", argc);
@@ -149,6 +157,7 @@ int main(int argc, char** argv) {
 	Game game;
 	game.start = 0;
 	game.pause = 0;
+	game.help = 0;
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
@@ -251,6 +260,25 @@ int main(int argc, char** argv) {
 						glTexCoord2d(0, 1); glVertex2f(0, 0);
 						glTexCoord2d(1, 1); glVertex2f(pause->w, 0);
 						glTexCoord2d(1, 0); glVertex2f(pause->w, pause->h);
+					glEnd();
+
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glDisable(GL_BLEND);					
+				glDisable(GL_TEXTURE_2D);
+			}
+
+			// Ecran jeu aide
+			if(game.help == 1) {
+				glEnable(GL_TEXTURE_2D);
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture(GL_TEXTURE_2D, helpBackground);
+
+					glBegin(GL_QUADS);
+						glTexCoord2d(0, 0); glVertex2f(0, help->h);
+						glTexCoord2d(0, 1); glVertex2f(0, 0);
+						glTexCoord2d(1, 1); glVertex2f(help->w, 0);
+						glTexCoord2d(1, 0); glVertex2f(help->w, help->h);
 					glEnd();
 
 					glBindTexture(GL_TEXTURE_2D, 0);
@@ -526,14 +554,16 @@ int main(int argc, char** argv) {
 
 			case SDL_KEYDOWN:
 				switch(e.key.keysym.sym) {
-					/*case 'p' :
-						if(game.pause == 0) {
+					case 'h' :
+						if(game.help == 0) {
+							game.help = 1;
 							game.pause = 1;
 						}
 						else {
+							game.help = 0;
 							game.pause = 0;
 						}
-						break;*/
+						break;
 					case 's' :
 						game.start = 1;
 						break;
@@ -566,12 +596,14 @@ int main(int argc, char** argv) {
 	glDeleteTextures(1, &figures);
 	glDeleteTextures(1, &mapBackground);
 	glDeleteTextures(1, &pauseBackground);
+	glDeleteTextures(1, &helpBackground);
 	glDeleteTextures(1, &texture);
 	// Destruction des données des images chargées
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(interface);
 	SDL_FreeSurface(figuresIMG);
 	SDL_FreeSurface(pause);
+	SDL_FreeSurface(help);
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
