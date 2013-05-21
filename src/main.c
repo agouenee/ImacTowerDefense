@@ -2,6 +2,7 @@
 #include <SDL/SDL_image.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glut.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -397,7 +398,6 @@ int main(int argc, char** argv) {
 			if(e.type == SDL_MOUSEMOTION) {
 				xOver = e.motion.x;
 	        	yOver = 600-e.motion.y;
-				break;
 			}
 		}
 
