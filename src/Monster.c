@@ -28,15 +28,15 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int
 	}
 
 	if(type == BOUTIN) {
-		(*newMonster).life = 20;
-		(*newMonster).initialLife = 20;
+		(*newMonster).life = 30;
+		(*newMonster).initialLife = 30;
 		(*newMonster).resistance = 5;
 		(*newMonster).move = 1;
 		(*newMonster).speedDelay = 1;
 	}
 	else if(type == BARJOT) {
-		(*newMonster).life = 40;
-		(*newMonster).initialLife = 40;
+		(*newMonster).life = 50;
+		(*newMonster).initialLife = 50;
 		(*newMonster).resistance = 10;
 		(*newMonster).move = 0;
 		(*newMonster).speedDelay = 0;

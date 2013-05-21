@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
 
 		if(game.pause == 0) {
 			// Monstres
-			if(cpt%40 == 0) {
+			if(cpt%50 == 0) {
 				// Création d'un nouveau monstre
 				// Type aléatoire
 				monsterTypeInt = rand()%2;
@@ -219,7 +219,7 @@ int main(int argc, char** argv) {
 				}
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next, game.nbListsSend);
 				// Nouvelle liste de monstre
-				if(cpt%220 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
+				if(cpt%550 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
