@@ -295,22 +295,3 @@ void displayTowerFeatures(Tower* t) {
     glDeleteTextures(1, &featuresTexture);
     SDL_FreeSurface(featuresImg);
 }
-
-// Détection des monstres par les tours
-/*Tower* reachTowerMonster(Tower* t, int posX, int posY) {
-	if(t != NULL) {
-		Tower* currTower = t;
-		while(currTower != NULL) {
-			// Calcul de la distance entre le monstre et la tour
-			float distance = sqrt((((*currTower).posX - posX)*((*currTower).posX - posX)) + (((*currTower).posY - (600-posY))*((*currTower).posY - (600-posY))));
-			// Si la distance est inférieure ou égale à la portée de la tour
-			if(distance <= (*currTower).reach) {
-				// Retour la puissance de la tour
-				return currTower;
-			}
-			currTower = (*currTower).next;
-		}
-	}
-	
-	return NULL;
-}*/

@@ -320,7 +320,7 @@ int main(int argc, char** argv) {
 		
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
-				//game.over = 1; 
+				game.over = 1; 
 			}
 
 			// Tours
@@ -349,10 +349,9 @@ int main(int argc, char** argv) {
 						}
 						// Tir de la tour en fonction de sa cadence
 						if(cadence%(*currTower).cadence == 0) {
-							// Si le monstre le plus proche de la tour n'est pas encore décédé (=D)
+							// Si le monstre le plus proche de la tour n'est pas encore tué
 							if((*closest).monster->life > 0) {
 								// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
-								//degat = ((*currTower).puissance/100 + ((*closest).monster->resistance/100)) / 2;
 								degat = (currTower->puissance - closest->monster->resistance) / 100.0;
 								(*closest).monster->life -= degat;
 							}
@@ -365,7 +364,6 @@ int main(int argc, char** argv) {
 									game.nbListsKilled += 1;
 								}
 								else {
-									//monsterToKill = (*monsterToKill).next;
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
 								printf("DEAD !\n");
@@ -409,7 +407,6 @@ int main(int argc, char** argv) {
 					case SDL_BUTTON_LEFT:
 						xClicked = e.button.x;
 						yClicked = 600-e.button.y;
-						//printf("%d %d\n", xClicked, yClicked);
 						// Si clic dans l'interface joueur
 						if(xClicked >= 600) {
 							// Clic sur pause/play
@@ -507,12 +504,7 @@ int main(int argc, char** argv) {
 				}
 				break;
 
-			/*case SDL_VIDEORESIZE:
-				WIDTH = e.resize.w;
-				HEIGHT = e.resize.h;
-				setVideoMode();
-				break;*/
-
+			// Raccourcis clavier
 			case SDL_KEYDOWN:
 				switch(e.key.keysym.sym) {
 					case 'a' :
@@ -558,21 +550,16 @@ int main(int argc, char** argv) {
 	}
 
 	// Libération mémoire
-	free(t_first);
-	free(t_last);
-	free(t);
-	/*free(t_selected);
-	//free(t_rmv);
-	free(t_shoot);*/
-	
-	/*free(monsterToKill);
-	free(monsterToRmv);*/
-
-	/*free(root);
-	free(first);*/
-
 	free(rootMonster);
-	free(currentList);
+	/*int i;
+	for(i = 0; i < monsterLists.nbLists; i++) {
+		monster = monsterLists.lists[i]->root;
+		while(monster != NULL) {
+
+			monster = (*monster).next;
+		}
+	}*/
+	
 
 	// Suppression des textures
 	glDeleteTextures(1, &menu);

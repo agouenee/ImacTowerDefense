@@ -225,7 +225,6 @@ MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists) {
 		int i;
 		for(i = 0; i < monsterLists.nbLists; i++) {
 			monsterToKill = monsterLists.lists[i]->root;
-			//j = 0;
 			while(monsterToKill != NULL) {
 				// Calcul de la distance entre le monstre et la tour
 				float distance = sqrt((((*currTower).posX - (*monsterToKill).posX)*((*currTower).posX - (*monsterToKill).posX)) + (((*currTower).posY - (600-(*monsterToKill).posY))*((*currTower).posY - (600-(*monsterToKill).posY))));
