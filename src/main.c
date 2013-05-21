@@ -13,9 +13,6 @@
 #include "Monster.h"
 #include "tools.h"
 
-#define WINDOW_WIDTH 900
-#define WINDOW_HEIGHT 600
-
 // 100 ms = 1/10ème de seconde
 static const Uint32 FRAMERATE_MILLISECONDS = 100;
 
@@ -174,56 +171,17 @@ int main(int argc, char** argv) {
 
 		if(game.start == 0) {
 			// Menu
-			glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, menu);
-				glBegin(GL_QUADS);
-					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
-					glTexCoord2d(0, 1); glVertex2f(0, 0);
-					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
-					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-				glEnd();
-			glDisable(GL_TEXTURE_2D);
+			displayImageFull(menu);
 		}
 		else if(game.over == 1) {
-			glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, gameOver);
-				glBegin(GL_QUADS);
-					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
-					glTexCoord2d(0, 1); glVertex2f(0, 0);
-					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
-					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-				glEnd();
-			glDisable(GL_TEXTURE_2D);
+			displayImageFull(gameOver);
 		}
 		else if(game.win == 1) {
-			glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, gameWin);
-				glBegin(GL_QUADS);
-					glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
-					glTexCoord2d(0, 1); glVertex2f(0, 0);
-					glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);
-					glTexCoord2d(1, 0); glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-				glEnd();
-			glDisable(GL_TEXTURE_2D);
+			displayImageFull(gameWin);
 		}
 		else {
 			// Interface joueur (boutons)
-			glEnable(GL_TEXTURE_2D);
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glBindTexture(GL_TEXTURE_2D, buttons);
-
-				glBegin(GL_QUADS);
-					glColor4ub(255, 255, 255, 255); // Opacité 100%
-					glTexCoord2d(0, 0); glVertex2f(600, interface->h);
-					glTexCoord2d(0, 1); glVertex2f(600, 0);
-					glTexCoord2d(1, 1); glVertex2f(interface->w + 600, 0);
-					glTexCoord2d(1, 0); glVertex2f(interface->w + 600, interface->h);
-				glEnd();
-
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glDisable(GL_BLEND);
-			glDisable(GL_TEXTURE_2D);
+			displayImageRight(interface, buttons);
 
 			// Budget
 			displayBudget(figuresIMG, figures, game.budget);
@@ -232,15 +190,7 @@ int main(int argc, char** argv) {
 			displayWave(figuresIMG, figures, game.nbListsSend);
 
 			// Carte
-			glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, mapBackground);
-				glBegin(GL_QUADS);
-					glTexCoord2d(0, 0); glVertex2f(0, background->h);
-					glTexCoord2d(0, 1); glVertex2f(0, 0);
-					glTexCoord2d(1, 1); glVertex2f(background->w, 0);
-					glTexCoord2d(1, 0); glVertex2f(background->w, background->h);
-				glEnd();
-			glDisable(GL_TEXTURE_2D);
+			displayImageLeft(background, mapBackground);
 			
 			// Dessin du chemin
 			glColor3ub(map.pathColor.r, map.pathColor.g, map.pathColor.b);
@@ -248,40 +198,12 @@ int main(int argc, char** argv) {
 
 			// Ecran jeu en pause
 			if(game.pause == 1) {
-				glEnable(GL_TEXTURE_2D);
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture(GL_TEXTURE_2D, pauseBackground);
-
-					glBegin(GL_QUADS);
-						glTexCoord2d(0, 0); glVertex2f(0, pause->h);
-						glTexCoord2d(0, 1); glVertex2f(0, 0);
-						glTexCoord2d(1, 1); glVertex2f(pause->w, 0);
-						glTexCoord2d(1, 0); glVertex2f(pause->w, pause->h);
-					glEnd();
-
-					glBindTexture(GL_TEXTURE_2D, 0);
-					glDisable(GL_BLEND);					
-				glDisable(GL_TEXTURE_2D);
+				displayImageLeft(pause, pauseBackground);
 			}
 
 			// Ecran jeu aide
 			if(displayingHelp == 1) {
-				glEnable(GL_TEXTURE_2D);
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture(GL_TEXTURE_2D, helpBackground);
-
-					glBegin(GL_QUADS);
-						glTexCoord2d(0, 0); glVertex2f(0, help->h);
-						glTexCoord2d(0, 1); glVertex2f(0, 0);
-						glTexCoord2d(1, 1); glVertex2f(help->w, 0);
-						glTexCoord2d(1, 0); glVertex2f(help->w, help->h);
-					glEnd();
-
-					glBindTexture(GL_TEXTURE_2D, 0);
-					glDisable(GL_BLEND);					
-				glDisable(GL_TEXTURE_2D);
+				displayImageLeft(help, helpBackground);
 			}
 
 		if(game.pause == 0) {
