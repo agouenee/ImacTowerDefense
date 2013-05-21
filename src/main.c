@@ -296,7 +296,7 @@ int main(int argc, char** argv) {
 				}
 				Monster* newMonster = createMonster(monsterType, posX, posY, root->next, game.nbListsSend);
 				// Nouvelle liste de monstre
-				if(cpt%130 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
+				if(cpt%220 == 0 && game.nbListsSend < NB_MONSTER_LIST_MAX) {
 					MonsterList* newList = createMonsterList();
 					rootMonster = newMonster;
 					(*newList).root = rootMonster;
@@ -308,7 +308,7 @@ int main(int argc, char** argv) {
 					game.nbListsSend += 1;
 					monsterLists.lists[monsterLists.nbLists - 1] = currentList;
 				}
-				else if((*currentList).nbMonstersSend < 5) {
+				else if((*currentList).nbMonstersSend < 10) {
 					// Ajout du monstre à la liste actuelle
 					rootMonster = addMonster(rootMonster, newMonster);
 					monsterLists.lists[monsterLists.nbLists - 1]->root = rootMonster;
@@ -320,7 +320,7 @@ int main(int argc, char** argv) {
 		
 			// Affichage des monstres
 			if(drawMonsters(monsterLists) == 0) {
-				//game.over = 1; 
+				game.over = 1; 
 			}
 
 			// Tours
@@ -373,10 +373,10 @@ int main(int argc, char** argv) {
 								game.budget += game.nbListsSend * 5;
 							}
 						}
-						cadence++;
 					}
 					currTower = (*currTower).next;
 				}
+				cadence++;
 				if(game.nbListsKilled == NB_MONSTER_LIST_MAX) {
 					game.win = 1;
 				}
@@ -558,18 +558,6 @@ int main(int argc, char** argv) {
 	}
 
 	// Libération mémoire
-	free(t_first);
-	free(t_last);
-	free(t);
-	/*free(t_selected);
-	//free(t_rmv);
-	free(t_shoot);*/
-	
-	/*free(monsterToKill);
-	free(monsterToRmv);*/
-
-	/*free(root);
-	free(first);*/
 
 	free(rootMonster);
 	free(currentList);

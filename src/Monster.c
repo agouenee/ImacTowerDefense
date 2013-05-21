@@ -28,14 +28,14 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int
 	}
 
 	if(type == BOUTIN) {
-		(*newMonster).life = 10;
-		(*newMonster).resistance = 10;
+		(*newMonster).life = 20;
+		(*newMonster).resistance = 5;
 		(*newMonster).move = 1;
 		(*newMonster).speedDelay = 1;
 	}
 	else if(type == BARJOT) {
-		(*newMonster).life = 20;
-		(*newMonster).resistance = 20;
+		(*newMonster).life = 40;
+		(*newMonster).resistance = 10;
 		(*newMonster).move = 0;
 		(*newMonster).speedDelay = 0;
 	}
@@ -44,7 +44,7 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int
 		exit(1);
 	}
 	// Augmenter la résistance en fonction du nombre de listes envoyées
-	(*newMonster).resistance += 8*nbLists;
+	(*newMonster).resistance += 10*nbLists;
 	(*newMonster).type = type;
 	(*newMonster).posX = posX;
 	(*newMonster).posY = posY;
@@ -210,8 +210,8 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glColor3ub(255, 0, 0);
 		glVertex2d(monster->posX, 600 - monster->posY + 45);
 		glVertex2d(monster->posX, 600 - monster->posY + 35);
-		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 35);
-		glVertex2d(monster->posX + monster->life * 2, 600 - monster->posY + 45);
+		glVertex2d(monster->posX + monster->life, 600 - monster->posY + 35);
+		glVertex2d(monster->posX + monster->life, 600 - monster->posY + 45);
 		glEnd();
 
 		return 1;
