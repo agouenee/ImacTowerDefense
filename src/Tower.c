@@ -96,11 +96,11 @@ Tower* rmvTower(Tower* t_first, Tower* t) {
 }
 
 // Vérification de la validité de l'emplacement de la tour
-int checkPosTower(Tower* t_first, int posX, int posY) {
+int checkPosTower(Map map, Tower* t_first, int posX, int posY) {
 	// Est-ce que la tour est sur une zone constructible ?
 	unsigned char pick_col[3];
 	glReadPixels(posX, posY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col);
-	if(pick_col[0] != 120 && pick_col[1] && pick_col[2]) {
+	if(pick_col[0] != map.buildingAreaColor.r && pick_col[1] != map.buildingAreaColor.g && pick_col[2] != map.buildingAreaColor.b) {
 		fprintf(stderr, "zone non constructible\n");
 		return 0;
 	}
@@ -295,22 +295,3 @@ void displayTowerFeatures(Tower* t) {
     glDeleteTextures(1, &featuresTexture);
     SDL_FreeSurface(featuresImg);
 }
-
-// Détection des monstres par les tours
-/*Tower* reachTowerMonster(Tower* t, int posX, int posY) {
-	if(t != NULL) {
-		Tower* currTower = t;
-		while(currTower != NULL) {
-			// Calcul de la distance entre le monstre et la tour
-			float distance = sqrt((((*currTower).posX - posX)*((*currTower).posX - posX)) + (((*currTower).posY - (600-posY))*((*currTower).posY - (600-posY))));
-			// Si la distance est inférieure ou égale à la portée de la tour
-			if(distance <= (*currTower).reach) {
-				// Retour la puissance de la tour
-				return currTower;
-			}
-			currTower = (*currTower).next;
-		}
-	}
-	
-	return NULL;
-}*/
