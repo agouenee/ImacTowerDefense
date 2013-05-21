@@ -11,6 +11,7 @@ typedef enum {
 
 typedef struct monster {
 	MonsterType type;
+	float initialLife;
 	float life;
 	unsigned int resistance;
 	int move;
