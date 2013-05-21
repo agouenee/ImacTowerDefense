@@ -40,7 +40,6 @@ int main(int argc, char** argv) {
 	int displayingHelp = 0;
 	int posX, posY;
 	int cpt = 1;
-	int i = 0;
 	Uint32 actualTime, prevTime, elapsedTime = 0;
 	srand(time(NULL));
 
@@ -55,12 +54,10 @@ int main(int argc, char** argv) {
 	Tower* t_selected = NULL;
 	Tower* t_rmv = NULL;
 	TowerType type = EMPTY;
-	Tower* t_shoot = NULL;
 	int cadence = 1;
 	float degat = 0;
 
 	// Monstres
-	Monster* monsterToKill;
 	Monster* monsterToRmv;
 	int monsterTypeInt = 0;
 
@@ -383,47 +380,6 @@ int main(int argc, char** argv) {
 				if(game.nbListsKilled == NB_MONSTER_LIST_MAX) {
 					game.win = 1;
 				}
-
-				/*int j =0;
-				// Attaque des tours
-				for(i = 0; i < monsterLists.nbLists; i++) {
-					monsterToKill = monsterLists.lists[i]->root;
-					j = 0;
-					while(monsterToKill != NULL) {
-						// Test de la distance tour/monstre
-						t_shoot = reachTowerMonster(t_first, (*monsterToKill).posX, (*monsterToKill).posY);
-						// Si le monstre est à la portée de la tour
-						if(t_shoot != NULL) {
-							if(cadence%(*t_shoot).cadence == 0) {
-								if((*monsterToKill).life > 0) {
-									// Calcul du nb de points de vie enlevés (moyenne puissance tour et résistance monstre)
-									degat = ((*t_shoot).puissance/100 + ((*monsterToKill).resistance/100)) / 2;
-									(*monsterToKill).life -= degat;
-								}
-							}
-							cadence++;
-							//t_shoot = NULL;
-						}
-						// Suppression des monstres
-						if((*monsterToKill).life <= 0) {
-							monsterLists.lists[i]->nbMonsters -= 1;
-							monsterToRmv = monsterToKill;
-							if(monsterLists.lists[i]->nbMonsters == 0) {
-								rmvMonsterList(&monsterLists, i);
-							}
-							else {
-								monsterToKill = (*monsterToKill).next;
-								monsterLists.lists[i]->root = rmvMonster(monsterLists.lists[i]->root, monsterToRmv);
-							}
-							printf("DEAD !\n");
-						}
-						else {
-							monsterToKill = (*monsterToKill).next;
-						}
-						j++;
-					}
-				}*/
-
 			}
 		}
 	}
@@ -566,6 +522,14 @@ int main(int argc, char** argv) {
 						}
 						else {
 							displayingHelp = 0;
+							game.pause = 0;
+						}
+						break;
+					case 'p' :
+						if(game.pause == 0) {
+							game.pause = 1;
+						}
+						else {
 							game.pause = 0;
 						}
 						break;
