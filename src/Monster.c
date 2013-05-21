@@ -252,3 +252,9 @@ MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists) {
 	
 	return NULL;
 }
+void destroyMonsters(Monster* root) {
+	if(root != NULL) {
+		destroyMonsters(root->next);
+		free(root);
+	}
+}

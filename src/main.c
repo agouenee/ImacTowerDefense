@@ -37,6 +37,7 @@ void reshape() {
 
 int main(int argc, char** argv) {
 	// Initialisation des variables
+	int i;
 	int displayingHelp = 0;
 	int posX, posY;
 	int cpt = 1;
@@ -550,16 +551,10 @@ int main(int argc, char** argv) {
 	}
 
 	// Libération mémoire
-	free(rootMonster);
-	/*int i;
 	for(i = 0; i < monsterLists.nbLists; i++) {
-		monster = monsterLists.lists[i]->root;
-		while(monster != NULL) {
-
-			monster = (*monster).next;
-		}
-	}*/
-	
+		destroyMonsters(monsterLists.lists[i]->root);
+		free(monsterLists.lists[i]);
+	}
 
 	// Suppression des textures
 	glDeleteTextures(1, &menu);

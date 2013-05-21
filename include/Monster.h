@@ -50,5 +50,6 @@ void rmvMonsterList(MonsterLists* lists, int index);
 int drawMonsters(MonsterLists lists);
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture);
 MonsterToReach* reachTowerMonster(Tower* currTower, MonsterLists monsterLists);
+void destroyMonsters(Monster* root);
 
 #endif
