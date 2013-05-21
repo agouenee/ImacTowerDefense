@@ -124,18 +124,18 @@ void rmvMonsterList(MonsterLists* lists, int index) {
 	(*lists).nbLists -= 1;
 }
 int drawMonsters(MonsterLists lists) {
-	SDL_Surface* boutin = IMG_Load("images/boutin.png");
+	SDL_Surface* boutin = IMG_Load("images/monsters/boutin.png");
 	if(boutin == NULL) {
 		fprintf(stderr, "impossible de charger l'image boutin.png \n");
 		exit(1);
 	}
-	SDL_Surface* barjot = IMG_Load("images/barjot.png");
+	SDL_Surface* barjot = IMG_Load("images/monsters/barjot.png");
 	if(barjot == NULL) {
 		fprintf(stderr, "impossible de charger l'image barjot.png \n");
 		exit(1);
 	}
-	GLuint textureBoutin = loadTexture("images/boutin.png");
-	GLuint textureBarjot = loadTexture("images/barjot.png");
+	GLuint textureBoutin = loadTexture("images/monsters/boutin.png");
+	GLuint textureBarjot = loadTexture("images/monsters/barjot.png");
 
 	Monster* monster;
 	int success = 1;
