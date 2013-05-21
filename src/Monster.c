@@ -85,6 +85,7 @@ Monster* rmvMonster(Monster* monsterList, Monster* monster) {
 	Monster* root = monsterList;
 	Monster* rmvMonster;
 
+	// Si le monstre à supprimer est le premier de la liste
 	if(monsterList == monster) {
 		rmvMonster = monsterList;
 		if((*monsterList).next != NULL) { 
@@ -165,18 +166,24 @@ int drawMonsters(MonsterLists lists) {
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	if(monster->nextNode != NULL) {
 		if(monster->move == monster->speedDelay) {
+			// Déplacement horizontal du monstre
 			if(monster->nextNode->y == monster->posY) {
+				// Vers la droite
 				if(monster->nextNode->x > monster->posX) {
 					monster->posX += 1;
 				}
+				// Vers la gauche
 				else {
 					monster->posX -= 1;
 				}   
 			}
+			// Déplacement vertical du monstre
 			else {
+				// Vers le bas
 				if(monster->nextNode->y > monster->posY) {
 					monster->posY += 1;
 				}
+				// Vers le haut
 				else {
 					monster->posY -= 1;
 				}
@@ -223,6 +230,7 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		}	
 		glEnd();
 
+		// Contour de la jauge
 		glBegin(GL_LINE_LOOP);
 		glColor3ub(30, 30, 30);
 		glVertex2d(monster->posX, 600 - monster->posY + 45);
