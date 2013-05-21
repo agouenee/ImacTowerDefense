@@ -1,6 +1,7 @@
 #ifndef ITD_TOWER___
 #define ITD_TOWER___
 
+#include "Map.h"
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -21,7 +22,7 @@ typedef struct tower {
 
 Tower* createTower(TowerType type, int posX, int posY, int budget);
 Tower* rmvTower(Tower* t_first, Tower* t);
-int checkPosTower(Tower* t_first, int posX, int posY);
+int checkPosTower(Map map, Tower* t_first, int posX, int posY);
 TowerType constructTowerType(int posX, int posY);
 void constructTower(Tower* t_first);
 Tower* constructTowerSelected(Tower* t_first, int posX, int posY);

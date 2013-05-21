@@ -96,11 +96,11 @@ Tower* rmvTower(Tower* t_first, Tower* t) {
 }
 
 // Vérification de la validité de l'emplacement de la tour
-int checkPosTower(Tower* t_first, int posX, int posY) {
+int checkPosTower(Map map, Tower* t_first, int posX, int posY) {
 	// Est-ce que la tour est sur une zone constructible ?
 	unsigned char pick_col[3];
 	glReadPixels(posX, posY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pick_col);
-	if(pick_col[0] != 120 && pick_col[1] && pick_col[2]) {
+	if(pick_col[0] != map.buildingAreaColor.r && pick_col[1] != map.buildingAreaColor.g && pick_col[2] != map.buildingAreaColor.b) {
 		fprintf(stderr, "zone non constructible\n");
 		return 0;
 	}

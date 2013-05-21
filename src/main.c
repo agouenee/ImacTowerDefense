@@ -433,7 +433,7 @@ int main(int argc, char** argv) {
 								// Création de la première tour
 								if(nbTowers == 0) {
 									// Vérification de la position
-									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									towerTest = checkPosTower(map, t_first, xClicked, yClicked);
 									if(towerTest == 1) {
 										t_first = createTower(type, xClicked, yClicked, game.budget);
 										// Vérification du prix
@@ -450,7 +450,7 @@ int main(int argc, char** argv) {
 								// Autres tours
 								else if(nbTowers >= 1) {
 									// Vérification de la position
-									towerTest = checkPosTower(t_first, xClicked, yClicked);
+									towerTest = checkPosTower(map, t_first, xClicked, yClicked);
 									if(towerTest == 1) {
 										t = createTower(type, xClicked, yClicked, game.budget);
 										// Vérification du prix
