@@ -4,6 +4,7 @@
 typedef struct game {
 	int start;
 	int pause;
+	int help;
 	int win;
 	int over;
 	int budget;
