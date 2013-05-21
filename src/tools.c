@@ -78,6 +78,7 @@ void displayImageFull(GLuint idTexture) {
 	glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, idTexture);
 		glBegin(GL_QUADS);
+			glColor4ub(255, 255, 255, 255); // Opacité 100%
 			glTexCoord2d(0, 0); glVertex2f(0, WINDOW_HEIGHT);
 			glTexCoord2d(0, 1); glVertex2f(0, 0);
 			glTexCoord2d(1, 1); glVertex2f(WINDOW_WIDTH, 0);

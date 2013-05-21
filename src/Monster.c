@@ -138,18 +138,19 @@ int drawMonsters(MonsterLists lists) {
 	GLuint textureBarjot = loadTexture("images/barjot.png");
 
 	Monster* monster;
+	int success = 1;
 	int i = 0;
 	for(i = 0; i < lists.nbLists; i++) {
 		monster = lists.lists[i]->root;
 		while(monster != NULL) {
 			if((*monster).type == BARJOT) {
 				if(drawMonster(monster, barjot, textureBarjot) == 0) {
-					return 0;
+					success = 0;
 				}
 			}
 			else {
 				if(drawMonster(monster, boutin, textureBoutin) == 0) {
-					return 0;
+					success = 0;
 				}
 			}
 			monster = (*monster).next;
@@ -159,7 +160,7 @@ int drawMonsters(MonsterLists lists) {
 	SDL_FreeSurface(boutin);
 	SDL_FreeSurface(barjot);
 
-	return 1;
+	return success;
 }
 int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 	if(monster->nextNode != NULL) {
