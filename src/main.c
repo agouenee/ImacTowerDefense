@@ -416,9 +416,13 @@ int main(int argc, char** argv) {
 								printf("Jeu en pause\n");
 							}
 							else if(xClicked >= 721 && xClicked <= 743 && yClicked >= 516 && yClicked <= 542) {
+								if(displayingHelp == 1) {
+									displayingHelp = 0;
+								}
 								game.pause = 0;
+								printf("Reprise du jeu\n");
 							}
-							// Clique sur quitter
+							// Clic sur quitter
 							if(xClicked >= 810 && xClicked <= 830 && yClicked >= 516 && yClicked <= 542) {
 								loop = 0;
 								break;								
