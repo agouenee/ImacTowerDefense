@@ -368,7 +368,6 @@ int main(int argc, char** argv) {
 								else {
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
-								printf("DEAD !\n");
 								// Gain d'argent en fonction de la vague du monstre
 								game.budget += game.nbListsSend * 5;
 							}
@@ -562,6 +561,7 @@ int main(int argc, char** argv) {
 		destroyMonsters(monsterLists.lists[i]->root);
 		free(monsterLists.lists[i]);
 	}
+	destroyTowers(t_first);
 
 	// Suppression des textures
 	glDeleteTextures(1, &menu);
