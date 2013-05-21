@@ -28,15 +28,15 @@ Monster* createMonster(MonsterType type, int posX, int posY, Node* nextNode, int
 	}
 
 	if(type == BOUTIN) {
-		(*newMonster).life = 30;
-		(*newMonster).initialLife = 30;
+		(*newMonster).life = 40;
+		(*newMonster).initialLife = 40;
 		(*newMonster).resistance = 5;
 		(*newMonster).move = 1;
 		(*newMonster).speedDelay = 1;
 	}
 	else if(type == BARJOT) {
-		(*newMonster).life = 50;
-		(*newMonster).initialLife = 50;
+		(*newMonster).life = 80;
+		(*newMonster).initialLife = 80;
 		(*newMonster).resistance = 10;
 		(*newMonster).move = 0;
 		(*newMonster).speedDelay = 0;
@@ -225,8 +225,8 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 			glVertex2d(monster->posX + 1, 600 - monster->posY + 45);
 		}
 		else {
-			glVertex2d(monster->posX + monster->life, 600 - monster->posY + 38);
-			glVertex2d(monster->posX + monster->life, 600 - monster->posY + 45);
+			glVertex2d(monster->posX + monster->life / 2, 600 - monster->posY + 38);
+			glVertex2d(monster->posX + monster->life / 2, 600 - monster->posY + 45);
 		}	
 		glEnd();
 
@@ -235,8 +235,8 @@ int drawMonster(Monster* monster, SDL_Surface* boutin, GLuint texture) {
 		glColor3ub(30, 30, 30);
 		glVertex2d(monster->posX, 600 - monster->posY + 45);
 		glVertex2d(monster->posX, 600 - monster->posY + 38);
-		glVertex2d(monster->posX + monster->initialLife, 600 - monster->posY + 38);
-		glVertex2d(monster->posX + monster->initialLife, 600 - monster->posY + 45);
+		glVertex2d(monster->posX + monster->initialLife / 2 , 600 - monster->posY + 38);
+		glVertex2d(monster->posX + monster->initialLife / 2, 600 - monster->posY + 45);
 		glEnd();
 
 		return 1;
