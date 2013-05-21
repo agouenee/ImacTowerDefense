@@ -457,12 +457,17 @@ int main(int argc, char** argv) {
 						// Si clic dans l'interface joueur
 						if(xClicked >= 600) {
 							// Clic sur pause/play
-							if(xClicked >= 720 && xClicked <= 745 && yClicked >= 516 && yClicked <= 542) {
+							if(xClicked >= 675 && xClicked <= 698 && yClicked >= 516 && yClicked <= 542) {
 								game.pause = 1;
 								printf("Jeu en pause\n");
 							}
-							else if(xClicked >= 768 && xClicked <= 790 && yClicked >= 516 && yClicked <= 542) {
+							else if(xClicked >= 721 && xClicked <= 743 && yClicked >= 516 && yClicked <= 542) {
 								game.pause = 0;
+							}
+							// Clique sur quitter
+							if(xClicked >= 810 && xClicked <= 830 && yClicked >= 516 && yClicked <= 542) {
+								loop = 0;
+								break;								
 							}
 							// Sélection du type de tour à construire
 							if(game.pause == 0) {
@@ -554,7 +559,7 @@ int main(int argc, char** argv) {
 
 			case SDL_KEYDOWN:
 				switch(e.key.keysym.sym) {
-					case 'h' :
+					case 'a' :
 						if(displayingHelp == 0) {
 							displayingHelp = 1;
 							game.pause = 1;
