@@ -295,3 +295,11 @@ void displayTowerFeatures(Tower* t) {
     glDeleteTextures(1, &featuresTexture);
     SDL_FreeSurface(featuresImg);
 }
+
+// Destruction des tours
+void destroyTowers(Tower* root) {
+	if(root != NULL) {
+		destroyTowers(root->next);
+		free(root);
+	}
+}

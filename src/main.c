@@ -36,7 +36,6 @@ void reshape() {
 int main(int argc, char** argv) {
 	// Initialisation des variables
 	int i;
-	int displayingHelp = 0;
 	int posX, posY;
 	int cpt = 1;
 	Uint32 actualTime, prevTime, elapsedTime = 0;
@@ -153,6 +152,7 @@ int main(int argc, char** argv) {
 	Game game;
 	game.start = 0;
 	game.pause = 0;
+	game.help = 0;
 	game.over = 0;
 	game.win = 0;
 	game.budget = 400;
@@ -202,7 +202,7 @@ int main(int argc, char** argv) {
 			}
 
 			// Ecran jeu aide
-			if(displayingHelp == 1) {
+			if(	game.help == 1) {
 				displayImageLeft(help, helpBackground);
 			}
 
@@ -290,7 +290,6 @@ int main(int argc, char** argv) {
 								else {
 									monsterLists.lists[(*closest).listNum]->root = rmvMonster(monsterLists.lists[(*closest).listNum]->root, monsterToRmv);
 								}
-								printf("DEAD !\n");
 								// Gain d'argent en fonction de la vague du monstre
 								game.budget += game.nbListsSend * 5;
 							}
@@ -338,9 +337,13 @@ int main(int argc, char** argv) {
 								printf("Jeu en pause\n");
 							}
 							else if(xClicked >= 721 && xClicked <= 743 && yClicked >= 516 && yClicked <= 542) {
+								if(game.help == 1) {
+									game.help = 0;
+								}
 								game.pause = 0;
+								printf("Reprise du jeu\n");
 							}
-							// Clique sur quitter
+							// Clic sur quitter
 							if(xClicked >= 810 && xClicked <= 830 && yClicked >= 516 && yClicked <= 542) {
 								loop = 0;
 								break;								
@@ -431,12 +434,12 @@ int main(int argc, char** argv) {
 			case SDL_KEYDOWN:
 				switch(e.key.keysym.sym) {
 					case 'a' :
-						if(displayingHelp == 0) {
-							displayingHelp = 1;
+						if(game.help == 0) {
+							game.help = 1;
 							game.pause = 1;
 						}
 						else {
-							displayingHelp = 0;
+							game.help = 0;
 							game.pause = 0;
 						}
 						break;
@@ -445,6 +448,9 @@ int main(int argc, char** argv) {
 							game.pause = 1;
 						}
 						else {
+							if(game.help == 1) {
+								game.help = 0;
+							}
 							game.pause = 0;
 						}
 						break;
@@ -477,6 +483,7 @@ int main(int argc, char** argv) {
 		destroyMonsters(monsterLists.lists[i]->root);
 		free(monsterLists.lists[i]);
 	}
+	destroyTowers(t_first);
 
 	// Suppression des textures
 	glDeleteTextures(1, &menu);

@@ -27,5 +27,6 @@ TowerType constructTowerType(int posX, int posY);
 void constructTower(Tower* t_first);
 Tower* constructTowerSelected(Tower* t_first, int posX, int posY);
 void displayTowerFeatures(Tower* t);
+void destroyTowers(Tower* root);
 
 #endif
